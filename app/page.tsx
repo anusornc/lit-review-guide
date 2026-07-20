@@ -1,13 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { thaiContent, uiText, type Locale } from "./i18n";
-
-type GoalId = "map" | "evaluate" | "understand" | "explain";
-type EvidenceId = "experimental" | "qualitative" | "mixed" | "theoretical" | "uncertain";
+import {
+  mergedGuideContent,
+  rankMethods,
+  type CommitmentId,
+  type DisciplineId,
+  type EvidenceId,
+  type GoalId,
+  type MethodId,
+} from "./guide-data";
 
 type Discipline = {
-  id: string;
+  id: DisciplineId;
   name: string;
   marker: string;
   intro: string;
@@ -18,7 +24,7 @@ type Discipline = {
 };
 
 type ReviewMethod = {
-  id: string;
+  id: MethodId;
   name: string;
   family: string;
   summary: string;
@@ -28,6 +34,21 @@ type ReviewMethod = {
   time: string;
   steps: string[];
   quality: string;
+};
+
+type MethodDeepDive = {
+  search: string;
+  appraisal: string;
+  reporting: string;
+  tools: string;
+  reference?: string;
+};
+
+type DisciplineDeepDive = {
+  journals: readonly string[];
+  standards: readonly string[];
+  tools: readonly string[];
+  tip: string;
 };
 
 const goals: { id: GoalId; index: string; title: string; description: string }[] = [
@@ -239,16 +260,6 @@ const methods: ReviewMethod[] = [
   },
 ];
 
-const methodForPath = (goal: GoalId | "", evidence: EvidenceId | "") => {
-  if (evidence === "theoretical") return "integrative";
-  if (goal === "map") return "scoping";
-  if (goal === "understand") return "qualitative";
-  if (goal === "explain") return "realist";
-  if (goal === "evaluate" && evidence === "mixed") return "mixed";
-  if (goal === "evaluate") return "systematic";
-  return "scoping";
-};
-
 const englishContent = { goals, evidenceTypes, disciplines, methods };
 
 export default function Home() {
@@ -256,36 +267,54 @@ export default function Home() {
   const [localeReady, setLocaleReady] = useState(false);
   const [step, setStep] = useState(1);
   const [goal, setGoal] = useState<GoalId | "">("");
-  const [discipline, setDiscipline] = useState("");
+  const [discipline, setDiscipline] = useState<DisciplineId | "">("");
   const [evidence, setEvidence] = useState<EvidenceId | "">("");
-  const [activeDiscipline, setActiveDiscipline] = useState("health");
-  const [activeMethod, setActiveMethod] = useState("scoping");
-  const [methodFilter, setMethodFilter] = useState("All methods");
-  const [copied, setCopied] = useState(false);
+  const [commitment, setCommitment] = useState<CommitmentId | "">("");
+  const [activeDiscipline, setActiveDiscipline] = useState<DisciplineId>("health");
+  const [activeMethod, setActiveMethod] = useState<MethodId>("scoping");
+  const [methodFilter, setMethodFilter] = useState("all");
+  const [copiedItem, setCopiedItem] = useState("");
 
-  const content = locale === "th" ? thaiContent : englishContent;
+  const merged = mergedGuideContent[locale];
+  const baseContent = locale === "th" ? thaiContent : englishContent;
+  const content = {
+    ...baseContent,
+    disciplines: [...baseContent.disciplines, merged.interdisciplinary],
+    methods: [...baseContent.methods, ...merged.extraMethods],
+  };
   const { goals, evidenceTypes, disciplines, methods } = content;
   const t = uiText[locale];
 
-  const recommended = methods.find((method) => method.id === methodForPath(goal, evidence)) ?? methods[1];
+  const rankedMethodIds = rankMethods({ goal, discipline, evidence, commitment });
+  const rankedMethods = rankedMethodIds
+    .map((methodId) => methods.find((method) => method.id === methodId))
+    .filter((method): method is (typeof methods)[number] => Boolean(method));
+  const recommended = rankedMethods[0] ?? methods[1];
+  const alternatives = rankedMethods.slice(1, 3);
   const chosenGoal = goals.find((item) => item.id === goal);
   const chosenDiscipline = disciplines.find((item) => item.id === discipline);
+  const chosenCommitment = merged.commitments.find((item) => item.id === commitment);
   const selectedDiscipline = disciplines.find((item) => item.id === activeDiscipline) ?? disciplines[0];
   const selectedMethod = methods.find((item) => item.id === activeMethod) ?? methods[1];
-  const methodFamilies = [t.method.all, ...Array.from(new Set(methods.map((method) => method.family)))];
-  const visibleMethods = methodFilter === t.method.all ? methods : methods.filter((method) => method.family === methodFilter);
+  const disciplineDeepDives = merged.disciplineDeepDives as Record<DisciplineId, DisciplineDeepDive>;
+  const methodDeepDives = merged.methodDeepDives as Record<MethodId, MethodDeepDive>;
+  const selectedDisciplineDeepDive = disciplineDeepDives[selectedDiscipline.id];
+  const selectedMethodDeepDive = methodDeepDives[selectedMethod.id];
+  const methodReference = selectedMethodDeepDive?.reference
+    ? merged.toolkit.references.find((item) => item.id === selectedMethodDeepDive.reference)
+    : undefined;
+  const methodFamilies = Array.from(new Set(methods.map((method) => method.family)));
+  const visibleMethods = methodFilter === "all" ? methods : methods.filter((method) => method.family === methodFilter);
 
-  const pathwayText = useMemo(
-    () =>
-      `${t.pathway.copyLabels.title}\n${t.pathway.copyLabels.intent}: ${chosenGoal?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.discipline}: ${chosenDiscipline?.name ?? t.pathway.notSelected}\n${t.pathway.copyLabels.evidence}: ${evidenceTypes.find((item) => item.id === evidence)?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.method}: ${recommended.name}\n${t.pathway.copyLabels.why}: ${recommended.bestFor}`,
-    [chosenDiscipline, chosenGoal, evidence, evidenceTypes, recommended, t],
-  );
+  const pathwayText = `${t.pathway.copyLabels.title}\n${t.pathway.copyLabels.intent}: ${chosenGoal?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.discipline}: ${chosenDiscipline?.name ?? t.pathway.notSelected}\n${t.pathway.copyLabels.evidence}: ${evidenceTypes.find((item) => item.id === evidence)?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.commitment}: ${chosenCommitment?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.method}: ${recommended.name}\n${t.pathway.copyLabels.alternatives}: ${alternatives.map((item) => item.name).join(" · ")}\n${t.pathway.copyLabels.why}: ${recommended.bestFor}`;
 
   useEffect(() => {
     const parameter = new URLSearchParams(window.location.search).get("lang");
     const stored = window.localStorage.getItem("litwise-language");
     const browserLanguage = window.navigator.language.toLowerCase().startsWith("th") ? "th" : "en";
     const nextLocale: Locale = parameter === "th" || parameter === "en" ? parameter : stored === "th" || stored === "en" ? stored : browserLanguage;
+    // The locale is resolved after hydration so the server and first client render stay deterministic.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocale(nextLocale);
     setLocaleReady(true);
   }, []);
@@ -298,21 +327,20 @@ export default function Home() {
     const url = new URL(window.location.href);
     url.searchParams.set("lang", locale);
     window.history.replaceState({}, "", url);
-    setMethodFilter(uiText[locale].method.all);
   }, [locale, localeReady]);
 
   useEffect(() => {
-    if (!copied) return;
-    const timeout = window.setTimeout(() => setCopied(false), 1800);
+    if (!copiedItem) return;
+    const timeout = window.setTimeout(() => setCopiedItem(""), 1800);
     return () => window.clearTimeout(timeout);
-  }, [copied]);
+  }, [copiedItem]);
 
-  const copyPathway = async () => {
-    await navigator.clipboard.writeText(pathwayText);
-    setCopied(true);
+  const copyText = async (itemId: string, value: string) => {
+    await navigator.clipboard.writeText(value);
+    setCopiedItem(itemId);
   };
 
-  const canContinue = (step === 1 && goal) || (step === 2 && discipline) || (step === 3 && evidence);
+  const canContinue = (step === 1 && goal) || (step === 2 && discipline) || (step === 3 && evidence) || (step === 4 && commitment);
 
   return (
     <main>
@@ -323,15 +351,16 @@ export default function Home() {
         </a>
         <nav aria-label={locale === "th" ? "เมนูหลัก" : "Main navigation"}>
           <a href="#pathway">{t.nav.start}</a>
+          <a href="#workflow">{t.nav.workflow}</a>
           <a href="#disciplines">{t.nav.disciplines}</a>
           <a href="#methods">{t.nav.methods}</a>
-          <a href="#field-notes">{t.nav.notes}</a>
+          <a href="#toolkit">{t.nav.toolkit}</a>
         </nav>
         <div className="header-tools">
           <div className="language-switch" role="group" aria-label={t.languageLabel}>
-            <button onClick={() => setLocale("en")} aria-pressed={locale === "en"}>EN</button>
+            <button onClick={() => { setLocale("en"); setMethodFilter("all"); }} aria-pressed={locale === "en"}>EN</button>
             <span aria-hidden="true">/</span>
-            <button onClick={() => setLocale("th")} aria-pressed={locale === "th"}>ไทย</button>
+            <button onClick={() => { setLocale("th"); setMethodFilter("all"); }} aria-pressed={locale === "th"}>ไทย</button>
           </div>
           <a className="header-action" href="#pathway">{t.nav.action} <span aria-hidden="true">↗</span></a>
         </div>
@@ -347,9 +376,9 @@ export default function Home() {
             <a className="text-link" href="#disciplines">{t.hero.explore} <span aria-hidden="true">↓</span></a>
           </div>
           <dl className="trust-row">
-            <div><dt>09</dt><dd>{t.hero.stats[0]}</dd></div>
-            <div><dt>08</dt><dd>{t.hero.stats[1]}</dd></div>
-            <div><dt>04</dt><dd>{t.hero.stats[2]}</dd></div>
+            <div><dt>14</dt><dd>{t.hero.stats[0]}</dd></div>
+            <div><dt>09</dt><dd>{t.hero.stats[1]}</dd></div>
+            <div><dt>05</dt><dd>{t.hero.stats[2]}</dd></div>
           </dl>
         </div>
 
@@ -440,32 +469,83 @@ export default function Home() {
             )}
 
             {step === 4 && (
+              <div className="step-content">
+                <p className="step-label">{t.pathway.step4Label}</p>
+                <h3>{t.pathway.step4Title}</h3>
+                <p className="step-intro">{t.pathway.step4Intro}</p>
+                <div className="commitment-list">
+                  {merged.commitments.map((item) => (
+                    <button key={item.id} className={commitment === item.id ? "selected" : ""} onClick={() => setCommitment(item.id)} aria-pressed={commitment === item.id}>
+                      <span className="radio-mark" aria-hidden="true" />
+                      <span><strong>{item.title}</strong><small>{item.description}</small></span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {step === 5 && (
               <div className="result-panel">
                 <div className="result-label"><span>{t.pathway.recommended}</span><span>{t.pathway.complete}</span></div>
                 <h3>{recommended.name}</h3>
                 <p className="result-summary">{recommended.summary}</p>
                 <div className="result-reason">
                   <span>{t.pathway.why}</span>
-                  <p>{t.pathway.reason(chosenGoal?.title ?? "", chosenDiscipline?.name ?? "", evidenceTypes.find((item) => item.id === evidence)?.title ?? "", recommended.bestFor)}</p>
+                  <p>{t.pathway.reason(chosenGoal?.title ?? "", chosenDiscipline?.name ?? "", evidenceTypes.find((item) => item.id === evidence)?.title ?? "", chosenCommitment?.title ?? "", recommended.bestFor)}</p>
                 </div>
                 <div className="result-grid">
                   <div><span>{t.pathway.likelyOutput}</span><p>{recommended.output}</p></div>
                   <div><span>{t.pathway.watchFor}</span><p>{recommended.avoidWhen}</p></div>
                 </div>
+                <div className="alternative-methods">
+                  <span>{t.pathway.alternatives}</span>
+                  <div>
+                    {alternatives.map((method) => (
+                      <button key={method.id} onClick={() => { setActiveMethod(method.id); document.getElementById("methods")?.scrollIntoView({ behavior: "smooth" }); }}>
+                        <strong>{method.name}</strong>
+                        <small>{method.family} · {method.time}</small>
+                        <em><b>{t.pathway.alternativeFit}</b> {method.bestFor}</em>
+                        <em><b>{t.pathway.alternativeTradeoff}</b> {method.avoidWhen}</em>
+                      </button>
+                    ))}
+                  </div>
+                  <p>{t.pathway.alternativeHint}</p>
+                </div>
                 <div className="result-actions">
                   <button className="button button-light" onClick={() => { setActiveMethod(recommended.id); document.getElementById("methods")?.scrollIntoView({ behavior: "smooth" }); }}>{t.pathway.study} <span aria-hidden="true">↓</span></button>
-                  <button className="button button-quiet" onClick={copyPathway}>{copied ? t.pathway.copied : t.pathway.copy}</button>
+                  <button className="button button-quiet" onClick={() => copyText("pathway", pathwayText)}>{copiedItem === "pathway" ? t.pathway.copied : t.pathway.copy}</button>
                 </div>
               </div>
             )}
 
             <div className="pathway-controls">
               <button className="back-button" onClick={() => setStep((value) => Math.max(1, value - 1))} disabled={step === 1}>{t.pathway.back}</button>
-              {step < 4 && <button className="button button-primary" disabled={!canContinue} onClick={() => setStep((value) => Math.min(4, value + 1))}>{t.pathway.continue} <span aria-hidden="true">→</span></button>}
-              {step === 4 && <button className="back-button" onClick={() => { setStep(1); setGoal(""); setDiscipline(""); setEvidence(""); }}>{t.pathway.restart}</button>}
+              {step < 5 && <button className="button button-primary" disabled={!canContinue} onClick={() => setStep((value) => Math.min(5, value + 1))}>{t.pathway.continue} <span aria-hidden="true">→</span></button>}
+              {step === 5 && <button className="back-button" onClick={() => { setStep(1); setGoal(""); setDiscipline(""); setEvidence(""); setCommitment(""); }}>{t.pathway.restart}</button>}
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="workflow-section" id="workflow">
+        <div className="section-heading split-heading workflow-heading">
+          <div><p className="section-index">{merged.workflow.index}</p><h2>{merged.workflow.title}</h2></div>
+          <p>{merged.workflow.intro}</p>
+        </div>
+        <ol className="workflow-grid">
+          {merged.workflow.phases.map((phase, index) => (
+            <li key={phase.title}>
+              <div className="workflow-number">{String(index + 1).padStart(2, "0")}</div>
+              <h3>{phase.title}</h3>
+              <p>{phase.purpose}</p>
+              <div className="workflow-outputs">
+                <span>{merged.workflow.outputLabel}</span>
+                <ul>{phase.outputs.map((output) => <li key={output}>{output}</li>)}</ul>
+              </div>
+              <div className="workflow-checkpoint"><span>{merged.workflow.checkpointLabel}</span><p>{phase.checkpoint}</p></div>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="disciplines-section" id="disciplines">
@@ -493,7 +573,13 @@ export default function Home() {
               <div><dt>{t.discipline.questions}</dt><dd>{selectedDiscipline.questions}</dd></div>
               <div><dt>{t.discipline.sources}</dt><dd>{selectedDiscipline.sources}</dd></div>
               <div><dt>{t.discipline.methods}</dt><dd>{selectedDiscipline.methods.join(" · ")}</dd></div>
+              {selectedDisciplineDeepDive && <>
+                <div><dt>{t.discipline.journals}</dt><dd>{selectedDisciplineDeepDive.journals.join(" · ")}</dd></div>
+                <div><dt>{t.discipline.standards}</dt><dd>{selectedDisciplineDeepDive.standards.join(" · ")}</dd></div>
+                <div><dt>{t.discipline.tools}</dt><dd>{selectedDisciplineDeepDive.tools.join(" · ")}</dd></div>
+              </>}
             </dl>
+            {selectedDisciplineDeepDive && <div className="field-insight"><span>{t.discipline.fieldTip}</span><p>{selectedDisciplineDeepDive.tip}</p></div>}
             <div className="field-caution"><span>{t.discipline.caution}</span><p>{selectedDiscipline.caution}</p></div>
           </article>
         </div>
@@ -505,7 +591,8 @@ export default function Home() {
           <div className="method-filter" aria-label={t.method.filterAria}>
             <label htmlFor="method-family">{t.method.purpose}</label>
             <select id="method-family" value={methodFilter} onChange={(event) => setMethodFilter(event.target.value)}>
-              {methodFamilies.map((family) => <option key={family}>{family}</option>)}
+              <option value="all">{t.method.all}</option>
+              {methodFamilies.map((family) => <option key={family} value={family}>{family}</option>)}
             </select>
           </div>
         </div>
@@ -534,8 +621,63 @@ export default function Home() {
               <span>{t.method.workflow}</span>
               <ol>{selectedMethod.steps.map((item) => <li key={item}>{item}</li>)}</ol>
             </div>
+            {selectedMethodDeepDive && (
+              <div className="method-deep-dive">
+                <div><span>{t.method.search}</span><p>{selectedMethodDeepDive.search}</p></div>
+                <div><span>{t.method.appraisal}</span><p>{selectedMethodDeepDive.appraisal}</p></div>
+                <div><span>{t.method.reporting}</span><p>{selectedMethodDeepDive.reporting}</p>{methodReference && <a href={methodReference.href} target="_blank" rel="noreferrer">{t.method.officialGuidance}</a>}</div>
+                <div><span>{t.method.tools}</span><p>{selectedMethodDeepDive.tools}</p></div>
+              </div>
+            )}
             <p className="quality-note"><strong>{t.method.quality}</strong> {selectedMethod.quality}</p>
           </article>
+        </div>
+      </section>
+
+      <section className="toolkit-section" id="toolkit">
+        <div className="section-heading split-heading toolkit-heading">
+          <div><p className="section-index">{merged.toolkit.index}</p><h2>{merged.toolkit.title}</h2></div>
+          <p>{merged.toolkit.intro}</p>
+        </div>
+
+        <div className="search-canvas">
+          <div><p className="detail-kicker">{merged.toolkit.searchTitle}</p><h3>{merged.toolkit.searchIntro}</h3></div>
+          <div className="search-code">
+            <pre><code>{merged.toolkit.searchCode}</code></pre>
+            <button onClick={() => copyText("boolean", merged.toolkit.searchCode)}>{copiedItem === "boolean" ? merged.toolkit.copied : merged.toolkit.copy}</button>
+          </div>
+        </div>
+
+        <div className="appraisal-panel">
+          <div className="toolkit-subheading"><p className="detail-kicker">{merged.toolkit.appraisalTitle}</p><h3>{merged.toolkit.appraisalIntro}</h3></div>
+          <div className="appraisal-table-wrap">
+            <table>
+              <thead><tr>{merged.toolkit.tableHeadings.map((heading) => <th key={heading}>{heading}</th>)}</tr></thead>
+              <tbody>{merged.toolkit.appraisalRows.map((row) => <tr key={row[0]}>{row.map((cell) => <td key={cell}>{cell}</td>)}</tr>)}</tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="template-grid">
+          {merged.toolkit.templates.map((template) => (
+            <article key={template.id}>
+              <p className="detail-kicker">{merged.toolkit.templateLabel}</p>
+              <h3>{template.name}</h3>
+              <p>{template.purpose}</p>
+              <pre>{template.content}</pre>
+              <button className="button button-primary" onClick={() => copyText(template.id, template.content)}>{copiedItem === template.id ? merged.toolkit.copied : merged.toolkit.copy}</button>
+            </article>
+          ))}
+        </div>
+
+        <div className="pitfall-panel">
+          <div><p className="detail-kicker">{merged.toolkit.pitfallsTitle}</p></div>
+          <ol>{merged.toolkit.pitfalls.map((pitfall, index) => <li key={pitfall[0]}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{pitfall[0]}</strong><p>{pitfall[1]}</p></div></li>)}</ol>
+        </div>
+
+        <div className="official-resources">
+          <div><p className="detail-kicker">{merged.toolkit.referencesTitle}</p><p>{merged.toolkit.referencesNote}</p></div>
+          <div>{merged.toolkit.references.map((reference) => <a key={reference.id} href={reference.href} target="_blank" rel="noreferrer">{reference.label}<span aria-hidden="true">↗</span></a>)}</div>
         </div>
       </section>
 

@@ -1,8 +1,19 @@
-# vinext-starter
+# LitWise — Literature Review Expert Guide
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+LitWise helps master’s students, PhD candidates, and researchers move from a
+broad research interest to a defensible literature-review design. The product
+combines a guided decision pathway with method, discipline, workflow, and
+execution guidance in English and Thai.
+
+## Product Shape
+
+- five-step pathway that recommends a starting method plus alternatives and trade-offs
+- 14 literature-review methods with search, appraisal, reporting, and tool guidance
+- 9 discipline families with databases, review venues, standards, tools, and cautions
+- six traceable phases: Scope → Search → Screen → Appraise → Extract → Write
+- Boolean search canvas, appraisal chooser, four copy-ready templates, and six failure modes
+- Thai and English content with URL, browser, and local-preference locale resolution
+- responsive, accessible React UI deployed through OpenAI Sites / vinext
 
 ## Prerequisites
 
@@ -14,18 +25,21 @@ Drizzle support.
 npm install
 npm run dev
 npm run build
+npm test
 ```
 
-This starter does not use `wrangler.jsonc`.
+Open the local URL printed by `npm run dev`. Add `?lang=th` or `?lang=en` to
+select a language explicitly.
 
-## Included Shape
+## Main Files
 
-- edit site code under `app/`
+- `app/page.tsx` contains the interactive product flow and guide surfaces
+- `app/i18n.ts` contains shared interface translations and core Thai content
+- `app/guide-data.ts` contains the merged decision model, deep method and discipline content, workflow, and toolkit
+- `app/globals.css` contains the responsive visual system
+- `tests/rendered-html.test.mjs` verifies production rendering, bilingual metadata, and merged guide coverage
 - `.openai/hosting.json` declares optional Sites D1 and R2 bindings
 - `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
 
 ## Workspace Auth Headers
 
@@ -88,8 +102,9 @@ actions tied to the current ChatGPT user. Leave public content anonymous.
 ## Useful Commands
 
 - `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
+- `npm run build`: verify the vinext production build
+- `npm test`: build and verify the rendered LitWise guide
+- `npm run lint`: run ESLint across the project
 - `npm run db:generate`: generate Drizzle migrations after schema changes
 
 ## Learn More
