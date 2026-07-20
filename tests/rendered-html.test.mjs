@@ -4,13 +4,13 @@ import test from "node:test";
 
 const templateRoot = new URL("../", import.meta.url);
 
-async function render(extraHeaders = {}) {
+async function render(extraHeaders = {}, path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request("https://litwise.test/", {
+    new Request(`https://litwise.test${path}`, {
       headers: { accept: "text/html", host: "litwise.test", "x-forwarded-proto": "https", ...extraHeaders },
     }),
     {
@@ -44,9 +44,11 @@ test("server-renders the LitWise research guide", async () => {
 });
 
 test("removes starter assets and ships product metadata", async () => {
-  const [page, layout, i18n, guideData, globalCss, packageJson, ogImage] = await Promise.all([
+  const [page, guideClient, layout, proxy, i18n, guideData, globalCss, packageJson, ogImage] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/guide-client.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../proxy.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/i18n.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/guide-data.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
@@ -54,23 +56,36 @@ test("removes starter assets and ships product metadata", async () => {
     readFile(new URL("../public/og.png", import.meta.url)),
   ]);
 
-  assert.match(page, /rankMethods/);
-  assert.match(page, /alternativeFit/);
-  assert.match(page, /alternativeTradeoff/);
-  assert.doesNotMatch(page, /methodForPath/);
-  assert.match(page, /discipline-atlas/);
-  assert.match(page, /methodDeepDives/);
-  assert.match(page, /disciplineDeepDives/);
-  assert.match(page, /workflow-section/);
-  assert.match(page, /toolkit-section/);
-  assert.match(page, /start-stage-grid/);
-  assert.match(page, /discipline-search/);
-  assert.match(page, /method-filter-pills/);
-  assert.match(page, /tool-directory/);
-  assert.match(layout, /generateMetadata/);
-  assert.match(layout, /x-forwarded-host/);
+  assert.match(guideClient, /rankMethods/);
+  assert.match(guideClient, /alternativeFit/);
+  assert.match(guideClient, /alternativeTradeoff/);
+  assert.doesNotMatch(guideClient, /methodForPath/);
+  assert.match(guideClient, /methodDeepDives/);
+  assert.match(guideClient, /disciplineDeepDives/);
+  assert.match(guideClient, /workflow-section/);
+  assert.match(guideClient, /toolkit-section/);
+  assert.match(guideClient, /start-stage-grid/);
+  assert.match(guideClient, /discipline-search/);
+  assert.match(guideClient, /method-filter-pills/);
+  assert.match(guideClient, /tool-directory/);
+  assert.match(guideClient, /theme-toggle/);
+  assert.match(guideClient, /hero-research-art/);
+  assert.match(guideClient, /wizard-progress/);
+  assert.match(guideClient, /methods-grid/);
+  assert.match(guideClient, /discipline-card-grid/);
+  assert.match(guideClient, /detail-modal/);
+  assert.match(guideClient, /keepFocusInDialog/);
+  assert.match(guideClient, /event\.key !== "Tab"/);
+  assert.match(guideClient, /id="pitfalls"/);
+  assert.ok(guideClient.indexOf('<section className="methods-section"') < guideClient.indexOf('<section className="disciplines-section"'));
+  assert.match(page, /generateMetadata/);
+  assert.match(page, /x-forwarded-host/);
   assert.match(page, /litwise-language/);
-  assert.match(page, /setLocale\("th"\)/);
+  assert.match(layout, /data-theme/);
+  assert.match(layout, /x-litwise-language/);
+  assert.match(proxy, /request\.nextUrl\.searchParams\.get\("lang"\)/);
+  assert.match(layout, /prefers-color-scheme/);
+  assert.match(guideClient, /setLocale\("th"\)/);
   assert.match(i18n, /คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม/);
   assert.match(i18n, /การทบทวนอย่างเป็นระบบ/);
   assert.match(i18n, /สุขภาพและการแพทย์/);
@@ -82,6 +97,9 @@ test("removes starter assets and ships product metadata", async () => {
   assert.doesNotMatch(guideData, /บทวิทยานิพนธ์ที่ปกป้องได้|ผืนงานสร้างคำค้น|เกณฑ์เคลื่อน|ตารางไร้ร่องรอย|การทบทวนแบบร่ม/);
   assert.match(globalCss, /--th-body: 16px/);
   assert.match(globalCss, /html\[data-locale="th"\]\s*\{/);
+  assert.match(globalCss, /html\[data-theme="dark"\]/);
+  assert.match(globalCss, /@media \(max-width: 600px\)/);
+  assert.match(globalCss, /body \{ font-size: 16px; \}/);
   assert.match(globalCss, /@media print/);
   assert.match(globalCss, /prefers-reduced-motion/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
@@ -94,7 +112,27 @@ test("serves Thai metadata and document language for Thai readers", async () => 
   const html = await response.text();
 
   assert.equal(response.status, 200);
-  assert.match(html, /<html lang="th">/i);
+  assert.match(html, /<html lang="th"[^>]*>/i);
   assert.match(html, /<title>LitWise — คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม<\/title>/i);
   assert.match(html, /ค้นหาวิธีทบทวนที่เหมาะกับคำถามวิจัยของคุณ/);
+});
+
+test("treats the language query as the server-rendered locale source", async () => {
+  const response = await render({}, "/?lang=th");
+  const html = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(html, /<html lang="th"[^>]*data-locale="th"/i);
+  assert.match(html, /<main lang="th">/i);
+  assert.match(html, /<title>LitWise — คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม<\/title>/i);
+  assert.match(html, /ค้นหาวิธีทบทวนที่เหมาะกับ/);
+});
+
+test("seeds persisted locale and theme before hydration", async () => {
+  const response = await render({ cookie: "litwise-language=th; litwise-theme=dark" });
+  const html = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(html, /<html lang="th"[^>]*data-locale="th"[^>]*data-theme="dark"/i);
+  assert.match(html, /<main lang="th">/i);
 });

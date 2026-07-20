@@ -3,7 +3,18 @@ export type Locale = "en" | "th";
 export const uiText = {
   en: {
     languageLabel: "Choose language",
-    nav: { start: "Start", workflow: "Workflow", disciplines: "Disciplines", methods: "Methods", toolkit: "Toolkit", notes: "Field notes", action: "Build my pathway" },
+    chrome: {
+      lightMode: "Use light theme",
+      darkMode: "Use dark theme",
+      close: "Close details",
+      researchFlow: "Review flow",
+      identified: "Records identified",
+      screened: "Records screened",
+      included: "Studies included",
+      protocolChecklist: "Protocol checklist",
+      checklistItems: ["Question framed", "Sources planned", "Criteria recorded"],
+    },
+    nav: { start: "Start", workflow: "Workflow", disciplines: "Disciplines", methods: "Methods", toolkit: "Tools", pitfalls: "Pitfalls", action: "Build my pathway" },
     hero: {
       eyebrow: "Literature review expert guide",
       audience: "Master’s · PhD · Research",
@@ -90,6 +101,7 @@ export const uiText = {
       searchPlaceholder: "Search disciplines, sources, or methods…",
       searchLabel: "Search discipline guidance",
       noResults: "No discipline matches that search. Try a broader term.",
+      cardAction: "Open field guide",
     },
     method: {
       index: "04 · Method library",
@@ -109,6 +121,7 @@ export const uiText = {
       reporting: "Reporting guidance",
       tools: "Working tools",
       officialGuidance: "Open official guidance ↗",
+      cardAction: "Open method guide",
       filters: { all: "All", structured: "Structured", flexible: "Flexible", quantitative: "Quantitative", qualitative: "Qualitative" },
     },
     notes: {
@@ -131,7 +144,18 @@ export const uiText = {
   },
   th: {
     languageLabel: "เลือกภาษา",
-    nav: { start: "เริ่มต้น", workflow: "ขั้นตอนทำงาน", disciplines: "สาขาวิชา", methods: "วิธีทบทวน", toolkit: "เครื่องมือ", notes: "ก่อนเริ่มค้น", action: "ช่วยเลือกวิธีทบทวน" },
+    chrome: {
+      lightMode: "เปลี่ยนเป็นโหมดสว่าง",
+      darkMode: "เปลี่ยนเป็นโหมดมืด",
+      close: "ปิดรายละเอียด",
+      researchFlow: "เส้นทางงานทบทวน",
+      identified: "รายการที่ค้นพบ",
+      screened: "รายการที่ผ่านการคัดกรอง",
+      included: "งานวิจัยที่นำมาสังเคราะห์",
+      protocolChecklist: "รายการตรวจโครงร่าง",
+      checklistItems: ["กำหนดคำถามแล้ว", "วางแผนแหล่งค้นแล้ว", "บันทึกเกณฑ์คัดเลือกแล้ว"],
+    },
+    nav: { start: "เริ่มต้น", workflow: "ขั้นตอนทำงาน", disciplines: "สาขาวิชา", methods: "วิธีทบทวน", toolkit: "เครื่องมือ", pitfalls: "ข้อควรระวัง", action: "ช่วยเลือกวิธีทบทวน" },
     hero: {
       eyebrow: "คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม",
       audience: "ปริญญาโท · ปริญญาเอก · นักวิจัย",
@@ -218,6 +242,7 @@ export const uiText = {
       searchPlaceholder: "ค้นหาสาขา ฐานข้อมูล หรือวิธีทบทวน…",
       searchLabel: "ค้นหาคำแนะนำตามสาขา",
       noResults: "ไม่พบสาขาที่ตรงกับคำค้น ลองใช้คำที่กว้างขึ้น",
+      cardAction: "เปิดคู่มือสาขา",
     },
     method: {
       index: "04 · คลังวิธีทบทวน",
@@ -237,6 +262,7 @@ export const uiText = {
       reporting: "แนวทางการรายงาน",
       tools: "เครื่องมือทำงาน",
       officialGuidance: "เปิดแนวทางทางการ ↗",
+      cardAction: "เปิดคู่มือวิธีทบทวน",
       filters: { all: "ทุกวิธี", structured: "เป็นระบบสูง", flexible: "ยืดหยุ่น", quantitative: "เชิงปริมาณ", qualitative: "เชิงคุณภาพ" },
     },
     notes: {
