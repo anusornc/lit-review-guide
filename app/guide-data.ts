@@ -200,6 +200,11 @@ export const mergedGuideContent = {
       intro: "Copy a starter, adapt it to your discipline, and preserve the decisions that make your review auditable.",
       searchTitle: "Boolean search canvas", searchIntro: "Build one block per concept. Add synonyms with OR; connect concepts with AND; add controlled vocabulary inside each database.",
       searchCode: "(\"artificial intelligence\" OR \"machine learning\" OR AI)\nAND\n(education OR teaching OR learning)\nAND\n(ethics OR bias OR fairness)",
+      searchTips: [
+        { marker: "01", title: "Search the right fields", description: "Use database field tags such as title/abstract or TITLE-ABS-KEY when an all-fields search returns too much noise." },
+        { marker: "02", title: "Use truncation carefully", description: "A wildcard can capture useful word endings, but test every truncated term so it does not retrieve unrelated words." },
+        { marker: "03", title: "Test proximity operators", description: "When a database supports NEAR, W/n, or an equivalent operator, use it to keep related concepts close without requiring an exact phrase." },
+      ],
       copy: "Copy", copied: "Copied ✓", templateLabel: "Copy-ready template",
       appraisalTitle: "Choose appraisal by evidence design", appraisalIntro: "The design of the included study—not the prestige of its journal—determines the appraisal lens.",
       appraisalRows: [
@@ -210,6 +215,43 @@ export const mergedGuideContent = {
         ["Systematic review", "Protocol, search, selection, appraisal, synthesis, bias", "AMSTAR 2 or a purpose-appropriate review tool"],
       ],
       tableHeadings: ["Evidence design", "Inspect", "Possible starting tool"],
+      toolDirectoryTitle: "Research tool directory",
+      toolDirectoryIntro: "Choose tools by the job they must do. Start with the smallest workable stack, confirm institutional access, and record any automation used in screening or analysis.",
+      toolLinkLabel: "Official site",
+      toolCategories: [
+        {
+          id: "references", title: "Reference management", description: "Collect, deduplicate, annotate, and cite without losing the source trail.",
+          tools: [
+            { name: "Zotero", access: "Free core · paid storage", bestFor: "A strong default for most students and research teams, with browser capture and an open ecosystem.", watchFor: "Agree on collections, tags, and attachment storage before collaborating.", links: [{ label: "Zotero", href: "https://www.zotero.org/" }] },
+            { name: "Mendeley Reference Manager", access: "Free", bestFor: "Researchers who want a straightforward PDF library and citation workflow.", watchFor: "Check export and collaboration needs before committing a large shared library.", links: [{ label: "Mendeley", href: "https://www.mendeley.com/reference-management/reference-manager" }] },
+            { name: "EndNote", access: "Paid · institutional access may apply", bestFor: "Labs and institutions that already use EndNote styles, libraries, and support.", watchFor: "Check whether your university already provides a licence before purchasing.", links: [{ label: "EndNote", href: "https://endnote.com/" }] },
+          ],
+        },
+        {
+          id: "screening", title: "Screening & review management", description: "Remove duplicates, apply eligibility criteria, resolve conflicts, and preserve an audit trail.",
+          tools: [
+            { name: "Rayyan", access: "Free + paid plans", bestFor: "Title and abstract screening, especially when several reviewers need blinding and conflict resolution.", watchFor: "Free and paid capabilities differ; agree on reviewer roles before inviting the team.", links: [{ label: "Rayyan", href: "https://www.rayyan.ai/" }] },
+            { name: "ASReview", access: "Free · open source", bestFor: "Large screening sets where active learning can prioritise likely-relevant records while humans retain decisions.", watchFor: "Predefine stopping rules and report the model, version, and human decisions transparently.", links: [{ label: "ASReview", href: "https://asreview.nl/" }] },
+            { name: "EPPI-Reviewer", access: "Subscription · partner access may apply", bestFor: "Complex evidence reviews and maps that need collaborative coding, synthesis, and review management.", watchFor: "It can be more platform than a small thesis needs; check training and access first.", links: [{ label: "EPPI-Reviewer", href: "https://eppi.ioe.ac.uk/cms/er4" }] },
+          ],
+        },
+        {
+          id: "writing", title: "Notes, writing & collaboration", description: "Turn reading notes into a shared synthesis and a manuscript that remains maintainable.",
+          tools: [
+            { name: "Notion / Obsidian", access: "Free core · optional paid services", bestFor: "Linked notes, concept development, and a durable synthesis workspace before drafting.", watchFor: "Choose Notion for shared work or Obsidian for local files; avoid maintaining the same notes in both.", links: [{ label: "Notion", href: "https://www.notion.com/product" }, { label: "Obsidian", href: "https://obsidian.md/" }] },
+            { name: "Overleaf", access: "Free + paid plans", bestFor: "LaTeX manuscripts, technical theses, and real-time collaboration around journal templates.", watchFor: "Confirm that your supervisor and coauthors are comfortable reviewing LaTeX projects.", links: [{ label: "Overleaf", href: "https://www.overleaf.com/" }] },
+            { name: "Google Docs + Paperpile", access: "Docs free · Paperpile paid", bestFor: "Teams that already review drafts in Google Docs and want citations inside that workflow.", watchFor: "Decide which reference library is authoritative to prevent duplicate or drifting records.", links: [{ label: "Google Docs", href: "https://docs.google.com/" }, { label: "Paperpile", href: "https://paperpile.com/" }] },
+          ],
+        },
+        {
+          id: "analysis", title: "Analysis & synthesis", description: "Code qualitative findings, calculate pooled estimates, or manage an end-to-end review.",
+          tools: [
+            { name: "NVivo / ATLAS.ti", access: "Paid · student and institutional options", bestFor: "Systematic coding of qualitative findings, memos, relationships, and team-based analysis.", watchFor: "Software does not choose a coding logic; define the analytical approach before importing everything.", links: [{ label: "NVivo", href: "https://lumivero.com/products/nvivo/" }, { label: "ATLAS.ti", href: "https://atlasti.com/" }] },
+            { name: "R + metafor", access: "Free · open source", bestFor: "Reproducible meta-analysis, sensitivity checks, and publication-quality statistical outputs.", watchFor: "Use it with statistical supervision when effect measures, dependence, or heterogeneity are complex.", links: [{ label: "R", href: "https://www.r-project.org/" }, { label: "metafor", href: "https://wviechtb.github.io/metafor/" }] },
+            { name: "Covidence", access: "Paid · often institutional", bestFor: "Teams that want screening, extraction, risk-of-bias work, and exports in one review platform.", watchFor: "Check university access and confirm that its workflow matches your review method before setup.", links: [{ label: "Covidence", href: "https://www.covidence.org/" }] },
+          ],
+        },
+      ],
       templates: [
         { id: "search-log", name: "Search log template", purpose: "Make every database search reproducible.", content: "Database: [name]\nPlatform: [provider]\nDate searched: [YYYY-MM-DD]\nCoverage: [start–end]\nExact search string: [paste]\nFilters: [list or none]\nResults returned: [n]\nExport file: [name]\nNotes and changes: [why]" },
         { id: "eligibility", name: "Eligibility decision form", purpose: "Keep screening decisions consistent and explainable.", content: "Study ID: [author-year]\nReviewer: [name]\nStage: [title/abstract | full text]\nDecision: [include | exclude | discuss]\nCriterion triggered: [criterion]\nExclusion reason: [one specific reason]\nNotes: [context or uncertainty]" },
@@ -346,6 +388,11 @@ export const mergedGuideContent = {
       intro: "คัดลอกแบบฟอร์ม ปรับให้เข้ากับสาขา และบันทึกเหตุผลของการตัดสินใจแต่ละขั้นเพื่อให้งานตรวจสอบได้",
       searchTitle: "แบบร่างคำค้น Boolean", searchIntro: "แยกคำถามออกเป็นแนวคิดหลัก ใช้ OR เชื่อมคำพ้อง ใช้ AND เชื่อมแต่ละแนวคิด แล้วเติมศัพท์ควบคุมให้ตรงกับฐานข้อมูลที่ใช้",
       searchCode: "(\"artificial intelligence\" OR \"machine learning\" OR AI)\nAND\n(education OR teaching OR learning)\nAND\n(ethics OR bias OR fairness)",
+      searchTips: [
+        { marker: "01", title: "กำหนดเขตข้อมูลที่ต้องการค้น", description: "หากการค้นทุกเขตข้อมูลให้ผลลัพธ์กว้างเกินไป ให้ลองใช้เขตชื่อเรื่องและบทคัดย่อ หรือ TITLE-ABS-KEY ตามรูปแบบของฐานข้อมูล" },
+        { marker: "02", title: "ใช้เครื่องหมายตัดคำอย่างระมัดระวัง", description: "เครื่องหมายแทนท้ายคำช่วยเก็บคำหลายรูปได้ แต่ควรทดลองทุกคำก่อน เพื่อไม่ให้ได้คำอื่นที่ไม่เกี่ยวข้องติดมาด้วย" },
+        { marker: "03", title: "ทดลองใช้คำสั่งค้นคำที่อยู่ใกล้กัน", description: "หากฐานข้อมูลรองรับ NEAR, W/n หรือคำสั่งใกล้เคียง ให้ใช้เชื่อมแนวคิดที่ควรอยู่ใกล้กันโดยไม่บังคับเป็นวลีตายตัว" },
+      ],
       copy: "คัดลอก", copied: "คัดลอกแล้ว ✓", templateLabel: "แบบฟอร์มพร้อมใช้",
       appraisalTitle: "เลือกวิธีประเมินให้ตรงกับประเภทหลักฐาน", appraisalIntro: "ประเภทงานวิจัยที่นำมาทบทวน—ไม่ใช่ชื่อเสียงของวารสาร—เป็นตัวกำหนดว่าควรประเมินคุณภาพจากมุมใด",
       appraisalRows: [
@@ -356,6 +403,43 @@ export const mergedGuideContent = {
         ["งานทบทวนอย่างเป็นระบบ", "โครงร่าง การค้น การเลือก การประเมิน การสังเคราะห์ และอคติ", "AMSTAR 2 หรือเครื่องมือประเมินงานทบทวนที่ตรงวัตถุประสงค์"],
       ],
       tableHeadings: ["ประเภทงานวิจัย", "ประเด็นที่ควรตรวจ", "เครื่องมือที่อาจใช้เป็นจุดเริ่มต้น"],
+      toolDirectoryTitle: "คลังเครื่องมือสำหรับทำงานทบทวน",
+      toolDirectoryIntro: "เลือกเครื่องมือจากงานที่ต้องทำ เริ่มจากชุดที่เล็กแต่เพียงพอ ตรวจสิทธิ์ใช้งานของมหาวิทยาลัย และบันทึกการใช้ระบบอัตโนมัติทุกครั้งที่นำมาช่วยคัดกรองหรือวิเคราะห์",
+      toolLinkLabel: "เว็บไซต์ทางการ",
+      toolCategories: [
+        {
+          id: "references", title: "จัดการเอกสารอ้างอิง", description: "รวบรวม ลบรายการซ้ำ ใส่บันทึก และอ้างอิง โดยยังย้อนกลับไปหาแหล่งต้นทางได้",
+          tools: [
+            { name: "Zotero", access: "ตัวโปรแกรมใช้ฟรี · พื้นที่เพิ่มมีค่าใช้จ่าย", bestFor: "เป็นตัวเลือกเริ่มต้นที่เหมาะกับนักศึกษาและทีมวิจัยส่วนใหญ่ มีส่วนเสริมเบราว์เซอร์และระบบที่เปิดกว้าง", watchFor: "ก่อนทำงานร่วมกันควรตกลงโครงสร้างโฟลเดอร์ แท็ก และวิธีเก็บไฟล์แนบ", links: [{ label: "Zotero", href: "https://www.zotero.org/" }] },
+            { name: "Mendeley Reference Manager", access: "ใช้ฟรี", bestFor: "ผู้ที่ต้องการคลังไฟล์ PDF และระบบแทรกการอ้างอิงที่ใช้งานไม่ซับซ้อน", watchFor: "ควรทดลองส่งออกข้อมูลและการทำงานร่วมกันก่อนย้ายคลังขนาดใหญ่ทั้งหมดเข้าไป", links: [{ label: "Mendeley", href: "https://www.mendeley.com/reference-management/reference-manager" }] },
+            { name: "EndNote", access: "มีค่าใช้จ่าย · สถาบันอาจมีสิทธิ์ให้ใช้", bestFor: "ห้องปฏิบัติการหรือมหาวิทยาลัยที่ใช้ EndNote เป็นมาตรฐานและมีรูปแบบอ้างอิงพร้อมอยู่แล้ว", watchFor: "ตรวจสิทธิ์ของมหาวิทยาลัยก่อนซื้อ เพราะหลายแห่งมีใบอนุญาตให้ใช้อยู่แล้ว", links: [{ label: "EndNote", href: "https://endnote.com/" }] },
+          ],
+        },
+        {
+          id: "screening", title: "คัดกรองและจัดการงานทบทวน", description: "ลบรายการซ้ำ ใช้เกณฑ์คัดเลือก แก้ความเห็นต่าง และเก็บประวัติการตัดสินใจ",
+          tools: [
+            { name: "Rayyan", access: "มีทั้งแผนฟรีและเสียเงิน", bestFor: "คัดกรองชื่อเรื่องและบทคัดย่อ โดยเฉพาะงานที่มีผู้ทบทวนหลายคนและต้องปกปิดผลการตัดสินใจระหว่างกัน", watchFor: "ความสามารถของแต่ละแผนต่างกัน ควรกำหนดบทบาททีมก่อนเชิญสมาชิก", links: [{ label: "Rayyan", href: "https://www.rayyan.ai/" }] },
+            { name: "ASReview", access: "ฟรี · โอเพนซอร์ส", bestFor: "ชุดเอกสารขนาดใหญ่ที่ต้องการใช้ active learning ช่วยจัดลำดับงานที่น่าจะเกี่ยวข้อง โดยให้มนุษย์เป็นผู้ตัดสิน", watchFor: "ควรกำหนดเกณฑ์หยุดและรายงานรุ่นโมเดล การตั้งค่า และการตัดสินใจของผู้ทบทวนให้ชัด", links: [{ label: "ASReview", href: "https://asreview.nl/" }] },
+            { name: "EPPI-Reviewer", access: "ระบบสมาชิก · บางโครงการอาจมีสิทธิ์ให้ใช้", bestFor: "งานทบทวนหรือ evidence map ที่ซับซ้อนและต้องทำงานร่วมกันตั้งแต่ลงรหัสจนถึงสังเคราะห์", watchFor: "งานวิทยานิพนธ์ขนาดเล็กอาจไม่ต้องใช้ระบบเต็มรูปแบบ ควรตรวจค่าใช้จ่ายและเวลาเรียนรู้ก่อน", links: [{ label: "EPPI-Reviewer", href: "https://eppi.ioe.ac.uk/cms/er4" }] },
+          ],
+        },
+        {
+          id: "writing", title: "จดบันทึก เขียน และทำงานร่วมกัน", description: "เปลี่ยนบันทึกจากการอ่านให้เป็นข้อสังเคราะห์ร่วมกันและต้นฉบับที่ดูแลต่อได้",
+          tools: [
+            { name: "Notion / Obsidian", access: "ตัวหลักใช้ฟรี · บริการเสริมมีค่าใช้จ่าย", bestFor: "เชื่อมโยงบันทึก พัฒนาแนวคิด และจัดพื้นที่สังเคราะห์ก่อนเริ่มเขียนต้นฉบับ", watchFor: "เลือก Notion เมื่อต้องทำงานร่วมกัน หรือ Obsidian เมื่อต้องการเก็บไฟล์ไว้ในเครื่อง ไม่ควรทำบันทึกชุดเดียวกันซ้ำสองระบบ", links: [{ label: "Notion", href: "https://www.notion.com/product" }, { label: "Obsidian", href: "https://obsidian.md/" }] },
+            { name: "Overleaf", access: "มีทั้งแผนฟรีและเสียเงิน", bestFor: "วิทยานิพนธ์และบทความที่ใช้ LaTeX รวมถึงงานที่ต้องเขียนร่วมกันบนแม่แบบวารสาร", watchFor: "ควรตรวจว่าอาจารย์ที่ปรึกษาและผู้เขียนร่วมสะดวกตรวจงานใน LaTeX หรือไม่", links: [{ label: "Overleaf", href: "https://www.overleaf.com/" }] },
+            { name: "Google Docs + Paperpile", access: "Docs ฟรี · Paperpile มีค่าใช้จ่าย", bestFor: "ทีมที่ตรวจแก้ต้นฉบับใน Google Docs อยู่แล้วและต้องการจัดการการอ้างอิงในพื้นที่เดียวกัน", watchFor: "กำหนดให้ชัดว่าคลังอ้างอิงใดเป็นฉบับหลัก เพื่อป้องกันรายการซ้ำหรือข้อมูลไม่ตรงกัน", links: [{ label: "Google Docs", href: "https://docs.google.com/" }, { label: "Paperpile", href: "https://paperpile.com/" }] },
+          ],
+        },
+        {
+          id: "analysis", title: "วิเคราะห์และสังเคราะห์", description: "ลงรหัสข้อค้นพบเชิงคุณภาพ รวมผลเชิงสถิติ หรือจัดการกระบวนการทบทวนทั้งงาน",
+          tools: [
+            { name: "NVivo / ATLAS.ti", access: "มีค่าใช้จ่าย · มีทางเลือกสำหรับนักศึกษาและสถาบัน", bestFor: "ลงรหัสข้อค้นพบเชิงคุณภาพ จัดบันทึก วิเคราะห์ความสัมพันธ์ และทำงานเป็นทีมอย่างเป็นระบบ", watchFor: "โปรแกรมไม่ได้เลือกหลักการวิเคราะห์แทนผู้วิจัย ควรกำหนดแนวทางลงรหัสก่อนนำข้อมูลทั้งหมดเข้าไป", links: [{ label: "NVivo", href: "https://lumivero.com/products/nvivo/" }, { label: "ATLAS.ti", href: "https://atlasti.com/" }] },
+            { name: "R + metafor", access: "ฟรี · โอเพนซอร์ส", bestFor: "ทำ meta-analysis ที่ทำซ้ำได้ ตรวจความไวของผล และสร้างผลลัพธ์ทางสถิติสำหรับรายงาน", watchFor: "ควรมีผู้เชี่ยวชาญด้านสถิติช่วยตรวจ เมื่อค่าผลลัพธ์ ความสัมพันธ์ระหว่างข้อมูล หรือความแตกต่างระหว่างงานมีความซับซ้อน", links: [{ label: "R", href: "https://www.r-project.org/" }, { label: "metafor", href: "https://wviechtb.github.io/metafor/" }] },
+            { name: "Covidence", access: "มีค่าใช้จ่าย · มหาวิทยาลัยหลายแห่งมีสิทธิ์ให้ใช้", bestFor: "ทีมที่ต้องการคัดกรอง สกัดข้อมูล ประเมินความเสี่ยงอคติ และส่งออกผลในระบบเดียว", watchFor: "ตรวจสิทธิ์ของมหาวิทยาลัยและทดสอบว่าขั้นตอนในระบบตรงกับวิธีทบทวนก่อนตั้งค่าโครงการ", links: [{ label: "Covidence", href: "https://www.covidence.org/" }] },
+          ],
+        },
+      ],
       templates: [
         { id: "search-log", name: "แบบบันทึกการค้น", purpose: "ช่วยให้ผู้อื่นทำการค้นในแต่ละฐานข้อมูลซ้ำได้", content: "ฐานข้อมูล: [ชื่อ]\nแพลตฟอร์ม: [ผู้ให้บริการ]\nวันที่ค้น: [YYYY-MM-DD]\nช่วงข้อมูล: [เริ่ม–สิ้นสุด]\nคำค้นเต็ม: [วางคำค้น]\nตัวกรอง: [ระบุหรือไม่มี]\nจำนวนผลลัพธ์: [n]\nชื่อไฟล์ส่งออก: [ชื่อ]\nหมายเหตุและการปรับ: [เหตุผล]" },
         { id: "eligibility", name: "แบบบันทึกผลการคัดเลือก", purpose: "ช่วยให้ตัดสินใจคัดกรองอย่างสม่ำเสมอและอธิบายเหตุผลได้", content: "รหัสงาน: [ผู้แต่ง-ปี]\nผู้ทบทวน: [ชื่อ]\nระยะ: [ชื่อ/บทคัดย่อ | ฉบับเต็ม]\nผลการพิจารณา: [รับ | ตัดออก | หารือ]\nเกณฑ์ที่ใช้: [เกณฑ์]\nเหตุผลตัดออก: [เหตุผลเฉพาะหนึ่งข้อ]\nหมายเหตุ: [บริบทหรือความไม่แน่นอน]" },

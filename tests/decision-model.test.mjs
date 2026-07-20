@@ -52,6 +52,11 @@ test("keeps the merged guide complete in English and Thai", () => {
     assert.equal(Object.keys(content.methodDeepDives).length, 14);
     assert.equal(Object.keys(content.disciplineDeepDives).length, 9);
     assert.equal(content.workflow.phases.length, 6);
+    assert.equal(content.toolkit.searchTips.length, 3);
+    assert.equal(content.toolkit.toolCategories.length, 4);
+    assert.equal(content.toolkit.toolCategories.flatMap((category) => category.tools).length, 12);
+    assert.ok(content.toolkit.toolCategories.every((category) => category.tools.every((tool) => tool.links.length >= 1)));
+    assert.ok(content.toolkit.toolCategories.every((category) => category.tools.every((tool) => tool.links.every((link) => link.href.startsWith("https://")))));
     assert.equal(content.toolkit.templates.length, 4);
     assert.equal(content.toolkit.pitfalls.length, 6);
   }

@@ -25,6 +25,17 @@ export const uiText = {
       ],
       note: "A rigorous review is a chain of aligned decisions, not a search with a fashionable label.",
     },
+    startHere: {
+      index: "Choose your entry point",
+      title: "Start from where you are now.",
+      intro: "You do not need to read this guide from top to bottom. Choose the situation that is closest to yours and move to the next useful decision.",
+      cards: [
+        { index: "01", title: "I have not started yet", description: "I have a topic or a rough idea, but I do not know which review method fits it.", action: "Choose a review method", href: "#pathway" },
+        { index: "02", title: "I already have papers", description: "My PDFs and notes are growing, and I need a traceable way to organise the work.", action: "Follow the workflow", href: "#workflow" },
+        { index: "03", title: "I need field-specific guidance", description: "I need to know which sources, standards, journals, and methods matter in my discipline.", action: "Explore my discipline", href: "#disciplines" },
+        { index: "04", title: "I need practical tools", description: "I am ready to search, screen, appraise, extract, analyse, or start writing.", action: "Open the toolkit", href: "#toolkit" },
+      ],
+    },
     pathway: {
       index: "01 · Guided pathway",
       title: "Make the method decision in five clear steps.",
@@ -76,6 +87,9 @@ export const uiText = {
       tools: "Useful tools",
       fieldTip: "Field insight",
       caution: "Discipline caution",
+      searchPlaceholder: "Search disciplines, sources, or methods…",
+      searchLabel: "Search discipline guidance",
+      noResults: "No discipline matches that search. Try a broader term.",
     },
     method: {
       index: "04 · Method library",
@@ -95,6 +109,7 @@ export const uiText = {
       reporting: "Reporting guidance",
       tools: "Working tools",
       officialGuidance: "Open official guidance ↗",
+      filters: { all: "All", structured: "Structured", flexible: "Flexible", quantitative: "Quantitative", qualitative: "Qualitative" },
     },
     notes: {
       index: "06 · Before the search",
@@ -137,6 +152,17 @@ export const uiText = {
         ["ผลลัพธ์", "คุณต้องการข้อสรุปหรือคุณูปการแบบใด?"],
       ],
       note: "งานทบทวนที่น่าเชื่อถือเกิดจากชุดการตัดสินใจที่สอดคล้องต่อเนื่องกัน ไม่ใช่การเลือกชื่อวิธีตามกระแสนิยม",
+    },
+    startHere: {
+      index: "เลือกจุดเริ่มต้น",
+      title: "เริ่มจากจุดที่คุณอยู่ตอนนี้",
+      intro: "คุณไม่จำเป็นต้องอ่านคู่มือนี้ตั้งแต่ต้นจนจบ เลือกสถานการณ์ที่ใกล้กับคุณที่สุด แล้วไปต่อยังขั้นที่ช่วยให้งานเดินหน้าได้ทันที",
+      cards: [
+        { index: "01", title: "ยังไม่ได้เริ่ม", description: "มีหัวข้อหรือแนวคิดคร่าว ๆ แล้ว แต่ยังไม่แน่ใจว่าควรใช้วิธีทบทวนแบบใด", action: "ช่วยเลือกวิธีทบทวน", href: "#pathway" },
+        { index: "02", title: "มีบทความอยู่แล้ว", description: "ไฟล์และบันทึกเริ่มมากขึ้น จึงต้องการขั้นตอนจัดระเบียบงานที่ย้อนกลับมาตรวจสอบได้", action: "ดูขั้นตอนทำงาน", href: "#workflow" },
+        { index: "03", title: "อยากดูคำแนะนำตามสาขา", description: "ต้องการรู้ว่าควรค้นจากที่ใด ใช้มาตรฐานอะไร และวิธีใดเป็นที่ยอมรับในสาขา", action: "เลือกสาขาวิชา", href: "#disciplines" },
+        { index: "04", title: "กำลังหาเครื่องมือช่วยทำงาน", description: "พร้อมเริ่มค้น คัดกรอง ประเมิน สกัดข้อมูล วิเคราะห์ หรือเขียนงานแล้ว", action: "เปิดชุดเครื่องมือ", href: "#toolkit" },
+      ],
     },
     pathway: {
       index: "01 · เส้นทางแนะนำ",
@@ -189,6 +215,9 @@ export const uiText = {
       tools: "เครื่องมือที่ใช้ได้",
       fieldTip: "คำแนะนำสำหรับสาขานี้",
       caution: "ข้อควรระวังประจำสาขา",
+      searchPlaceholder: "ค้นหาสาขา ฐานข้อมูล หรือวิธีทบทวน…",
+      searchLabel: "ค้นหาคำแนะนำตามสาขา",
+      noResults: "ไม่พบสาขาที่ตรงกับคำค้น ลองใช้คำที่กว้างขึ้น",
     },
     method: {
       index: "04 · คลังวิธีทบทวน",
@@ -208,6 +237,7 @@ export const uiText = {
       reporting: "แนวทางการรายงาน",
       tools: "เครื่องมือทำงาน",
       officialGuidance: "เปิดแนวทางทางการ ↗",
+      filters: { all: "ทุกวิธี", structured: "เป็นระบบสูง", flexible: "ยืดหยุ่น", quantitative: "เชิงปริมาณ", qualitative: "เชิงคุณภาพ" },
     },
     notes: {
       index: "06 · ก่อนเริ่มค้น",

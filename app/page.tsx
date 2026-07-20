@@ -51,6 +51,25 @@ type DisciplineDeepDive = {
   tip: string;
 };
 
+type MethodFilterId = "all" | "structured" | "flexible" | "quantitative" | "qualitative";
+
+const methodFilterTags: Record<MethodId, readonly Exclude<MethodFilterId, "all">[]> = {
+  systematic: ["structured", "quantitative", "qualitative"],
+  scoping: ["structured", "flexible"],
+  "meta-analysis": ["structured", "quantitative"],
+  qualitative: ["flexible", "qualitative"],
+  realist: ["structured", "flexible", "qualitative"],
+  integrative: ["flexible", "quantitative", "qualitative"],
+  mixed: ["structured", "quantitative", "qualitative"],
+  bibliometric: ["structured", "quantitative"],
+  critical: ["flexible", "qualitative"],
+  umbrella: ["structured", "quantitative"],
+  rapid: ["structured", "flexible"],
+  "systematic-search": ["structured", "flexible"],
+  "meta-ethnography": ["structured", "qualitative"],
+  thematic: ["flexible", "qualitative"],
+};
+
 const goals: { id: GoalId; index: string; title: string; description: string }[] = [
   { id: "map", index: "01", title: "Map a field", description: "See the size, concepts, gaps, and boundaries of a broad topic." },
   { id: "evaluate", index: "02", title: "Evaluate effects", description: "Answer a focused question about impact, association, or effectiveness." },
@@ -272,7 +291,8 @@ export default function Home() {
   const [commitment, setCommitment] = useState<CommitmentId | "">("");
   const [activeDiscipline, setActiveDiscipline] = useState<DisciplineId>("health");
   const [activeMethod, setActiveMethod] = useState<MethodId>("scoping");
-  const [methodFilter, setMethodFilter] = useState("all");
+  const [disciplineQuery, setDisciplineQuery] = useState("");
+  const [methodFilter, setMethodFilter] = useState<MethodFilterId>("all");
   const [copiedItem, setCopiedItem] = useState("");
 
   const merged = mergedGuideContent[locale];
@@ -303,8 +323,22 @@ export default function Home() {
   const methodReference = selectedMethodDeepDive?.reference
     ? merged.toolkit.references.find((item) => item.id === selectedMethodDeepDive.reference)
     : undefined;
-  const methodFamilies = Array.from(new Set(methods.map((method) => method.family)));
-  const visibleMethods = methodFilter === "all" ? methods : methods.filter((method) => method.family === methodFilter);
+  const normalizedDisciplineQuery = disciplineQuery.trim().toLocaleLowerCase(locale === "th" ? "th" : "en");
+  const matchesDisciplineQuery = (item: Discipline, query: string) => [item.name, item.intro, item.questions, item.sources, ...item.methods]
+    .join(" ")
+    .toLocaleLowerCase(locale === "th" ? "th" : "en")
+    .includes(query);
+  const visibleDisciplines = normalizedDisciplineQuery
+    ? disciplines.filter((item) => matchesDisciplineQuery(item, normalizedDisciplineQuery))
+    : disciplines;
+  const methodFilterOptions: { id: MethodFilterId; label: string }[] = [
+    { id: "all", label: t.method.filters.all },
+    { id: "structured", label: t.method.filters.structured },
+    { id: "flexible", label: t.method.filters.flexible },
+    { id: "quantitative", label: t.method.filters.quantitative },
+    { id: "qualitative", label: t.method.filters.qualitative },
+  ];
+  const visibleMethods = methodFilter === "all" ? methods : methods.filter((method) => methodFilterTags[method.id].includes(methodFilter));
 
   const pathwayText = `${t.pathway.copyLabels.title}\n${t.pathway.copyLabels.intent}: ${chosenGoal?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.discipline}: ${chosenDiscipline?.name ?? t.pathway.notSelected}\n${t.pathway.copyLabels.evidence}: ${evidenceTypes.find((item) => item.id === evidence)?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.commitment}: ${chosenCommitment?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.method}: ${recommended.name}\n${t.pathway.copyLabels.alternatives}: ${alternatives.map((item) => item.name).join(" · ")}\n${t.pathway.copyLabels.why}: ${recommended.bestFor}`;
 
@@ -350,7 +384,7 @@ export default function Home() {
           <span>LitWise</span>
         </a>
         <nav aria-label={locale === "th" ? "เมนูหลัก" : "Main navigation"}>
-          <a href="#pathway">{t.nav.start}</a>
+          <a href="#start">{t.nav.start}</a>
           <a href="#workflow">{t.nav.workflow}</a>
           <a href="#disciplines">{t.nav.disciplines}</a>
           <a href="#methods">{t.nav.methods}</a>
@@ -392,6 +426,23 @@ export default function Home() {
           <ol>{t.compass.steps.map((item, index) => <li key={item[0]}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{item[0]}</strong><small>{item[1]}</small></div></li>)}</ol>
           <p className="compass-note">{t.compass.note}</p>
         </aside>
+      </section>
+
+      <section className="start-section" id="start">
+        <div className="section-heading split-heading">
+          <div><p className="section-index">{t.startHere.index}</p><h2>{t.startHere.title}</h2></div>
+          <p>{t.startHere.intro}</p>
+        </div>
+        <div className="start-stage-grid">
+          {t.startHere.cards.map((card) => (
+            <a key={card.title} href={card.href}>
+              <span className="start-card-index">{card.index}</span>
+              <h3>{card.title}</h3>
+              <p>{card.description}</p>
+              <span className="start-card-action">{card.action}<b aria-hidden="true">→</b></span>
+            </a>
+          ))}
+        </div>
       </section>
 
       <section className="pathway-section" id="pathway">
@@ -554,18 +605,38 @@ export default function Home() {
           <p>{t.discipline.intro}</p>
         </div>
 
+        <div className="discipline-search">
+          <label htmlFor="discipline-search-input">{t.discipline.searchLabel}</label>
+          <input
+            id="discipline-search-input"
+            type="search"
+            value={disciplineQuery}
+            placeholder={t.discipline.searchPlaceholder}
+            onChange={(event) => {
+              const nextQuery = event.target.value;
+              const normalizedNextQuery = nextQuery.trim().toLocaleLowerCase(locale === "th" ? "th" : "en");
+              setDisciplineQuery(nextQuery);
+              if (normalizedNextQuery) {
+                const firstMatch = disciplines.find((item) => matchesDisciplineQuery(item, normalizedNextQuery));
+                if (firstMatch) setActiveDiscipline(firstMatch.id);
+              }
+            }}
+          />
+        </div>
+
         <div className="discipline-atlas">
           <div className="discipline-list" role="list" aria-label={t.discipline.listAria}>
-            {disciplines.map((item, index) => (
+            {visibleDisciplines.map((item) => (
               <button key={item.id} onClick={() => setActiveDiscipline(item.id)} className={activeDiscipline === item.id ? "active" : ""} aria-pressed={activeDiscipline === item.id}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
+                <span>{String(disciplines.findIndex((candidate) => candidate.id === item.id) + 1).padStart(2, "0")}</span>
                 <strong>{item.name}</strong>
                 <span aria-hidden="true">↗</span>
               </button>
             ))}
+            {visibleDisciplines.length === 0 && <p className="discipline-empty">{t.discipline.noResults}</p>}
           </div>
 
-          <article className="discipline-detail">
+          {visibleDisciplines.length > 0 && <article className="discipline-detail">
             <div className="discipline-monogram" aria-hidden="true">{selectedDiscipline.marker}</div>
             <p className="detail-kicker">{t.discipline.guide} · {selectedDiscipline.name}</p>
             <h3>{selectedDiscipline.intro}</h3>
@@ -581,19 +652,28 @@ export default function Home() {
             </dl>
             {selectedDisciplineDeepDive && <div className="field-insight"><span>{t.discipline.fieldTip}</span><p>{selectedDisciplineDeepDive.tip}</p></div>}
             <div className="field-caution"><span>{t.discipline.caution}</span><p>{selectedDiscipline.caution}</p></div>
-          </article>
+          </article>}
         </div>
       </section>
 
       <section className="methods-section" id="methods">
         <div className="section-heading methods-heading">
           <div><p className="section-index">{t.method.index}</p><h2>{t.method.title}</h2></div>
-          <div className="method-filter" aria-label={t.method.filterAria}>
-            <label htmlFor="method-family">{t.method.purpose}</label>
-            <select id="method-family" value={methodFilter} onChange={(event) => setMethodFilter(event.target.value)}>
-              <option value="all">{t.method.all}</option>
-              {methodFamilies.map((family) => <option key={family} value={family}>{family}</option>)}
-            </select>
+          <div className="method-filter-pills" role="group" aria-label={t.method.filterAria}>
+            {methodFilterOptions.map((filter) => (
+              <button
+                key={filter.id}
+                className={methodFilter === filter.id ? "active" : ""}
+                aria-pressed={methodFilter === filter.id}
+                onClick={() => {
+                  setMethodFilter(filter.id);
+                  const firstVisibleMethod = filter.id === "all" ? methods[0] : methods.find((method) => methodFilterTags[method.id].includes(filter.id as Exclude<MethodFilterId, "all">));
+                  if (firstVisibleMethod) setActiveMethod(firstVisibleMethod.id);
+                }}
+              >
+                {filter.label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -648,6 +728,15 @@ export default function Home() {
           </div>
         </div>
 
+        <div className="search-tip-grid">
+          {merged.toolkit.searchTips.map((tip) => (
+            <article key={tip.title}>
+              <span>{tip.marker}</span>
+              <div><h3>{tip.title}</h3><p>{tip.description}</p></div>
+            </article>
+          ))}
+        </div>
+
         <div className="appraisal-panel">
           <div className="toolkit-subheading"><p className="detail-kicker">{merged.toolkit.appraisalTitle}</p><h3>{merged.toolkit.appraisalIntro}</h3></div>
           <div className="appraisal-table-wrap">
@@ -655,6 +744,32 @@ export default function Home() {
               <thead><tr>{merged.toolkit.tableHeadings.map((heading) => <th key={heading}>{heading}</th>)}</tr></thead>
               <tbody>{merged.toolkit.appraisalRows.map((row) => <tr key={row[0]}>{row.map((cell) => <td key={cell}>{cell}</td>)}</tr>)}</tbody>
             </table>
+          </div>
+        </div>
+
+        <div className="tool-directory">
+          <div className="section-heading split-heading tool-directory-heading">
+            <div><h2>{merged.toolkit.toolDirectoryTitle}</h2></div>
+            <p>{merged.toolkit.toolDirectoryIntro}</p>
+          </div>
+          <div className="tool-category-grid">
+            {merged.toolkit.toolCategories.map((category) => (
+              <article className="tool-category" key={category.id}>
+                <header><h3>{category.title}</h3><p>{category.description}</p></header>
+                <div className="tool-card-list">
+                  {category.tools.map((tool) => (
+                    <article className="tool-card" key={tool.name}>
+                      <div className="tool-card-head"><h4>{tool.name}</h4><span className="tool-access">{tool.access}</span></div>
+                      <p>{tool.bestFor}</p>
+                      <small>{tool.watchFor}</small>
+                      <div className="tool-links">
+                        {tool.links.map((link) => <a key={link.href} href={link.href} target="_blank" rel="noreferrer">{merged.toolkit.toolLinkLabel}: {link.label}<span aria-hidden="true">↗</span></a>)}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </article>
+            ))}
           </div>
         </div>
 

@@ -28,12 +28,16 @@ test("server-renders the LitWise research guide", async () => {
   const html = await response.text();
   assert.match(html, /<title>LitWise — Literature Review Expert Guide<\/title>/i);
   assert.match(html, /Find the review method your/);
+  assert.match(html, /Start from where you are now/);
   assert.match(html, /Make the method decision in five clear steps/);
   assert.match(html, /Health &amp; medicine/);
   assert.match(html, /Systematic review/);
   assert.match(html, /Umbrella review/);
   assert.match(html, /Execute your review in six traceable phases/);
   assert.match(html, /Research toolkit/);
+  assert.match(html, /Research tool directory/);
+  assert.match(html, /Zotero/);
+  assert.match(html, /ASReview/);
   assert.match(html, /Search log template/);
   assert.match(html, /https:\/\/litwise\.test\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
@@ -59,6 +63,10 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(page, /disciplineDeepDives/);
   assert.match(page, /workflow-section/);
   assert.match(page, /toolkit-section/);
+  assert.match(page, /start-stage-grid/);
+  assert.match(page, /discipline-search/);
+  assert.match(page, /method-filter-pills/);
+  assert.match(page, /tool-directory/);
   assert.match(layout, /generateMetadata/);
   assert.match(layout, /x-forwarded-host/);
   assert.match(page, /litwise-language/);
@@ -74,6 +82,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.doesNotMatch(guideData, /บทวิทยานิพนธ์ที่ปกป้องได้|ผืนงานสร้างคำค้น|เกณฑ์เคลื่อน|ตารางไร้ร่องรอย|การทบทวนแบบร่ม/);
   assert.match(globalCss, /--th-body: 16px/);
   assert.match(globalCss, /html\[data-locale="th"\]\s*\{/);
+  assert.match(globalCss, /@media print/);
+  assert.match(globalCss, /prefers-reduced-motion/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.ok(ogImage.byteLength > 100_000);
   await assert.rejects(access(new URL("../app/_sites-preview/SkeletonPreview.tsx", templateRoot)));
