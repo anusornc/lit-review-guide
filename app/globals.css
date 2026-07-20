@@ -40,7 +40,26 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .site-header nav a { position: relative; padding: 32px 0; }
 .site-header nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 22px; height: 1px; background: var(--clay); transition: right 180ms ease; }
 .site-header nav a:hover::after { right: 0; }
-.header-action { justify-self: end; font-size: 13px; font-weight: 650; border-bottom: 1px solid var(--forest); padding-bottom: 4px; }
+.header-tools { justify-self: end; display: flex; align-items: center; gap: 24px; }
+.header-action { font-size: 13px; font-weight: 650; border-bottom: 1px solid var(--forest); padding-bottom: 4px; white-space: nowrap; }
+.language-switch { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; }
+.language-switch button { border: 0; border-bottom: 1px solid transparent; background: transparent; color: inherit; padding: 4px 2px; cursor: pointer; }
+.language-switch button[aria-pressed="true"] { border-bottom-color: var(--clay); color: var(--forest); }
+
+html[data-locale="th"] body { font-family: Thonburi, "Noto Sans Thai", Tahoma, var(--sans); }
+html[data-locale="th"] h1,
+html[data-locale="th"] h2,
+html[data-locale="th"] h3,
+html[data-locale="th"] .hero-lede,
+html[data-locale="th"] .brand,
+html[data-locale="th"] .option-card strong,
+html[data-locale="th"] .discipline-list button strong,
+html[data-locale="th"] .method-list strong,
+html[data-locale="th"] .note-grid strong,
+html[data-locale="th"] blockquote { font-family: "Th Sarabun New", Thonburi, "Noto Sans Thai", Tahoma, sans-serif; letter-spacing: -0.015em; }
+html[data-locale="th"] h1 { line-height: 1.02; }
+html[data-locale="th"] h2,
+html[data-locale="th"] h3 { line-height: 1.18; }
 
 .hero {
   width: min(1440px, calc(100% - 64px));
@@ -250,6 +269,7 @@ footer > p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55;
 
 @media (max-width: 560px) {
   .site-header { width: calc(100% - 28px); min-height: 72px; }
+  .header-tools { gap: 12px; }
   .hero, .disciplines-section, .field-notes, footer { width: calc(100% - 28px); }
   .hero { padding: 54px 0 72px; }
   .eyebrow { flex-direction: column; gap: 6px; margin-bottom: 25px; }

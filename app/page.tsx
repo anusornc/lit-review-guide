@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { thaiContent, uiText, type Locale } from "./i18n";
 
 type GoalId = "map" | "evaluate" | "understand" | "explain";
 type EvidenceId = "experimental" | "qualitative" | "mixed" | "theoretical" | "uncertain";
@@ -248,7 +249,11 @@ const methodForPath = (goal: GoalId | "", evidence: EvidenceId | "") => {
   return "scoping";
 };
 
+const englishContent = { goals, evidenceTypes, disciplines, methods };
+
 export default function Home() {
+  const [locale, setLocale] = useState<Locale>("en");
+  const [localeReady, setLocaleReady] = useState(false);
   const [step, setStep] = useState(1);
   const [goal, setGoal] = useState<GoalId | "">("");
   const [discipline, setDiscipline] = useState("");
@@ -258,19 +263,43 @@ export default function Home() {
   const [methodFilter, setMethodFilter] = useState("All methods");
   const [copied, setCopied] = useState(false);
 
+  const content = locale === "th" ? thaiContent : englishContent;
+  const { goals, evidenceTypes, disciplines, methods } = content;
+  const t = uiText[locale];
+
   const recommended = methods.find((method) => method.id === methodForPath(goal, evidence)) ?? methods[1];
   const chosenGoal = goals.find((item) => item.id === goal);
   const chosenDiscipline = disciplines.find((item) => item.id === discipline);
   const selectedDiscipline = disciplines.find((item) => item.id === activeDiscipline) ?? disciplines[0];
   const selectedMethod = methods.find((item) => item.id === activeMethod) ?? methods[1];
-  const methodFamilies = ["All methods", ...Array.from(new Set(methods.map((method) => method.family)))];
-  const visibleMethods = methodFilter === "All methods" ? methods : methods.filter((method) => method.family === methodFilter);
+  const methodFamilies = [t.method.all, ...Array.from(new Set(methods.map((method) => method.family)))];
+  const visibleMethods = methodFilter === t.method.all ? methods : methods.filter((method) => method.family === methodFilter);
 
   const pathwayText = useMemo(
     () =>
-      `LitWise review pathway\nIntent: ${chosenGoal?.title ?? "Not selected"}\nDiscipline: ${chosenDiscipline?.name ?? "Not selected"}\nEvidence: ${evidenceTypes.find((item) => item.id === evidence)?.title ?? "Not selected"}\nRecommended starting method: ${recommended.name}\nWhy: ${recommended.bestFor}`,
-    [chosenDiscipline, chosenGoal, evidence, recommended],
+      `${t.pathway.copyLabels.title}\n${t.pathway.copyLabels.intent}: ${chosenGoal?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.discipline}: ${chosenDiscipline?.name ?? t.pathway.notSelected}\n${t.pathway.copyLabels.evidence}: ${evidenceTypes.find((item) => item.id === evidence)?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.method}: ${recommended.name}\n${t.pathway.copyLabels.why}: ${recommended.bestFor}`,
+    [chosenDiscipline, chosenGoal, evidence, evidenceTypes, recommended, t],
   );
+
+  useEffect(() => {
+    const parameter = new URLSearchParams(window.location.search).get("lang");
+    const stored = window.localStorage.getItem("litwise-language");
+    const browserLanguage = window.navigator.language.toLowerCase().startsWith("th") ? "th" : "en";
+    const nextLocale: Locale = parameter === "th" || parameter === "en" ? parameter : stored === "th" || stored === "en" ? stored : browserLanguage;
+    setLocale(nextLocale);
+    setLocaleReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!localeReady) return;
+    window.localStorage.setItem("litwise-language", locale);
+    document.documentElement.lang = locale;
+    document.documentElement.dataset.locale = locale;
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", locale);
+    window.history.replaceState({}, "", url);
+    setMethodFilter(uiText[locale].method.all);
+  }, [locale, localeReady]);
 
   useEffect(() => {
     if (!copied) return;
@@ -288,61 +317,63 @@ export default function Home() {
   return (
     <main>
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="LitWise home">
+        <a className="brand" href="#top" aria-label="LitWise">
           <span className="brand-mark">L</span>
           <span>LitWise</span>
         </a>
-        <nav aria-label="Main navigation">
-          <a href="#pathway">Start</a>
-          <a href="#disciplines">Disciplines</a>
-          <a href="#methods">Methods</a>
-          <a href="#field-notes">Field notes</a>
+        <nav aria-label={locale === "th" ? "เมนูหลัก" : "Main navigation"}>
+          <a href="#pathway">{t.nav.start}</a>
+          <a href="#disciplines">{t.nav.disciplines}</a>
+          <a href="#methods">{t.nav.methods}</a>
+          <a href="#field-notes">{t.nav.notes}</a>
         </nav>
-        <a className="header-action" href="#pathway">Build my pathway <span aria-hidden="true">↗</span></a>
+        <div className="header-tools">
+          <div className="language-switch" role="group" aria-label={t.languageLabel}>
+            <button onClick={() => setLocale("en")} aria-pressed={locale === "en"}>EN</button>
+            <span aria-hidden="true">/</span>
+            <button onClick={() => setLocale("th")} aria-pressed={locale === "th"}>ไทย</button>
+          </div>
+          <a className="header-action" href="#pathway">{t.nav.action} <span aria-hidden="true">↗</span></a>
+        </div>
       </header>
 
       <section className="hero" id="top">
         <div className="hero-copy">
-          <p className="eyebrow"><span>Literature review expert guide</span><span>Master’s · PhD · Research</span></p>
-          <h1>Find the review method your <em>question</em> needs.</h1>
-          <p className="hero-lede">Start with what you need to understand—not a method name. LitWise turns your research intent, discipline, and evidence into a defensible review pathway.</p>
+          <p className="eyebrow"><span>{t.hero.eyebrow}</span><span>{t.hero.audience}</span></p>
+          <h1>{t.hero.before}<em>{t.hero.emphasis}</em>{t.hero.after}</h1>
+          <p className="hero-lede">{t.hero.lede}</p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#pathway">Build my review pathway <span aria-hidden="true">→</span></a>
-            <a className="text-link" href="#disciplines">Explore disciplines <span aria-hidden="true">↓</span></a>
+            <a className="button button-primary" href="#pathway">{t.nav.action} <span aria-hidden="true">→</span></a>
+            <a className="text-link" href="#disciplines">{t.hero.explore} <span aria-hidden="true">↓</span></a>
           </div>
           <dl className="trust-row">
-            <div><dt>09</dt><dd>review methods explained</dd></div>
-            <div><dt>08</dt><dd>discipline families mapped</dd></div>
-            <div><dt>04</dt><dd>decisions to a starting method</dd></div>
+            <div><dt>09</dt><dd>{t.hero.stats[0]}</dd></div>
+            <div><dt>08</dt><dd>{t.hero.stats[1]}</dd></div>
+            <div><dt>04</dt><dd>{t.hero.stats[2]}</dd></div>
           </dl>
         </div>
 
-        <aside className="hero-compass" aria-label="The four-part decision compass">
+        <aside className="hero-compass" aria-label={t.compass.aria}>
           <div className="orbital orbital-one" />
           <div className="orbital orbital-two" />
           <div className="compass-heading">
-            <span className="compass-kicker">Your decision compass</span>
+            <span className="compass-kicker">{t.compass.title}</span>
             <span className="compass-code">LW · 01</span>
           </div>
-          <ol>
-            <li><span>01</span><div><strong>Question</strong><small>What must this review help you understand?</small></div></li>
-            <li><span>02</span><div><strong>Evidence</strong><small>What kinds of knowledge can answer it?</small></div></li>
-            <li><span>03</span><div><strong>Method</strong><small>Which synthesis logic fits that evidence?</small></div></li>
-            <li><span>04</span><div><strong>Output</strong><small>What claim or contribution can you defend?</small></div></li>
-          </ol>
-          <p className="compass-note">A rigorous review is a chain of aligned decisions, not a search with a fashionable label.</p>
+          <ol>{t.compass.steps.map((item, index) => <li key={item[0]}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{item[0]}</strong><small>{item[1]}</small></div></li>)}</ol>
+          <p className="compass-note">{t.compass.note}</p>
         </aside>
       </section>
 
       <section className="pathway-section" id="pathway">
         <div className="section-heading split-heading">
-          <div><p className="section-index">01 · Guided pathway</p><h2>Make the method decision in four clear steps.</h2></div>
-          <p>Use this as a starting hypothesis. Confirm the final design with your supervisor, advisory committee, or review team.</p>
+          <div><p className="section-index">{t.pathway.index}</p><h2>{t.pathway.title}</h2></div>
+          <p>{t.pathway.intro}</p>
         </div>
 
         <div className="pathway-shell">
-          <aside className="step-rail" aria-label="Pathway progress">
-            {["Research intent", "Discipline", "Evidence pattern", "Starting method"].map((label, index) => {
+          <aside className="step-rail" aria-label={t.pathway.progressAria}>
+            {t.pathway.stepNames.map((label, index) => {
               const itemStep = index + 1;
               return (
                 <button
@@ -362,9 +393,9 @@ export default function Home() {
           <div className="pathway-workspace" aria-live="polite">
             {step === 1 && (
               <div className="step-content">
-                <p className="step-label">Step 1 of 4 · Research intent</p>
-                <h3>What are you trying to understand?</h3>
-                <p className="step-intro">Choose the closest intent. A useful method begins with the decision your review must support.</p>
+                <p className="step-label">{t.pathway.step1Label}</p>
+                <h3>{t.pathway.step1Title}</h3>
+                <p className="step-intro">{t.pathway.step1Intro}</p>
                 <div className="option-grid">
                   {goals.map((item) => (
                     <button key={item.id} className={`option-card ${goal === item.id ? "selected" : ""}`} onClick={() => setGoal(item.id)} aria-pressed={goal === item.id}>
@@ -379,9 +410,9 @@ export default function Home() {
 
             {step === 2 && (
               <div className="step-content">
-                <p className="step-label">Step 2 of 4 · Discipline</p>
-                <h3>Where does your question live?</h3>
-                <p className="step-intro">Select the closest home discipline. Interdisciplinary projects can start with the field that sets the standard of evidence.</p>
+                <p className="step-label">{t.pathway.step2Label}</p>
+                <h3>{t.pathway.step2Title}</h3>
+                <p className="step-intro">{t.pathway.step2Intro}</p>
                 <div className="discipline-choice-grid">
                   {disciplines.map((item) => (
                     <button key={item.id} className={discipline === item.id ? "selected" : ""} onClick={() => setDiscipline(item.id)} aria-pressed={discipline === item.id}>
@@ -394,9 +425,9 @@ export default function Home() {
 
             {step === 3 && (
               <div className="step-content">
-                <p className="step-label">Step 3 of 4 · Evidence pattern</p>
-                <h3>What evidence will carry the answer?</h3>
-                <p className="step-intro">Think about the evidence you expect—not only the data you prefer to analyse.</p>
+                <p className="step-label">{t.pathway.step3Label}</p>
+                <h3>{t.pathway.step3Title}</h3>
+                <p className="step-intro">{t.pathway.step3Intro}</p>
                 <div className="evidence-list">
                   {evidenceTypes.map((item) => (
                     <button key={item.id} className={evidence === item.id ? "selected" : ""} onClick={() => setEvidence(item.id)} aria-pressed={evidence === item.id}>
@@ -410,28 +441,28 @@ export default function Home() {
 
             {step === 4 && (
               <div className="result-panel">
-                <div className="result-label"><span>Recommended starting point</span><span>Pathway complete</span></div>
+                <div className="result-label"><span>{t.pathway.recommended}</span><span>{t.pathway.complete}</span></div>
                 <h3>{recommended.name}</h3>
                 <p className="result-summary">{recommended.summary}</p>
                 <div className="result-reason">
-                  <span>Why it fits your pathway</span>
-                  <p>You want to <strong>{chosenGoal?.title.toLowerCase()}</strong> in <strong>{chosenDiscipline?.name}</strong>, using <strong>{evidenceTypes.find((item) => item.id === evidence)?.title.toLowerCase()}</strong> evidence. {recommended.bestFor}</p>
+                  <span>{t.pathway.why}</span>
+                  <p>{t.pathway.reason(chosenGoal?.title ?? "", chosenDiscipline?.name ?? "", evidenceTypes.find((item) => item.id === evidence)?.title ?? "", recommended.bestFor)}</p>
                 </div>
                 <div className="result-grid">
-                  <div><span>Likely output</span><p>{recommended.output}</p></div>
-                  <div><span>Watch for</span><p>{recommended.avoidWhen}</p></div>
+                  <div><span>{t.pathway.likelyOutput}</span><p>{recommended.output}</p></div>
+                  <div><span>{t.pathway.watchFor}</span><p>{recommended.avoidWhen}</p></div>
                 </div>
                 <div className="result-actions">
-                  <button className="button button-light" onClick={() => { setActiveMethod(recommended.id); document.getElementById("methods")?.scrollIntoView({ behavior: "smooth" }); }}>Study this method <span aria-hidden="true">↓</span></button>
-                  <button className="button button-quiet" onClick={copyPathway}>{copied ? "Pathway copied ✓" : "Copy pathway"}</button>
+                  <button className="button button-light" onClick={() => { setActiveMethod(recommended.id); document.getElementById("methods")?.scrollIntoView({ behavior: "smooth" }); }}>{t.pathway.study} <span aria-hidden="true">↓</span></button>
+                  <button className="button button-quiet" onClick={copyPathway}>{copied ? t.pathway.copied : t.pathway.copy}</button>
                 </div>
               </div>
             )}
 
             <div className="pathway-controls">
-              <button className="back-button" onClick={() => setStep((value) => Math.max(1, value - 1))} disabled={step === 1}>← Back</button>
-              {step < 4 && <button className="button button-primary" disabled={!canContinue} onClick={() => setStep((value) => Math.min(4, value + 1))}>Continue <span aria-hidden="true">→</span></button>}
-              {step === 4 && <button className="back-button" onClick={() => { setStep(1); setGoal(""); setDiscipline(""); setEvidence(""); }}>Start again</button>}
+              <button className="back-button" onClick={() => setStep((value) => Math.max(1, value - 1))} disabled={step === 1}>{t.pathway.back}</button>
+              {step < 4 && <button className="button button-primary" disabled={!canContinue} onClick={() => setStep((value) => Math.min(4, value + 1))}>{t.pathway.continue} <span aria-hidden="true">→</span></button>}
+              {step === 4 && <button className="back-button" onClick={() => { setStep(1); setGoal(""); setDiscipline(""); setEvidence(""); }}>{t.pathway.restart}</button>}
             </div>
           </div>
         </div>
@@ -439,12 +470,12 @@ export default function Home() {
 
       <section className="disciplines-section" id="disciplines">
         <div className="section-heading split-heading">
-          <div><p className="section-index">02 · Discipline atlas</p><h2>Enter through your field. Then follow the question.</h2></div>
-          <p>Every discipline has its own evidence culture. Select a field to see its common questions, sources, methods, and caution points.</p>
+          <div><p className="section-index">{t.discipline.index}</p><h2>{t.discipline.title}</h2></div>
+          <p>{t.discipline.intro}</p>
         </div>
 
         <div className="discipline-atlas">
-          <div className="discipline-list" role="list" aria-label="Discipline families">
+          <div className="discipline-list" role="list" aria-label={t.discipline.listAria}>
             {disciplines.map((item, index) => (
               <button key={item.id} onClick={() => setActiveDiscipline(item.id)} className={activeDiscipline === item.id ? "active" : ""} aria-pressed={activeDiscipline === item.id}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
@@ -456,23 +487,23 @@ export default function Home() {
 
           <article className="discipline-detail">
             <div className="discipline-monogram" aria-hidden="true">{selectedDiscipline.marker}</div>
-            <p className="detail-kicker">Field guide · {selectedDiscipline.name}</p>
+            <p className="detail-kicker">{t.discipline.guide} · {selectedDiscipline.name}</p>
             <h3>{selectedDiscipline.intro}</h3>
             <dl>
-              <div><dt>Typical questions</dt><dd>{selectedDiscipline.questions}</dd></div>
-              <div><dt>Search territory</dt><dd>{selectedDiscipline.sources}</dd></div>
-              <div><dt>Methods to compare</dt><dd>{selectedDiscipline.methods.join(" · ")}</dd></div>
+              <div><dt>{t.discipline.questions}</dt><dd>{selectedDiscipline.questions}</dd></div>
+              <div><dt>{t.discipline.sources}</dt><dd>{selectedDiscipline.sources}</dd></div>
+              <div><dt>{t.discipline.methods}</dt><dd>{selectedDiscipline.methods.join(" · ")}</dd></div>
             </dl>
-            <div className="field-caution"><span>Discipline caution</span><p>{selectedDiscipline.caution}</p></div>
+            <div className="field-caution"><span>{t.discipline.caution}</span><p>{selectedDiscipline.caution}</p></div>
           </article>
         </div>
       </section>
 
       <section className="methods-section" id="methods">
         <div className="section-heading methods-heading">
-          <div><p className="section-index">03 · Method library</p><h2>Compare the logic—not only the labels.</h2></div>
-          <div className="method-filter" aria-label="Filter methods by purpose">
-            <label htmlFor="method-family">Purpose</label>
+          <div><p className="section-index">{t.method.index}</p><h2>{t.method.title}</h2></div>
+          <div className="method-filter" aria-label={t.method.filterAria}>
+            <label htmlFor="method-family">{t.method.purpose}</label>
             <select id="method-family" value={methodFilter} onChange={(event) => setMethodFilter(event.target.value)}>
               {methodFamilies.map((family) => <option key={family}>{family}</option>)}
             </select>
@@ -480,7 +511,7 @@ export default function Home() {
         </div>
 
         <div className="method-browser">
-          <div className="method-list" role="list" aria-label="Literature review methods">
+          <div className="method-list" role="list" aria-label={t.method.listAria}>
             {visibleMethods.map((method, index) => (
               <button key={method.id} className={activeMethod === method.id ? "active" : ""} onClick={() => setActiveMethod(method.id)} aria-pressed={activeMethod === method.id}>
                 <span className="method-number">{String(index + 1).padStart(2, "0")}</span>
@@ -491,46 +522,43 @@ export default function Home() {
           </div>
 
           <article className="method-detail">
-            <p className="detail-kicker">Method detail · {selectedMethod.family}</p>
+            <p className="detail-kicker">{t.method.detail} · {selectedMethod.family}</p>
             <h3>{selectedMethod.name}</h3>
             <p className="method-summary">{selectedMethod.summary}</p>
             <div className="fit-grid">
-              <div><span>Use it when</span><p>{selectedMethod.bestFor}</p></div>
-              <div><span>Do not force it when</span><p>{selectedMethod.avoidWhen}</p></div>
+              <div><span>{t.method.useWhen}</span><p>{selectedMethod.bestFor}</p></div>
+              <div><span>{t.method.avoidWhen}</span><p>{selectedMethod.avoidWhen}</p></div>
             </div>
-            <div className="method-output"><span>Defensible output</span><p>{selectedMethod.output}</p><small>{selectedMethod.time}</small></div>
+            <div className="method-output"><span>{t.method.output}</span><p>{selectedMethod.output}</p><small>{selectedMethod.time}</small></div>
             <div className="method-steps">
-              <span>Core workflow</span>
+              <span>{t.method.workflow}</span>
               <ol>{selectedMethod.steps.map((item) => <li key={item}>{item}</li>)}</ol>
             </div>
-            <p className="quality-note"><strong>Quality lens:</strong> {selectedMethod.quality}</p>
+            <p className="quality-note"><strong>{t.method.quality}</strong> {selectedMethod.quality}</p>
           </article>
         </div>
       </section>
 
       <section className="field-notes" id="field-notes">
         <div className="field-note-title">
-          <p className="section-index">04 · Before the search</p>
-          <h2>Write these four sentences before opening a database.</h2>
+          <p className="section-index">{t.notes.index}</p>
+          <h2>{t.notes.title}</h2>
         </div>
         <ol className="note-grid">
-          <li><span>01</span><strong>My review must help someone decide…</strong><p>Name the decision, audience, or knowledge gap—not just the topic.</p></li>
-          <li><span>02</span><strong>The review includes evidence about…</strong><p>Define people, phenomena, concepts, settings, dates, and boundaries.</p></li>
-          <li><span>03</span><strong>I will judge evidence by…</strong><p>Choose quality criteria that match each study design and knowledge claim.</p></li>
-          <li><span>04</span><strong>The final contribution will be…</strong><p>State whether you need an estimate, map, explanation, theory, or agenda.</p></li>
+          {t.notes.items.map((item, index) => <li key={item[0]}><span>{String(index + 1).padStart(2, "0")}</span><strong>{item[0]}</strong><p>{item[1]}</p></li>)}
         </ol>
-        <blockquote>“The method is justified by the question, evidence, and intended claim.”<cite>LitWise decision principle</cite></blockquote>
+        <blockquote>{t.notes.quote}<cite>{t.notes.cite}</cite></blockquote>
       </section>
 
       <section className="closing-section">
-        <div><p className="section-index">Ready to begin?</p><h2>Turn a broad interest into a review you can defend.</h2></div>
-        <a className="button button-light" href="#pathway" onClick={() => setStep(1)}>Build my pathway <span aria-hidden="true">↑</span></a>
+        <div><p className="section-index">{t.closing.index}</p><h2>{t.closing.title}</h2></div>
+        <a className="button button-light" href="#pathway" onClick={() => setStep(1)}>{t.nav.action} <span aria-hidden="true">↑</span></a>
       </section>
 
       <footer>
         <a className="brand footer-brand" href="#top"><span className="brand-mark">L</span><span>LitWise</span></a>
-        <p>Method guidance for researchers who want clarity before complexity.</p>
-        <p className="footer-note">Use this guide to frame a defensible starting point. Final protocols should follow field-specific standards and supervisory or team review.</p>
+        <p>{t.footer.tagline}</p>
+        <p className="footer-note">{t.footer.note}</p>
       </footer>
     </main>
   );
