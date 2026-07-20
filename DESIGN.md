@@ -85,10 +85,10 @@
 
 ## Implementation constraints
 
-- Framework/styling system: existing Next 16 + React 19 + Vinext + global CSS; preserve the package manager and architecture
+- Framework/styling system: standard Next.js 16 + React 19 + global CSS, packaged as a provider-neutral standalone Node.js application
 - Design-token constraints: extend the root variables in `app/globals.css`; do not add a second styling framework
 - Performance constraints: no heavy animation or image dependency; all filters and content remain client-local
-- Compatibility constraints: Sites/Cloudflare Worker-compatible ESM build and existing `.openai/hosting.json`
+- Compatibility constraints: standard Next.js standalone build, Node.js 22+, and portable container deployment without provider-specific runtime bindings
 - Test/screenshot expectations: build, lint, unit/render tests; reference and generated screenshots at the available in-app desktop viewport, plus explicit inspection of the 600px responsive rules; Visual Ralph verdict target >= 90 for hierarchy/component-language match. Record exact capture dimensions rather than claiming an emulated viewport that was not used.
 
 ## Open questions

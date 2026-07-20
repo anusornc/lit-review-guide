@@ -1,23 +1,68 @@
 import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
+import { once } from "node:events";
 import { access, readFile } from "node:fs/promises";
-import test from "node:test";
+import { createServer } from "node:net";
+import test, { after, before } from "node:test";
+import { setTimeout as delay } from "node:timers/promises";
+import { fileURLToPath } from "node:url";
 
 const templateRoot = new URL("../", import.meta.url);
+const projectRoot = fileURLToPath(templateRoot);
+let productionServer;
+let productionOrigin;
+
+async function reservePort() {
+  const server = createServer();
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  const address = server.address();
+  const port = typeof address === "object" && address ? address.port : 0;
+  server.close();
+  await once(server, "close");
+  return port;
+}
+
+before(async () => {
+  const port = await reservePort();
+  productionOrigin = `http://127.0.0.1:${port}`;
+  productionServer = spawn(
+    process.execPath,
+    [".next/standalone/server.js"],
+    { cwd: projectRoot, env: { ...process.env, NODE_ENV: "production", HOSTNAME: "127.0.0.1", PORT: String(port) }, stdio: ["ignore", "pipe", "pipe"] },
+  );
+
+  let startupOutput = "";
+  productionServer.stdout.on("data", (chunk) => { startupOutput += chunk; });
+  productionServer.stderr.on("data", (chunk) => { startupOutput += chunk; });
+
+  for (let attempt = 0; attempt < 60; attempt += 1) {
+    if (productionServer.exitCode !== null) {
+      throw new Error(`Next.js production server exited early.\n${startupOutput}`);
+    }
+    try {
+      const response = await fetch(productionOrigin);
+      if (response.ok) return;
+    } catch {
+      // The server is still starting.
+    }
+    await delay(100);
+  }
+
+  throw new Error(`Next.js production server did not become ready.\n${startupOutput}`);
+});
+
+after(async () => {
+  if (!productionServer || productionServer.exitCode !== null) return;
+  productionServer.kill("SIGTERM");
+  await Promise.race([once(productionServer, "exit"), delay(2_000)]);
+  if (productionServer.exitCode === null) productionServer.kill("SIGKILL");
+});
 
 async function render(extraHeaders = {}, path = "/") {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { default: worker } = await import(workerUrl.href);
-
-  return worker.fetch(
-    new Request(`https://litwise.test${path}`, {
-      headers: { accept: "text/html", host: "litwise.test", "x-forwarded-proto": "https", ...extraHeaders },
-    }),
-    {
-      ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) },
-    },
-    { waitUntil() {}, passThroughOnException() {} },
-  );
+  return fetch(`${productionOrigin}${path}`, {
+    headers: { accept: "text/html", "x-forwarded-host": "litwise.test", "x-forwarded-proto": "https", ...extraHeaders },
+  });
 }
 
 test("server-renders the LitWise research guide", async () => {

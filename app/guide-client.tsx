@@ -13,14 +13,14 @@ import {
 } from "./guide-data";
 
 type Discipline = {
-  id: DisciplineId;
-  name: string;
-  marker: string;
-  intro: string;
-  questions: string;
-  sources: string;
-  methods: string[];
-  caution: string;
+  readonly id: DisciplineId;
+  readonly name: string;
+  readonly marker: string;
+  readonly intro: string;
+  readonly questions: string;
+  readonly sources: string;
+  readonly methods: readonly string[];
+  readonly caution: string;
 };
 
 type ReviewMethod = {
