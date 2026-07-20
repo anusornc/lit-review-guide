@@ -40,10 +40,12 @@ test("server-renders the LitWise research guide", async () => {
 });
 
 test("removes starter assets and ships product metadata", async () => {
-  const [page, layout, i18n, packageJson, ogImage] = await Promise.all([
+  const [page, layout, i18n, guideData, globalCss, packageJson, ogImage] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/i18n.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/guide-data.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
     readFile(new URL("../public/og.png", import.meta.url)),
   ]);
@@ -65,7 +67,13 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(i18n, /การทบทวนอย่างเป็นระบบ/);
   assert.match(i18n, /สุขภาพและการแพทย์/);
   assert.match(i18n, /Best fit/);
-  assert.match(i18n, /ข้อแลกเปลี่ยน/);
+  assert.match(i18n, /ข้อควรพิจารณา/);
+  assert.match(i18n, /งานทบทวนที่น่าเชื่อถือ/);
+  assert.doesNotMatch(i18n, /สายโซ่ของการตัดสินใจ|อธิบายและปกป้องได้|ข้ออ้างเชิงความรู้|พื้นที่การสืบค้น|สร้างเส้นทางของฉัน|บันทึกภาคสนาม|ดำเนินการต่อ|ข้อแลกเปลี่ยน/);
+  assert.match(guideData, /การทบทวนงานทบทวนอย่างเป็นระบบ \(umbrella review\)/);
+  assert.doesNotMatch(guideData, /บทวิทยานิพนธ์ที่ปกป้องได้|ผืนงานสร้างคำค้น|เกณฑ์เคลื่อน|ตารางไร้ร่องรอย|การทบทวนแบบร่ม/);
+  assert.match(globalCss, /--th-body: 16px/);
+  assert.match(globalCss, /html\[data-locale="th"\]\s*\{/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.ok(ogImage.byteLength > 100_000);
   await assert.rejects(access(new URL("../app/_sites-preview/SkeletonPreview.tsx", templateRoot)));

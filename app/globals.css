@@ -46,7 +46,13 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .language-switch button { border: 0; border-bottom: 1px solid transparent; background: transparent; color: inherit; padding: 4px 2px; cursor: pointer; }
 .language-switch button[aria-pressed="true"] { border-bottom-color: var(--clay); color: var(--forest); }
 
-html[data-locale="th"] body { font-family: Thonburi, "Noto Sans Thai", Tahoma, var(--sans); }
+html[data-locale="th"] {
+  --th-caption: 11px;
+  --th-small: 13px;
+  --th-body: 16px;
+  --th-body-large: 16px;
+}
+html[data-locale="th"] body { font-family: Thonburi, "Noto Sans Thai", Tahoma, var(--sans); font-size: var(--th-body); }
 html[data-locale="th"] h1,
 html[data-locale="th"] h2,
 html[data-locale="th"] h3,
@@ -60,6 +66,77 @@ html[data-locale="th"] blockquote { font-family: "Th Sarabun New", Thonburi, "No
 html[data-locale="th"] h1 { line-height: 1.02; }
 html[data-locale="th"] h2,
 html[data-locale="th"] h3 { line-height: 1.18; }
+html[data-locale="th"] .site-header nav,
+html[data-locale="th"] .header-action,
+html[data-locale="th"] .button,
+html[data-locale="th"] .text-link,
+html[data-locale="th"] .back-button { font-size: 14px; }
+html[data-locale="th"] .language-switch,
+html[data-locale="th"] .method-output small,
+html[data-locale="th"] .method-deep-dive a,
+html[data-locale="th"] .search-code button { font-size: 12px; }
+html[data-locale="th"] .step-rail button strong,
+html[data-locale="th"] .discipline-choice-grid button strong { font-size: 14px; }
+html[data-locale="th"] .trust-row dd,
+html[data-locale="th"] .hero-compass li small,
+html[data-locale="th"] .option-card small,
+html[data-locale="th"] .evidence-list small,
+html[data-locale="th"] .commitment-list small,
+html[data-locale="th"] .method-list em,
+html[data-locale="th"] .quality-note,
+html[data-locale="th"] .template-grid article > p:not(.detail-kicker),
+html[data-locale="th"] .pitfall-panel p,
+html[data-locale="th"] .official-resources > div:first-child > p:last-child,
+html[data-locale="th"] footer > p { font-size: var(--th-small); line-height: 1.65; }
+html[data-locale="th"] .section-heading > p,
+html[data-locale="th"] .step-intro,
+html[data-locale="th"] .result-reason p,
+html[data-locale="th"] .result-grid p,
+html[data-locale="th"] .workflow-grid > li > p,
+html[data-locale="th"] .field-caution p,
+html[data-locale="th"] .fit-grid p,
+html[data-locale="th"] .method-output p,
+html[data-locale="th"] .method-deep-dive p,
+html[data-locale="th"] .note-grid p { font-size: var(--th-body); line-height: 1.7; }
+html[data-locale="th"] .compass-note,
+html[data-locale="th"] .workflow-checkpoint p,
+html[data-locale="th"] .discipline-detail dd,
+html[data-locale="th"] .field-insight p,
+html[data-locale="th"] .method-summary { font-size: var(--th-body-large); line-height: 1.65; }
+html[data-locale="th"] .alternative-methods button em { font-size: 12px; line-height: 1.65; }
+html[data-locale="th"] .alternative-methods > p,
+html[data-locale="th"] .method-steps li,
+html[data-locale="th"] .appraisal-table-wrap td { font-size: var(--th-small); line-height: 1.65; }
+html[data-locale="th"] .workflow-outputs li { font-size: 12px; }
+html[data-locale="th"] .appraisal-table-wrap td:first-child,
+html[data-locale="th"] .official-resources a { font-size: var(--th-body); }
+html[data-locale="th"] .template-grid pre { font-size: 12px; line-height: 1.75; }
+html[data-locale="th"] .compass-heading,
+html[data-locale="th"] .section-index,
+html[data-locale="th"] .detail-kicker,
+html[data-locale="th"] .step-label,
+html[data-locale="th"] .result-label,
+html[data-locale="th"] .result-reason span,
+html[data-locale="th"] .result-grid span,
+html[data-locale="th"] .method-output span,
+html[data-locale="th"] .method-steps > span,
+html[data-locale="th"] .fit-grid span,
+html[data-locale="th"] .alternative-methods > span,
+html[data-locale="th"] .alternative-methods button small,
+html[data-locale="th"] .workflow-outputs > span,
+html[data-locale="th"] .workflow-checkpoint > span,
+html[data-locale="th"] .discipline-detail dt,
+html[data-locale="th"] .field-caution span,
+html[data-locale="th"] .field-insight span,
+html[data-locale="th"] .method-filter label,
+html[data-locale="th"] .method-list small,
+html[data-locale="th"] .method-deep-dive span,
+html[data-locale="th"] .appraisal-table-wrap th,
+html[data-locale="th"] .field-notes cite {
+  font-size: var(--th-caption);
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
 
 .hero {
   width: min(1440px, calc(100% - 64px));
