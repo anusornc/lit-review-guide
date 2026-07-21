@@ -159,8 +159,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(layout, /prefers-color-scheme/);
   assert.match(guideClient, /resolveLocalePreference/);
   assert.match(guideClient, /setLocale\("th"\)/);
-  assert.match(i18n, /คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม/);
-  assert.match(i18n, /การทบทวนอย่างเป็นระบบ/);
+  assert.match(i18n, /คู่มือการทบทวนวรรณกรรมสำหรับนักวิจัย/);
+  assert.match(i18n, /การทบทวนวรรณกรรมอย่างเป็นระบบ/);
   assert.match(i18n, /สุขภาพและการแพทย์/);
   assert.match(i18n, /Best fit/);
   assert.match(i18n, /ข้อควรพิจารณา/);
@@ -170,7 +170,7 @@ test("removes starter assets and ships product metadata", async () => {
   assert.doesNotMatch(guideData, /บทวิทยานิพนธ์ที่ปกป้องได้|ผืนงานสร้างคำค้น|เกณฑ์เคลื่อน|ตารางไร้ร่องรอย|การทบทวนแบบร่ม/);
   assert.match(researchTools, /เครื่องมือช่วยวางกรอบคำถาม/);
   assert.match(researchTools, /แบบฝึกหัดคัดกรองบทความ/);
-  assert.match(researchTools, /เครื่องมือวางแผน PRISMA flow/);
+  assert.match(researchTools, /เครื่องมือวางแผนผัง PRISMA/);
   assert.match(researchTools, /ตอบได้ตรงกับเกณฑ์/);
   assert.match(researchTools, /ผลรวมของแต่ละเหตุผลต้องเท่ากับจำนวนรายงานฉบับเต็มที่ตัดออก/);
   assert.doesNotMatch(researchTools, /รับเข้า|กรอบตั้งต้น|เส้นทางที่คำนวณได้|รายงานที่พยายามขอ|ขอฉบับเต็มไม่ได้|ระบบอัตโนมัตินำออก/);

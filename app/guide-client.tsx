@@ -448,7 +448,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
 
   return (
     <>
-      <title>{locale === "th" ? "LitWise — คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม" : "LitWise — Literature Review Expert Guide"}</title>
+      <title>{locale === "th" ? "LitWise — คู่มือการทบทวนวรรณกรรมสำหรับนักวิจัย" : "LitWise — Literature Review Expert Guide"}</title>
       <main lang={locale}>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="LitWise">
