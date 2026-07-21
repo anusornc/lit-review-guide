@@ -52,7 +52,7 @@
 - Existing components to reuse: decision pathway state, method ranking, bilingual datasets, workflow phases, toolkit, templates, and copy actions
 - New/changed components: sticky reference-style nav, theme toggle, PRISMA/checklist hero stack, top-progress wizard, method card grid, discipline card grid, accessible modal-like details, dark workflow cards, reference-style tool cards, and a bilingual Prompt Lab with explicit evidence guardrails
 - Variants and states: default/hover/active/selected/disabled for cards and pills; light/dark surfaces; empty search state; copied state; open/closed detail dialogs
-- Token/component ownership: `app/globals.css` owns tokens and visual variants; `app/page.tsx` resolves request-aware locale, theme, and metadata; `app/guide-client.tsx` owns interactive state and semantic page markup
+- Token/component ownership: `app/globals.css` owns tokens and visual variants; `app/page.tsx` owns static metadata; `app/layout.tsx` seeds browser preferences; `app/guide-client.tsx` owns locale, theme, interactive state, and semantic page markup
 
 ## Accessibility
 
@@ -85,10 +85,10 @@
 
 ## Implementation constraints
 
-- Framework/styling system: standard Next.js 16 + React 19 + global CSS, packaged as a provider-neutral standalone Node.js application
+- Framework/styling system: standard Next.js 16 + React 19 + global CSS, packaged as a provider-neutral standalone Node.js application with a conditional static export for GitHub Pages
 - Design-token constraints: extend the root variables in `app/globals.css`; do not add a second styling framework
 - Performance constraints: no heavy animation or image dependency; all filters and content remain client-local
-- Compatibility constraints: standard Next.js standalone build, Node.js 22+, and portable container deployment without provider-specific runtime bindings
+- Compatibility constraints: standard Next.js standalone build, Node.js 22+, portable container deployment, and GitHub Pages static export without request-time middleware
 - Test/screenshot expectations: build, lint, unit/render tests; reference and generated screenshots at the available in-app desktop viewport, plus explicit inspection of the 600px responsive rules; Visual Ralph verdict target >= 90 for hierarchy/component-language match. Record exact capture dimensions rather than claiming an emulated viewport that was not used.
 
 ## Open questions

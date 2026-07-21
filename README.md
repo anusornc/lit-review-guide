@@ -7,8 +7,8 @@ guidance in English and Thai.
 
 This repository is a standard, self-hosted Next.js application. It does not
 depend on ChatGPT Sites, Vinext, Cloudflare Workers, or provider-specific
-authentication. You can run it on localhost or deploy it to any machine that
-supports Node.js 22 or Docker.
+authentication. You can run it on localhost, deploy it to GitHub Pages, or run
+it on any machine that supports Node.js 22 or Docker.
 
 ## Product Shape
 
@@ -17,7 +17,7 @@ supports Node.js 22 or Docker.
 - 9 discipline families with databases, review venues, standards, tools, and cautions
 - six traceable phases: Scope → Search → Screen → Appraise → Extract → Write
 - Boolean search canvas, bilingual research Prompt Lab, appraisal chooser, copy-ready templates, and common pitfalls
-- Thai and English content with URL, cookie, and browser-language resolution
+- Thai and English content with URL, saved preference, and browser-language resolution
 - responsive UI, light and dark themes, accessible dialogs, and keyboard navigation
 
 ## Requirements
@@ -36,6 +36,25 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Use `?lang=th` or
 `?lang=en` to select a language explicitly.
+
+## Deploy with GitHub Pages
+
+The repository includes `.github/workflows/deploy-pages.yml`. Every push to
+`main` builds a static export and publishes the `out/` directory through GitHub
+Actions. In GitHub, open **Settings → Pages** and set **Source** to
+**GitHub Actions** once for a new repository.
+
+To verify the Pages artifact locally:
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/lit-review-guide \
+NEXT_PUBLIC_SITE_ORIGIN=https://YOUR_GITHUB_USERNAME.github.io \
+npm run build:pages
+```
+
+The generated site is in `out/`. The normal `npm run build` command remains a
+standalone Node.js build, so GitHub Pages support does not remove the Node or
+Docker deployment options.
 
 ## Run as a production Node.js service
 
@@ -95,12 +114,12 @@ npm start
 
 ## Main Files
 
-- `app/page.tsx` resolves request-aware language, theme, and metadata
+- `app/page.tsx` defines static metadata and the default English render
 - `app/guide-client.tsx` contains the interactive guide and research pathway
 - `app/i18n.ts` contains shared interface translations and Thai content
 - `app/guide-data.ts` contains the decision model, method and discipline guides, workflow, and toolkit
 - `app/globals.css` contains the responsive visual system
-- `proxy.ts` applies an explicit `?lang=` selection before server rendering
+- `.github/workflows/deploy-pages.yml` builds and deploys the static Pages artifact
 - `Dockerfile` packages the Next.js standalone server
 - `tests/` verifies the decision model, production HTML, and hosting portability
 
@@ -108,6 +127,7 @@ npm start
 
 - `npm run dev`: start the local development server
 - `npm run build`: create the portable production build
+- `npm run build:pages`: create the static GitHub Pages build in `out/`
 - `npm start`: run the production server after building
 - `npm test`: run the automated tests
 - `npm run lint`: run ESLint across the project

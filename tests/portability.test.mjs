@@ -11,9 +11,10 @@ test("uses the standard Next.js runtime without Sites or Cloudflare coupling", a
   assert.equal(packageJson.name, "litwise-literature-review-guide");
   assert.equal(packageJson.scripts.dev, "next dev");
   assert.equal(packageJson.scripts.build, "next build && node scripts/prepare-standalone.mjs");
+  assert.equal(packageJson.scripts["build:pages"], "GITHUB_PAGES=true next build && node scripts/prepare-pages.mjs");
   assert.equal(packageJson.scripts.start, "node .next/standalone/server.js");
   assert.equal(packageJson.scripts.test, "npm run build && node --test tests/*.test.mjs");
-  assert.match(nextConfig, /output:\s*["']standalone["']/);
+  assert.match(nextConfig, /output: isGitHubPages \? ["']export["'] : ["']standalone["']/);
   await access(new URL("../scripts/prepare-standalone.mjs", import.meta.url));
 
   const installedPackages = { ...packageJson.dependencies, ...packageJson.devDependencies };
@@ -53,10 +54,11 @@ test("documents direct Node and Docker deployment", async () => {
   assert.match(dockerIgnore, /\.next/);
 });
 
-test("keeps hosting configuration out of the portable repository", async () => {
+test("keeps provider-specific runtimes out while allowing a static Pages workflow", async () => {
   const gitignore = await readFile(new URL("../.gitignore", import.meta.url), "utf8");
   assert.doesNotMatch(gitignore, /\.vinext/);
   assert.doesNotMatch(gitignore, /\.wrangler/);
   assert.doesNotMatch(gitignore, /\.openai\/hosting\.json/);
+  await access(new URL("../.github/workflows/deploy-pages.yml", import.meta.url));
   await access(projectRoot);
 });

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { thaiContent, uiText, type Locale } from "./i18n";
+import { resolveLocalePreference, resolveThemePreference } from "./preferences";
 import {
   mergedGuideContent,
   rankMethods,
@@ -302,6 +303,7 @@ const englishContent = { goals, evidenceTypes, disciplines, methods };
 export default function GuideClient({ initialLocale, initialTheme }: { initialLocale: Locale; initialTheme: "light" | "dark" }) {
   const [locale, setLocale] = useState<Locale>(initialLocale);
   const [theme, setTheme] = useState<"light" | "dark">(initialTheme);
+  const [preferencesReady, setPreferencesReady] = useState(false);
   const [step, setStep] = useState(1);
   const [goal, setGoal] = useState<GoalId | "">("");
   const [discipline, setDiscipline] = useState<DisciplineId | "">("");
@@ -366,30 +368,36 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
   const pathwayText = `${t.pathway.copyLabels.title}\n${t.pathway.copyLabels.intent}: ${chosenGoal?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.discipline}: ${chosenDiscipline?.name ?? t.pathway.notSelected}\n${t.pathway.copyLabels.evidence}: ${evidenceTypes.find((item) => item.id === evidence)?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.commitment}: ${chosenCommitment?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.method}: ${recommended.name}\n${t.pathway.copyLabels.alternatives}: ${alternatives.map((item) => item.name).join(" · ")}\n${t.pathway.copyLabels.why}: ${recommended.bestFor}`;
 
   useEffect(() => {
+    const queryLocale = new URL(window.location.href).searchParams.get("lang");
+    const nextLocale = resolveLocalePreference(
+      queryLocale,
+      window.localStorage.getItem("litwise-language"),
+      window.navigator.language,
+    );
+    const storedTheme = window.localStorage.getItem("litwise-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const nextTheme = resolveThemePreference(storedTheme, prefersDark);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLocale(nextLocale);
+    setTheme(nextTheme);
+    setPreferencesReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!preferencesReady) return;
     window.localStorage.setItem("litwise-language", locale);
-    document.cookie = `litwise-language=${locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
     document.documentElement.lang = locale;
     document.documentElement.dataset.locale = locale;
     const url = new URL(window.location.href);
     url.searchParams.set("lang", locale);
     window.history.replaceState({}, "", url);
-  }, [locale]);
+  }, [locale, preferencesReady]);
 
   useEffect(() => {
-    const storedTheme = window.localStorage.getItem("litwise-theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const rootTheme = document.documentElement.dataset.theme;
-    const nextTheme = storedTheme === "dark" || storedTheme === "light"
-      ? storedTheme
-      : rootTheme === "dark" || rootTheme === "light"
-        ? rootTheme
-        : prefersDark ? "dark" : "light";
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTheme(nextTheme);
-    document.documentElement.dataset.theme = nextTheme;
-    window.localStorage.setItem("litwise-theme", nextTheme);
-    document.cookie = `litwise-theme=${nextTheme}; Path=/; Max-Age=31536000; SameSite=Lax`;
-  }, []);
+    if (!preferencesReady) return;
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem("litwise-theme", theme);
+  }, [preferencesReady, theme]);
 
   useEffect(() => {
     if (!detailModal) return;
@@ -437,7 +445,9 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
   const canContinue = (step === 1 && goal) || (step === 2 && discipline) || (step === 3 && evidence) || (step === 4 && commitment);
 
   return (
-    <main lang={locale}>
+    <>
+      <title>{locale === "th" ? "LitWise — คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม" : "LitWise — Literature Review Expert Guide"}</title>
+      <main lang={locale}>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="LitWise">
           <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
@@ -465,7 +475,6 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
               setTheme(nextTheme);
               document.documentElement.dataset.theme = nextTheme;
               window.localStorage.setItem("litwise-theme", nextTheme);
-              document.cookie = `litwise-theme=${nextTheme}; Path=/; Max-Age=31536000; SameSite=Lax`;
             }}
             aria-label={theme === "light" ? t.chrome.darkMode : t.chrome.lightMode}
             title={theme === "light" ? t.chrome.darkMode : t.chrome.lightMode}
@@ -982,6 +991,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
         <p>{t.footer.tagline}</p>
         <p className="footer-note">{t.footer.note}</p>
       </footer>
-    </main>
+      </main>
+    </>
   );
 }

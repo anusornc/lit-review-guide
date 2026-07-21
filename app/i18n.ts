@@ -1,4 +1,4 @@
-export type Locale = "en" | "th";
+export type { Locale } from "./preferences";
 
 export const uiText = {
   en: {

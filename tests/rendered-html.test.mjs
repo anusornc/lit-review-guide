@@ -87,16 +87,15 @@ test("server-renders the LitWise research guide", async () => {
   assert.match(html, /Zotero/);
   assert.match(html, /ASReview/);
   assert.match(html, /Search log template/);
-  assert.match(html, /https:\/\/litwise\.test\/og\.png/);
+  assert.match(html, /http:\/\/localhost:3000\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
 
 test("removes starter assets and ships product metadata", async () => {
-  const [page, guideClient, layout, proxy, i18n, guideData, globalCss, packageJson, ogImage] = await Promise.all([
+  const [page, guideClient, layout, i18n, guideData, globalCss, packageJson, ogImage] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/guide-client.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../proxy.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/i18n.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/guide-data.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
@@ -127,13 +126,15 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(guideClient, /event\.key !== "Tab"/);
   assert.match(guideClient, /id="pitfalls"/);
   assert.ok(guideClient.indexOf('<section className="methods-section"') < guideClient.indexOf('<section className="disciplines-section"'));
-  assert.match(page, /generateMetadata/);
-  assert.match(page, /x-forwarded-host/);
-  assert.match(page, /litwise-language/);
+  assert.match(page, /export const metadata/);
+  assert.match(page, /NEXT_PUBLIC_SITE_ORIGIN/);
+  assert.match(page, /NEXT_PUBLIC_BASE_PATH/);
+  assert.doesNotMatch(page, /next\/headers|cookies\(|headers\(/);
   assert.match(layout, /data-theme/);
-  assert.match(layout, /x-litwise-language/);
-  assert.match(proxy, /request\.nextUrl\.searchParams\.get\("lang"\)/);
+  assert.match(layout, /URLSearchParams/);
+  assert.match(layout, /navigator\.language/);
   assert.match(layout, /prefers-color-scheme/);
+  assert.match(guideClient, /resolveLocalePreference/);
   assert.match(guideClient, /setLocale\("th"\)/);
   assert.match(i18n, /คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม/);
   assert.match(i18n, /การทบทวนอย่างเป็นระบบ/);
@@ -159,34 +160,34 @@ test("removes starter assets and ships product metadata", async () => {
   await assert.rejects(access(new URL("../app/_sites-preview/SkeletonPreview.tsx", templateRoot)));
 });
 
-test("serves Thai metadata and document language for Thai readers", async () => {
+test("serves a static English document with client preference bootstrapping", async () => {
   const response = await render({ "accept-language": "th-TH,th;q=0.9,en;q=0.8" });
   const html = await response.text();
 
   assert.equal(response.status, 200);
-  assert.match(html, /<html lang="th"[^>]*>/i);
-  assert.match(html, /<title>LitWise — คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม<\/title>/i);
-  assert.match(html, /ค้นหาวิธีทบทวนที่เหมาะกับคำถามวิจัยของคุณ/);
+  assert.match(html, /<html lang="en"[^>]*data-locale="en"/i);
+  assert.match(html, /<title>LitWise — Literature Review Expert Guide<\/title>/i);
+  assert.match(html, /navigator\.language/);
+  assert.match(html, /litwise-language/);
 });
 
-test("treats the language query as the server-rendered locale source", async () => {
+test("keeps the query-compatible page static before client hydration", async () => {
   const response = await render({}, "/?lang=th");
   const html = await response.text();
 
   assert.equal(response.status, 200);
-  assert.match(html, /<html lang="th"[^>]*data-locale="th"/i);
-  assert.match(html, /<main lang="th">/i);
-  assert.match(html, /<title>LitWise — คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม<\/title>/i);
-  assert.match(html, /ค้นหาวิธีทบทวนที่เหมาะกับ/);
-  assert.match(html, /คลังพรอมป์สำหรับงานวิจัย/);
-  assert.match(html, /ขยายชุดคำค้น/);
+  assert.match(html, /<html lang="en"[^>]*data-locale="en"/i);
+  assert.match(html, /<main lang="en">/i);
+  assert.match(html, /Find the review method your/);
+  assert.match(html, /URLSearchParams\(location\.search\).*get/);
 });
 
-test("seeds persisted locale and theme before hydration", async () => {
+test("seeds saved locale and theme before hydration without request cookies", async () => {
   const response = await render({ cookie: "litwise-language=th; litwise-theme=dark" });
   const html = await response.text();
 
   assert.equal(response.status, 200);
-  assert.match(html, /<html lang="th"[^>]*data-locale="th"[^>]*data-theme="dark"/i);
-  assert.match(html, /<main lang="th">/i);
+  assert.match(html, /localStorage\.getItem.*litwise-language/);
+  assert.match(html, /localStorage\.getItem.*litwise-theme/);
+  assert.match(html, /<main lang="en">/i);
 });

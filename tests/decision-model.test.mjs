@@ -2,6 +2,16 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { mergedGuideContent, rankMethods } from "../app/guide-data.ts";
+import { resolveLocalePreference, resolveThemePreference } from "../app/preferences.ts";
+
+test("resolves static-host locale preferences in a predictable order", () => {
+  assert.equal(resolveLocalePreference("th", "en", "en-US"), "th");
+  assert.equal(resolveLocalePreference(undefined, "th", "en-US"), "th");
+  assert.equal(resolveLocalePreference(undefined, undefined, "th-TH"), "th");
+  assert.equal(resolveLocalePreference("invalid", "invalid", "en-GB"), "en");
+  assert.equal(resolveThemePreference("dark", false), "dark");
+  assert.equal(resolveThemePreference(undefined, true), "dark");
+});
 
 test("ranks a full quantitative health review without presenting a fake percentage", () => {
   const ranked = rankMethods({
