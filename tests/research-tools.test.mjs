@@ -1,0 +1,88 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import {
+  buildQuestionDraft,
+  calculateChecklistProgress,
+  calculatePrismaFlow,
+  learningToolsContent,
+  scoreScreeningDecisions,
+  selectQuestionFramework,
+} from "../app/research-tools.ts";
+
+test("matches a research purpose to a defensible question framework", () => {
+  assert.equal(selectQuestionFramework("effect"), "pico");
+  assert.equal(selectQuestionFramework("experience"), "peo");
+  assert.equal(selectQuestionFramework("qualitative"), "spider");
+  assert.equal(selectQuestionFramework("policy"), "spice");
+  assert.equal(selectQuestionFramework("map"), "pcc");
+});
+
+test("builds a copy-ready question without inventing missing fields", () => {
+  assert.equal(
+    buildQuestionDraft("pico", {
+      population: "undergraduate students",
+      intervention: "AI tutoring",
+      comparison: "usual instruction",
+      outcome: "learning achievement",
+    }, "en"),
+    "Among undergraduate students, how does AI tutoring, compared with usual instruction, affect learning achievement?",
+  );
+
+  assert.equal(
+    buildQuestionDraft("pcc", { population: "นักศึกษามหาวิทยาลัย", concept: "การรู้เท่าทัน AI", context: "ประเทศไทย" }, "th"),
+    "มีหลักฐานประเภทใดเกี่ยวกับการรู้เท่าทัน AI ในกลุ่มนักศึกษามหาวิทยาลัย ภายใต้บริบทประเทศไทย?",
+  );
+});
+
+test("derives a consistent simplified PRISMA flow and flags impossible counts", () => {
+  assert.deepEqual(calculatePrismaFlow({
+    databases: 100,
+    otherSources: 20,
+    duplicatesRemoved: 10,
+    automationRemoved: 5,
+    otherRemoved: 5,
+    recordsExcluded: 40,
+    reportsNotRetrieved: 5,
+    fullTextExcluded: 15,
+  }), {
+    identified: 120,
+    removedBeforeScreening: 20,
+    screened: 100,
+    reportsSought: 60,
+    reportsAssessed: 55,
+    studiesIncluded: 40,
+    valid: true,
+  });
+
+  assert.equal(calculatePrismaFlow({
+    databases: 4,
+    otherSources: 0,
+    duplicatesRemoved: 5,
+    automationRemoved: 0,
+    otherRemoved: 0,
+    recordsExcluded: 0,
+    reportsNotRetrieved: 0,
+    fullTextExcluded: 0,
+  }).valid, false);
+});
+
+test("reports checklist and screening progress through stable public values", () => {
+  assert.deepEqual(calculateChecklistProgress(3, 12), { completed: 3, total: 12, percent: 25 });
+  assert.deepEqual(scoreScreeningDecisions(
+    { empirical: "include", editorial: "exclude", unclear: "full-text" },
+    { empirical: "include", editorial: "exclude", unclear: "full-text", conflict: "discuss" },
+  ), { answered: 3, correct: 3, total: 4 });
+});
+
+test("keeps every learning tool complete in English and Thai", () => {
+  for (const locale of ["en", "th"]) {
+    const content = learningToolsContent[locale];
+    assert.equal(content.comparison.methodMeta.length, 14);
+    assert.equal(content.workflow.details.length, 6);
+    assert.equal(content.checklist.items.length, 12);
+    assert.equal(content.questionBuilder.frameworks.length, 5);
+    assert.equal(content.screening.scenarios.length, 6);
+    assert.equal(content.prisma.inputs.length, 8);
+  }
+});

@@ -27,9 +27,9 @@
 
 ## Information architecture
 
-- Primary navigation: Start, Methods, Disciplines, Workflow, Tools, Pitfalls
+- Primary navigation: Start, Methods, Disciplines, Workflow, Practice, Tools, Pitfalls
 - Core routes/screens: one long-form page with anchored sections and modal-like method/discipline deep dives
-- Content hierarchy: hero -> situation-based entry points -> decision wizard -> method library -> discipline library -> six-phase workflow -> search/appraisal/tools/templates -> pitfalls -> closing action
+- Content hierarchy: hero -> situation-based entry points -> decision wizard -> method library and comparison -> discipline library -> expandable six-phase workflow -> project workbench -> search/appraisal/tools/templates -> pitfalls -> closing action
 
 ## Design principles
 
@@ -50,7 +50,7 @@
 ## Components
 
 - Existing components to reuse: decision pathway state, method ranking, bilingual datasets, workflow phases, toolkit, templates, and copy actions
-- New/changed components: sticky reference-style nav, theme toggle, PRISMA/checklist hero stack, top-progress wizard, method card grid, discipline card grid, accessible modal-like details, dark workflow cards, reference-style tool cards, and a bilingual Prompt Lab with explicit evidence guardrails
+- New/changed components: sticky reference-style nav, theme toggle, PRISMA/checklist hero stack, top-progress wizard, method card grid and comparison table, discipline card grid, accessible modal-like details, expandable workflow cards, a browser-local project checklist, question-framework builder, screening calibration lab, simplified PRISMA planner, reference-style tool cards, and a bilingual Prompt Lab with explicit evidence guardrails
 - Variants and states: default/hover/active/selected/disabled for cards and pills; light/dark surfaces; empty search state; copied state; open/closed detail dialogs
 - Token/component ownership: `app/globals.css` owns tokens and visual variants; `app/page.tsx` owns static metadata; `app/layout.tsx` seeds browser preferences; `app/guide-client.tsx` owns locale, theme, interactive state, and semantic page markup
 
@@ -73,7 +73,7 @@
 - Loading: not applicable; all guide content is local
 - Empty: discipline search displays a localized empty message and no contradictory detail
 - Error: clipboard failure does not destroy content; the original text stays selectable
-- Success: selections, active filters, copied labels, and pathway completion receive explicit text/state feedback
+- Success: selections, active filters, copied labels, pathway completion, checklist progress, screening score, and PRISMA totals receive explicit text/state feedback
 - Disabled: incomplete wizard steps and unavailable next actions are visibly muted and disabled
 - Offline/slow network: core page and local data work after the app loads; external official links may be unavailable
 
@@ -88,6 +88,7 @@
 - Framework/styling system: standard Next.js 16 + React 19 + global CSS, packaged as a provider-neutral standalone Node.js application with a conditional static export for GitHub Pages
 - Design-token constraints: extend the root variables in `app/globals.css`; do not add a second styling framework
 - Performance constraints: no heavy animation or image dependency; all filters and content remain client-local
+- Privacy constraints: checklist state may use browser `localStorage`; workbench inputs and calculations stay client-side and require no account or research-data upload
 - Compatibility constraints: standard Next.js standalone build, Node.js 22+, portable container deployment, and GitHub Pages static export without request-time middleware
 - Test/screenshot expectations: build, lint, unit/render tests; reference and generated screenshots at the available in-app desktop viewport, plus explicit inspection of the 600px responsive rules; Visual Ralph verdict target >= 90 for hierarchy/component-language match. Record exact capture dimensions rather than claiming an emulated viewport that was not used.
 

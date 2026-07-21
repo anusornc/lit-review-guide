@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { thaiContent, uiText, type Locale } from "./i18n";
 import { resolveLocalePreference, resolveThemePreference } from "./preferences";
+import { learningToolsContent } from "./research-tools";
+import { MethodComparison, ResearchWorkbench, WorkflowDrillDown } from "./research-workbench";
 import {
   mergedGuideContent,
   rankMethods,
@@ -327,6 +329,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
   };
   const { goals, evidenceTypes, disciplines, methods } = content;
   const t = uiText[locale];
+  const learning = learningToolsContent[locale];
 
   const rankedMethodIds = rankMethods({ goal, discipline, evidence, commitment });
   const rankedMethods = rankedMethodIds
@@ -458,6 +461,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
           <a href="#methods">{t.nav.methods}</a>
           <a href="#disciplines">{t.nav.disciplines}</a>
           <a href="#workflow">{t.nav.workflow}</a>
+          <a href="#workbench">{learning.navLabel}</a>
           <a href="#toolkit">{t.nav.toolkit}</a>
             <a href="#pitfalls">{t.nav.pitfalls}</a>
         </nav>
@@ -716,6 +720,8 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
           ))}
         </div>
 
+        <MethodComparison locale={locale} methods={methods} methodDeepDives={methodDeepDives} />
+
         {detailModal === "method" && (
           <DetailModal className="method-detail" closeLabel={t.chrome.close} labelledBy="method-dialog-title" onClose={() => setDetailModal(null)}>
               <p className="detail-kicker">{t.method.detail} · {selectedMethod.family}</p>
@@ -818,21 +824,15 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
           <div><p className="section-index">{merged.workflow.index}</p><h2>{merged.workflow.title}</h2></div>
           <p>{merged.workflow.intro}</p>
         </div>
-        <ol className="workflow-grid">
-          {merged.workflow.phases.map((phase, index) => (
-            <li key={phase.title}>
-              <div className="workflow-number">{String(index + 1).padStart(2, "0")}</div>
-              <h3>{phase.title}</h3>
-              <p>{phase.purpose}</p>
-              <div className="workflow-outputs">
-                <span>{merged.workflow.outputLabel}</span>
-                <ul>{phase.outputs.map((output) => <li key={output}>{output}</li>)}</ul>
-              </div>
-              <div className="workflow-checkpoint"><span>{merged.workflow.checkpointLabel}</span><p>{phase.checkpoint}</p></div>
-            </li>
-          ))}
-        </ol>
+        <WorkflowDrillDown
+          locale={locale}
+          phases={merged.workflow.phases}
+          outputLabel={merged.workflow.outputLabel}
+          checkpointLabel={merged.workflow.checkpointLabel}
+        />
       </section>
+
+      <ResearchWorkbench locale={locale} />
 
       <section className="toolkit-section" id="toolkit">
         <div className="section-heading split-heading toolkit-heading">

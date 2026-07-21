@@ -16,9 +16,15 @@ it on any machine that supports Node.js 22 or Docker.
 - 14 literature-review methods with search, appraisal, reporting, and tool guidance
 - 9 discipline families with databases, review venues, standards, tools, and cautions
 - six traceable phases: Scope → Search → Screen → Appraise → Extract → Write
+- side-by-side method comparison and expandable phase-by-phase workflow guidance
+- a project checklist, question-framework builder, screening calibration lab, and simplified PRISMA flow planner
 - Boolean search canvas, bilingual research Prompt Lab, appraisal chooser, copy-ready templates, and common pitfalls
 - Thai and English content with URL, saved preference, and browser-language resolution
 - responsive UI, light and dark themes, accessible dialogs, and keyboard navigation
+
+The project checklist is saved only in the current browser through
+`localStorage`. The question, screening, and PRISMA tools run entirely in the
+browser and do not upload research data to a server.
 
 ## Requirements
 
@@ -118,6 +124,8 @@ npm start
 - `app/guide-client.tsx` contains the interactive guide and research pathway
 - `app/i18n.ts` contains shared interface translations and Thai content
 - `app/guide-data.ts` contains the decision model, method and discipline guides, workflow, and toolkit
+- `app/research-tools.ts` contains bilingual workbench content and pure research-planning calculations
+- `app/research-workbench.tsx` contains method comparison, checklist, question, screening, and PRISMA interactions
 - `app/globals.css` contains the responsive visual system
 - `.github/workflows/deploy-pages.yml` builds and deploys the static Pages artifact
 - `Dockerfile` packages the Next.js standalone server
