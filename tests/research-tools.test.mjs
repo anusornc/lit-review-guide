@@ -104,6 +104,10 @@ test("keeps every learning tool complete in English and Thai", () => {
     assert.equal(content.workflow.details.length, 6);
     assert.equal(content.checklist.items.length, 12);
     assert.equal(content.questionBuilder.frameworks.length, 5);
+    for (const framework of content.questionBuilder.frameworks) {
+      assert.ok(framework.exampleQuestion.length > 20);
+      assert.ok(framework.fields.every((field) => field.length === 3 && field[2].length > 3));
+    }
     assert.equal(content.screening.scenarios.length, 6);
     assert.equal(content.prisma.inputs.length, 8);
   }
@@ -113,11 +117,16 @@ test("uses consistent, natural Thai labels in the learning tools", () => {
   const content = learningToolsContent.th;
   const thaiText = JSON.stringify(content);
 
+  assert.equal(content.questionBuilder.intro, "อยากให้งานทบทวนนี้ช่วยตอบคำถามอะไร? เลือกเป้าหมายที่ใกล้กับงานของคุณ แล้วระบบจะแนะนำกรอบคำถาม พร้อมตัวอย่างที่กรอกครบและช่องสำหรับหัวข้อของคุณ คุณปรับคำและขอบเขตให้เหมาะกับสาขาของคุณได้");
+  assert.equal(content.questionBuilder.purposeLabel, "คุณอยากหาคำตอบแบบไหน?");
+  assert.equal(content.questionBuilder.exampleToggle, "ดูตัวอย่างที่กรอกครบ");
   assert.equal(content.questionBuilder.frameworkLabel, "กรอบคำถามที่แนะนำ");
+  assert.equal(content.questionBuilder.purposes[0].label, "เปรียบเทียบว่าอะไรได้ผลกว่ากัน");
+  assert.equal(content.questionBuilder.purposes[4].label, "สำรวจว่ามีงานวิจัยอะไรอยู่แล้ว");
   assert.equal(content.screening.title, "แบบฝึกหัดคัดกรองบทความ");
   assert.equal(content.screening.options[0].label, "คัดเข้า");
   assert.equal(content.screening.options[1].label, "คัดออก");
   assert.equal(content.prisma.flowLabel, "ผลการคำนวณ");
   assert.equal(content.prisma.stages.included, "งานวิจัยที่คัดเข้า");
-  assert.doesNotMatch(thaiText, /รับเข้า|กรอบตั้งต้น|เส้นทางที่คำนวณได้|รายงานที่พยายามขอ|ขอฉบับเต็มไม่ได้|ระบบอัตโนมัตินำออก/);
+  assert.doesNotMatch(thaiText, /รับเข้า|กรอบตั้งต้น|เส้นทางที่คำนวณได้|รายงานที่พยายามขอ|ขอฉบับเต็มไม่ได้|ระบบอัตโนมัตินำออก|เริ่มจากการตัดสินใจที่งานทบทวนต้องช่วยสนับสนุน|ดุลยพินิจของแต่ละสาขา|ปรากฏการณ์ที่สนใจ/);
 });

@@ -308,11 +308,23 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
             </button>
           ))}</div>
         </div>
+        <details className="question-example">
+          <summary><span>{content.questionBuilder.exampleToggle}</span><strong>{framework.name}</strong></summary>
+          <div className="question-example-content">
+            <dl>{framework.fields.map(([fieldId, label, example]) => (
+              <div key={fieldId}><dt>{label}</dt><dd>{example}</dd></div>
+            ))}</dl>
+            <div className="question-example-result">
+              <span>{content.questionBuilder.exampleQuestionLabel}</span>
+              <blockquote>{framework.exampleQuestion}</blockquote>
+            </div>
+          </div>
+        </details>
         <div className="question-builder-grid">
           <div className="framework-form">
             <p><span>{content.questionBuilder.frameworkLabel}</span><strong>{framework.name}</strong><small>{framework.description}</small></p>
-            {framework.fields.map(([fieldId, label]) => (
-              <label key={fieldId}>{label}<input value={questionValues[fieldId] ?? ""} onChange={(event) => setQuestionValues((current) => ({ ...current, [fieldId]: event.target.value }))} /></label>
+            {framework.fields.map(([fieldId, label, example]) => (
+              <label key={fieldId}>{label}<input placeholder={example} value={questionValues[fieldId] ?? ""} onChange={(event) => setQuestionValues((current) => ({ ...current, [fieldId]: event.target.value }))} /></label>
             ))}
           </div>
           <div className="question-draft" aria-live="polite">

@@ -490,7 +490,7 @@ Report: verdict [supported | partly supported | unsupported | unable to verify],
       interdisciplinary: { journals: ["Nature Sustainability", "PNAS", "One Earth", "เวทีแนวหน้าของแต่ละสาขา"], standards: ["ตระกูล PRISMA เมื่อเหมาะสม", "JBI Manual", "การตัดสินใจเรื่องขอบเขตและคำศัพท์ที่ชัด"], tools: ["OpenAlex", "VOSviewer", "Connected Papers", "Zotero"], tip: "ค้นข้ามชุดคำศัพท์และตระกูลฐานข้อมูล เพราะดัชนีของศาสตร์เดียวจะทำให้หลักฐานบางส่วนหายไปอย่างเป็นระบบ" },
     },
     workflow: {
-      index: "02 · ลงมือทำงานทบทวน", title: "ทำงานทบทวนให้ย้อนกลับมาตรวจสอบได้ใน 6 ระยะ",
+      index: "02 · ลงมือทำงานทบทวน", title: "ทบทวนวรรณกรรมใน 6 ขั้นตอน",
       intro: "ทุกระยะควรมีหลักฐานการตัดสินใจ เพื่อให้นักวิจัยคนอื่น—รวมถึงตัวคุณในอนาคต—ย้อนกลับมาตรวจสอบได้",
       outputLabel: "หลักฐานการทำงานที่ควรมี", checkpointLabel: "คำถามก่อนผ่านไปขั้นถัดไป",
       phases: [
