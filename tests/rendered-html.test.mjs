@@ -172,6 +172,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(researchTools, /อยากให้งานทบทวนนี้ช่วยตอบคำถามอะไร/);
   assert.match(researchTools, /ดูตัวอย่างที่กรอกครบ/);
   assert.match(researchTools, /เปรียบเทียบว่าอะไรได้ผลกว่ากัน/);
+  assert.match(researchTools, /Population · Intervention · Comparison · Outcome/);
+  assert.match(researchTools, /Sample · Phenomenon of Interest · Design · Evaluation · Research type/);
   assert.match(researchTools, /แบบฝึกหัดคัดกรองบทความ/);
   assert.match(researchTools, /เครื่องมือวางแผนผัง PRISMA/);
   assert.match(researchTools, /ตอบได้ตรงกับเกณฑ์/);
@@ -181,6 +183,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(researchWorkbench, /validatePrismaReasonCounts/);
   assert.match(researchWorkbench, /className="screening-verdict" role="status"/);
   assert.match(researchWorkbench, /className="question-example"/);
+  assert.match(researchWorkbench, /className="purpose-framework-name"/);
+  assert.match(researchWorkbench, /framework\.expandedName/);
   assert.match(researchWorkbench, /placeholder={example}/);
   assert.match(researchWorkbench, /data-testid="method-comparison"/);
   assert.match(researchWorkbench, /data-testid="screening-practice-lab"/);

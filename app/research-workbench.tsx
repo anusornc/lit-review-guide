@@ -296,20 +296,25 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
         <header><p className="detail-kicker">01</p><h3>{content.questionBuilder.title}</h3><p>{content.questionBuilder.intro}</p></header>
         <div className="question-purpose-picker" role="group" aria-label={content.questionBuilder.purposeLabel}>
           <strong>{content.questionBuilder.purposeLabel}</strong>
-          <div>{content.questionBuilder.purposes.map((purpose) => (
-            <button
-              key={purpose.id}
-              type="button"
-              aria-pressed={questionPurpose === purpose.id}
-              className={questionPurpose === purpose.id ? "active" : ""}
-              onClick={() => { setQuestionPurpose(purpose.id); setQuestionValues({}); }}
-            >
-              <strong>{purpose.label}</strong><small>{purpose.description}</small>
-            </button>
-          ))}</div>
+          <div>{content.questionBuilder.purposes.map((purpose) => {
+            const purposeFrameworkId = selectQuestionFramework(purpose.id);
+            const purposeFramework = content.questionBuilder.frameworks.find((item) => item.id === purposeFrameworkId);
+            return (
+              <button
+                key={purpose.id}
+                type="button"
+                aria-pressed={questionPurpose === purpose.id}
+                className={questionPurpose === purpose.id ? "active" : ""}
+                onClick={() => { setQuestionPurpose(purpose.id); setQuestionValues({}); }}
+              >
+                <span className="purpose-framework-name"><b>{purposeFramework?.name}</b>{purposeFramework?.expandedName}</span>
+                <strong>{purpose.label}</strong><small>{purpose.description}</small>
+              </button>
+            );
+          })}</div>
         </div>
         <details className="question-example">
-          <summary><span>{content.questionBuilder.exampleToggle}</span><strong>{framework.name}</strong></summary>
+          <summary><span>{content.questionBuilder.exampleToggle}</span><strong>{framework.name}</strong><small>{framework.expandedName}</small></summary>
           <div className="question-example-content">
             <dl>{framework.fields.map(([fieldId, label, example]) => (
               <div key={fieldId}><dt>{label}</dt><dd>{example}</dd></div>
@@ -322,7 +327,7 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
         </details>
         <div className="question-builder-grid">
           <div className="framework-form">
-            <p><span>{content.questionBuilder.frameworkLabel}</span><strong>{framework.name}</strong><small>{framework.description}</small></p>
+            <p><span>{content.questionBuilder.frameworkLabel}</span><strong>{framework.name}</strong><em>{framework.expandedName}</em><small>{framework.description}</small></p>
             {framework.fields.map(([fieldId, label, example]) => (
               <label key={fieldId}>{label}<input placeholder={example} value={questionValues[fieldId] ?? ""} onChange={(event) => setQuestionValues((current) => ({ ...current, [fieldId]: event.target.value }))} /></label>
             ))}

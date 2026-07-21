@@ -342,18 +342,21 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .workbench-tool > header { max-width: 830px; margin-bottom: 26px; }
 .question-purpose-picker > strong, .prisma-inputs > strong, .prisma-flow > strong { display: block; margin-bottom: 11px; color: var(--accent); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
 .question-purpose-picker > div { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-.question-purpose-picker button { min-height: 90px; display: flex; flex-direction: column; gap: 4px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); padding: 13px; cursor: pointer; text-align: left; }
+.question-purpose-picker button { min-height: 165px; display: flex; flex-direction: column; gap: 5px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); padding: 13px; cursor: pointer; text-align: left; }
 .question-purpose-picker button.active { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
 .question-purpose-picker button strong { font-size: 15px; }
 .question-purpose-picker button small { color: var(--muted); font-size: 14px; line-height: 1.55; }
+.purpose-framework-name { display: grid; gap: 2px; margin-bottom: 4px; color: var(--muted); font-family: var(--mono); font-size: 9px; line-height: 1.45; }
+.purpose-framework-name b { color: var(--accent); font-size: 11px; letter-spacing: .05em; }
 .question-example { margin-top: 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); }
-.question-example summary { min-height: 50px; display: flex; align-items: center; gap: 8px; padding: 13px 17px; cursor: pointer; color: var(--accent); font-weight: 700; list-style: none; }
+.question-example summary { min-height: 50px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 13px 17px; cursor: pointer; color: var(--accent); font-weight: 700; list-style: none; }
 .question-example summary::-webkit-details-marker { display: none; }
 .question-example summary::after { content: "+"; margin-left: auto; color: var(--muted); font-family: var(--mono); font-size: 18px; }
 .question-example[open] summary { border-bottom: 1px solid var(--line); }
 .question-example[open] summary::after { content: "−"; }
 .question-example summary span { font-size: 14px; }
 .question-example summary strong { border-radius: 99px; background: var(--accent-soft); padding: 4px 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; }
+.question-example summary small { color: var(--muted); font-family: var(--mono); font-size: 11px; font-weight: 500; line-height: 1.5; }
 .question-example-content { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 18px; padding: 18px; }
 .question-example-content dl { display: grid; gap: 8px; margin: 0; }
 .question-example-content dl > div { display: grid; grid-template-columns: minmax(130px, .7fr) minmax(0, 1.3fr); gap: 12px; border-bottom: 1px solid var(--line); padding: 0 0 8px; }
@@ -368,6 +371,7 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .framework-form > p { display: grid; gap: 3px; padding-bottom: 13px; border-bottom: 1px solid var(--line); }
 .framework-form > p span, .question-draft > span, .screening-lab > aside span { color: var(--accent); font-size: 8px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .framework-form > p strong { font-family: var(--serif); font-size: 24px; }
+.framework-form > p em { color: var(--accent); font-family: var(--mono); font-size: 11px; font-style: normal; line-height: 1.55; }
 .framework-form > p small { color: var(--muted); font-size: 14px; }
 .framework-form label, .prisma-inputs label { display: grid; gap: 6px; margin-top: 11px; color: var(--muted); font-size: 14px; font-weight: 600; }
 .framework-form input, .prisma-inputs input { width: 100%; min-height: 42px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); padding: 10px 12px; }
@@ -686,7 +690,7 @@ html[data-locale="th"] .stat-option-grid button small, html[data-locale="th"] .s
   .project-checklist-summary { align-items: flex-start; flex-direction: column; gap: 18px; }
   .project-progress { text-align: left; }
   .project-checklist-grid, .question-purpose-picker > div, .screening-scenarios { grid-template-columns: 1fr; }
-  .question-purpose-picker button { min-height: 76px; }
+  .question-purpose-picker button { min-height: 0; }
   .question-example-content dl > div { grid-template-columns: 1fr; gap: 2px; }
   .question-draft blockquote { font-size: 21px; }
   .screening-scenarios article { min-height: 230px; }

@@ -105,6 +105,7 @@ test("keeps every learning tool complete in English and Thai", () => {
     assert.equal(content.checklist.items.length, 12);
     assert.equal(content.questionBuilder.frameworks.length, 5);
     for (const framework of content.questionBuilder.frameworks) {
+      assert.ok(framework.expandedName.length > framework.name.length);
       assert.ok(framework.exampleQuestion.length > 20);
       assert.ok(framework.fields.every((field) => field.length === 3 && field[2].length > 3));
     }
@@ -123,6 +124,16 @@ test("uses consistent, natural Thai labels in the learning tools", () => {
   assert.equal(content.questionBuilder.frameworkLabel, "กรอบคำถามที่แนะนำ");
   assert.equal(content.questionBuilder.purposes[0].label, "เปรียบเทียบว่าอะไรได้ผลกว่ากัน");
   assert.equal(content.questionBuilder.purposes[4].label, "สำรวจว่ามีงานวิจัยอะไรอยู่แล้ว");
+  assert.deepEqual(
+    content.questionBuilder.frameworks.map((framework) => framework.expandedName),
+    [
+      "Population · Intervention · Comparison · Outcome",
+      "Population · Exposure · Outcome",
+      "Sample · Phenomenon of Interest · Design · Evaluation · Research type",
+      "Setting · Perspective · Intervention · Comparison · Evaluation",
+      "Population · Concept · Context",
+    ],
+  );
   assert.equal(content.screening.title, "แบบฝึกหัดคัดกรองบทความ");
   assert.equal(content.screening.options[0].label, "คัดเข้า");
   assert.equal(content.screening.options[1].label, "คัดออก");
