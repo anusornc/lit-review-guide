@@ -8,6 +8,7 @@ import {
   learningToolsContent,
   scoreScreeningDecisions,
   selectQuestionFramework,
+  validatePrismaReasonCounts,
 } from "../app/research-tools.ts";
 
 test("matches a research purpose to a defensible question framework", () => {
@@ -65,6 +66,27 @@ test("derives a consistent simplified PRISMA flow and flags impossible counts", 
     reportsNotRetrieved: 0,
     fullTextExcluded: 0,
   }).valid, false);
+});
+
+test("requires traceable full-text reasons to reconcile with the PRISMA exclusion total", () => {
+  assert.deepEqual(validatePrismaReasonCounts(15, [
+    { reason: "Wrong population", count: 8 },
+    { reason: "No empirical outcome", count: 4 },
+    { reason: "Duplicate report", count: 3 },
+  ]), { total: 15, valid: true });
+
+  assert.deepEqual(validatePrismaReasonCounts(15, [
+    { reason: "Wrong population", count: 8 },
+    { reason: "No empirical outcome", count: 4 },
+  ]), { total: 12, valid: false });
+
+  assert.deepEqual(validatePrismaReasonCounts(0, [
+    { reason: "", count: 0 },
+  ]), { total: 0, valid: true });
+
+  assert.equal(validatePrismaReasonCounts(4, [
+    { reason: "", count: 4 },
+  ]).valid, false);
 });
 
 test("reports checklist and screening progress through stable public values", () => {

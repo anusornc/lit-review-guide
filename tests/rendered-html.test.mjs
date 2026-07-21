@@ -85,6 +85,9 @@ test("server-renders the LitWise research guide", async () => {
   assert.match(html, /Screening calibration lab/);
   assert.match(html, /PRISMA flow planner/);
   assert.match(html, /Saved only in this browser/);
+  assert.match(html, /aria-label="0\/12 completed"/);
+  assert.match(html, /Full-text exclusion reasons and counts/);
+  assert.match(html, /Reason total/);
   assert.match(html, /Research toolkit/);
   assert.match(html, /AI prompt lab/);
   assert.match(html, /Expand search vocabulary/);
@@ -159,7 +162,11 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(researchTools, /เครื่องมือช่วยวางกรอบคำถาม/);
   assert.match(researchTools, /ห้องฝึกปรับเกณฑ์คัดกรอง/);
   assert.match(researchTools, /เครื่องมือวางแผน PRISMA flow/);
+  assert.match(researchTools, /ตอบได้ตรงกับเกณฑ์/);
+  assert.match(researchTools, /ผลรวมของแต่ละเหตุผลต้องเท่ากับจำนวนรายงานฉบับเต็มที่ตัดออก/);
   assert.match(researchWorkbench, /litwise-project-checklist-v1/);
+  assert.match(researchWorkbench, /validatePrismaReasonCounts/);
+  assert.match(researchWorkbench, /className="screening-verdict" role="status"/);
   assert.match(researchWorkbench, /data-testid="method-comparison"/);
   assert.match(researchWorkbench, /data-testid="screening-practice-lab"/);
   assert.match(researchWorkbench, /data-testid="prisma-flow-builder"/);

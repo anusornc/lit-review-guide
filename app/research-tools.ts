@@ -16,6 +16,11 @@ export type PrismaInputs = {
   fullTextExcluded: number;
 };
 
+export type PrismaExclusionReason = {
+  reason: string;
+  count: number;
+};
+
 const purposeFrameworks: Record<QuestionPurposeId, QuestionFrameworkId> = {
   effect: "pico",
   experience: "peo",
@@ -110,6 +115,20 @@ export function calculatePrismaFlow(input: PrismaInputs) {
     .every((value) => Number.isFinite(value) && value >= 0);
 
   return { identified, removedBeforeScreening, screened, reportsSought, reportsAssessed, studiesIncluded, valid };
+}
+
+export function validatePrismaReasonCounts(
+  fullTextExcluded: number,
+  reasons: PrismaExclusionReason[],
+) {
+  const total = reasons.reduce((sum, item) => sum + item.count, 0);
+  const populatedReasons = reasons.filter((item) => item.reason.trim() || item.count > 0);
+  const rowsAreComplete = populatedReasons.every((item) => item.reason.trim() && Number.isFinite(item.count) && item.count > 0);
+  const hasRequiredReasons = fullTextExcluded === 0 || populatedReasons.length > 0;
+  return {
+    total,
+    valid: fullTextExcluded >= 0 && rowsAreComplete && hasRequiredReasons && total === fullTextExcluded,
+  };
 }
 
 const methodMetaEn: { id: MethodId; complexity: string; team: string }[] = [
@@ -227,6 +246,8 @@ export const learningToolsContent = {
       criteriaLabel: "Example protocol",
       criteria: "Include empirical studies from 2020 onward about AI-supported tutoring for university students that report a learning or engagement outcome. Exclude editorials, school-only studies, and tools without learner outcomes.",
       score: "correct decisions",
+      correct: "Correct",
+      review: "Review this decision",
       reset: "Try again",
       options: [
         { id: "include", label: "Include" }, { id: "exclude", label: "Exclude" },
@@ -247,7 +268,13 @@ export const learningToolsContent = {
       inputLabel: "Selection counts",
       flowLabel: "Derived flow",
       reasonsLabel: "Full-text exclusion reasons and counts",
-      reasonsPlaceholder: "Example: Wrong population (n=8); no empirical outcome (n=4); duplicate report (n=3)",
+      reasonName: "Reason",
+      reasonCount: "Count",
+      reasonPlaceholder: "Example: Wrong population",
+      addReason: "Add reason",
+      removeReason: "Remove",
+      reasonTotal: "Reason total",
+      reasonMismatch: "The reason counts must add up to the number of full-text reports excluded.",
       copy: "Copy flow summary",
       copied: "Copied",
       invalid: "One or more exclusions are larger than the records available at that stage. Check the counts.",
@@ -342,6 +369,8 @@ export const learningToolsContent = {
       criteriaLabel: "โครงร่างตัวอย่าง",
       criteria: "รับงานวิจัยเชิงประจักษ์ตั้งแต่ปี 2020 ที่ศึกษา AI ช่วยสอนกับนักศึกษามหาวิทยาลัยและรายงานผลด้านการเรียนรู้หรือการมีส่วนร่วม ตัดบทบรรณาธิการ งานที่มีเฉพาะนักเรียน และเครื่องมือที่ไม่มีผลลัพธ์ของผู้เรียน",
       score: "คำตอบที่สอดคล้องกับเกณฑ์",
+      correct: "ตอบได้ตรงกับเกณฑ์",
+      review: "ควรทบทวนคำตอบนี้อีกครั้ง",
       reset: "ลองใหม่",
       options: [
         { id: "include", label: "รับเข้า" }, { id: "exclude", label: "ตัดออก" },
@@ -362,7 +391,13 @@ export const learningToolsContent = {
       inputLabel: "จำนวนในกระบวนการคัดเลือก",
       flowLabel: "เส้นทางที่คำนวณได้",
       reasonsLabel: "เหตุผลและจำนวนที่ตัดออกในขั้นฉบับเต็ม",
-      reasonsPlaceholder: "ตัวอย่าง: ประชากรไม่ตรง (n=8); ไม่มีผลเชิงประจักษ์ (n=4); เป็นรายงานซ้ำ (n=3)",
+      reasonName: "เหตุผล",
+      reasonCount: "จำนวน",
+      reasonPlaceholder: "ตัวอย่าง: ประชากรไม่ตรง",
+      addReason: "เพิ่มเหตุผล",
+      removeReason: "ลบรายการ",
+      reasonTotal: "รวมจำนวนตามเหตุผล",
+      reasonMismatch: "ผลรวมของแต่ละเหตุผลต้องเท่ากับจำนวนรายงานฉบับเต็มที่ตัดออก",
       copy: "คัดลอกสรุปเส้นทาง",
       copied: "คัดลอกแล้ว",
       invalid: "มีจำนวนที่ตัดออกมากกว่ารายการที่เหลือในขั้นนั้น กรุณาตรวจตัวเลข",
