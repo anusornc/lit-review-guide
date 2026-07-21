@@ -84,6 +84,10 @@ test("server-renders the LitWise research guide", async () => {
   assert.match(html, /Question framework builder/);
   assert.match(html, /Screening calibration lab/);
   assert.match(html, /PRISMA flow planner/);
+  assert.match(html, /Statistical test chooser/);
+  assert.match(html, /Use this as a starting point/);
+  assert.match(html, /Browse all 14 techniques/);
+  assert.match(html, /Sources for this guidance/);
   assert.match(html, /Saved only in this browser/);
   assert.match(html, /aria-label="0\/12 completed"/);
   assert.match(html, /Full-text exclusion reasons and counts/);
@@ -101,7 +105,7 @@ test("server-renders the LitWise research guide", async () => {
 });
 
 test("removes starter assets and ships product metadata", async () => {
-  const [page, guideClient, layout, i18n, guideData, researchTools, researchWorkbench, globalCss, packageJson, ogImage] = await Promise.all([
+  const [page, guideClient, layout, i18n, guideData, researchTools, researchWorkbench, statChooser, statData, researchSources, globalCss, packageJson, ogImage] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/guide-client.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
@@ -109,6 +113,9 @@ test("removes starter assets and ships product metadata", async () => {
     readFile(new URL("../app/guide-data.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/research-tools.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/research-workbench.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/stat-test-chooser.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/stat-test-data.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/research-sources.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
     readFile(new URL("../public/og.png", import.meta.url)),
@@ -124,6 +131,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(guideClient, /MethodComparison/);
   assert.match(guideClient, /WorkflowDrillDown/);
   assert.match(guideClient, /ResearchWorkbench/);
+  assert.match(guideClient, /methodSourceIds/);
+  assert.match(guideClient, /SourceLinks/);
   assert.match(guideClient, /toolkit-section/);
   assert.match(guideClient, /ai-prompt-lab/);
   assert.match(guideClient, /start-stage-grid/);
@@ -160,16 +169,30 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(guideData, /การทบทวนงานทบทวนอย่างเป็นระบบ \(umbrella review\)/);
   assert.doesNotMatch(guideData, /บทวิทยานิพนธ์ที่ปกป้องได้|ผืนงานสร้างคำค้น|เกณฑ์เคลื่อน|ตารางไร้ร่องรอย|การทบทวนแบบร่ม/);
   assert.match(researchTools, /เครื่องมือช่วยวางกรอบคำถาม/);
-  assert.match(researchTools, /ห้องฝึกปรับเกณฑ์คัดกรอง/);
+  assert.match(researchTools, /แบบฝึกหัดคัดกรองบทความ/);
   assert.match(researchTools, /เครื่องมือวางแผน PRISMA flow/);
   assert.match(researchTools, /ตอบได้ตรงกับเกณฑ์/);
   assert.match(researchTools, /ผลรวมของแต่ละเหตุผลต้องเท่ากับจำนวนรายงานฉบับเต็มที่ตัดออก/);
+  assert.doesNotMatch(researchTools, /รับเข้า|กรอบตั้งต้น|เส้นทางที่คำนวณได้|รายงานที่พยายามขอ|ขอฉบับเต็มไม่ได้|ระบบอัตโนมัตินำออก/);
   assert.match(researchWorkbench, /litwise-project-checklist-v1/);
   assert.match(researchWorkbench, /validatePrismaReasonCounts/);
   assert.match(researchWorkbench, /className="screening-verdict" role="status"/);
   assert.match(researchWorkbench, /data-testid="method-comparison"/);
   assert.match(researchWorkbench, /data-testid="screening-practice-lab"/);
   assert.match(researchWorkbench, /data-testid="prisma-flow-builder"/);
+  assert.match(researchWorkbench, /StatTestChooser/);
+  assert.match(researchWorkbench, /workflowSourceIds/);
+  assert.match(statChooser, /data-testid="stat-test-chooser"/);
+  assert.match(statChooser, /aria-live="polite"/);
+  assert.doesNotMatch(statChooser, /iframe|dangerouslySetInnerHTML/);
+  assert.match(statData, /ตัวช่วยเลือกสถิติ/);
+  assert.match(statData, /equal_var=False/);
+  assert.equal((statData.match(/^  \d+: \{/gm) ?? []).length, 14);
+  assert.match(researchSources, /JBI Manual for Evidence Synthesis/);
+  assert.match(researchSources, /PRISMA 2020 Statement/);
+  assert.match(researchSources, /UCLA OARC/);
+  assert.match(globalCss, /\.guidance-sources/);
+  assert.match(globalCss, /\.stat-option-grid/);
   assert.match(globalCss, /--th-body: 16px/);
   assert.match(globalCss, /html\[data-locale="th"\]\s*\{/);
   assert.match(globalCss, /html\[data-theme="dark"\]/);

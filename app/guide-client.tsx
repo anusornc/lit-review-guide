@@ -4,7 +4,9 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { thaiContent, uiText, type Locale } from "./i18n";
 import { resolveLocalePreference, resolveThemePreference } from "./preferences";
 import { learningToolsContent } from "./research-tools";
+import { methodSourceIds } from "./research-sources";
 import { MethodComparison, ResearchWorkbench, WorkflowDrillDown } from "./research-workbench";
+import { SourceLinks } from "./source-links";
 import {
   mergedGuideContent,
   rankMethods,
@@ -346,9 +348,6 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
   const methodDeepDives = merged.methodDeepDives as Record<MethodId, MethodDeepDive>;
   const selectedDisciplineDeepDive = disciplineDeepDives[selectedDiscipline.id];
   const selectedMethodDeepDive = methodDeepDives[selectedMethod.id];
-  const methodReference = selectedMethodDeepDive?.reference
-    ? merged.toolkit.references.find((item) => item.id === selectedMethodDeepDive.reference)
-    : undefined;
   const activePrompt = merged.toolkit.aiLab.prompts.find((prompt) => prompt.id === activePromptId)
     ?? merged.toolkit.aiLab.prompts[0];
   const normalizedDisciplineQuery = disciplineQuery.trim().toLocaleLowerCase(locale === "th" ? "th" : "en");
@@ -646,6 +645,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
                   <div><span>{t.pathway.likelyOutput}</span><p>{recommended.output}</p></div>
                   <div><span>{t.pathway.watchFor}</span><p>{recommended.avoidWhen}</p></div>
                 </div>
+                <SourceLinks locale={locale} sourceIds={methodSourceIds[recommended.id]} className="pathway-guidance-sources" />
                 <div className="alternative-methods">
                   <span>{t.pathway.alternatives}</span>
                   <div>
@@ -740,10 +740,11 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
                 <div className="method-deep-dive">
                   <div><span>{t.method.search}</span><p>{selectedMethodDeepDive.search}</p></div>
                   <div><span>{t.method.appraisal}</span><p>{selectedMethodDeepDive.appraisal}</p></div>
-                  <div><span>{t.method.reporting}</span><p>{selectedMethodDeepDive.reporting}</p>{methodReference && <a href={methodReference.href} target="_blank" rel="noreferrer">{t.method.officialGuidance}</a>}</div>
+                  <div><span>{t.method.reporting}</span><p>{selectedMethodDeepDive.reporting}</p></div>
                   <div><span>{t.method.tools}</span><p>{selectedMethodDeepDive.tools}</p></div>
                 </div>
               )}
+              <SourceLinks locale={locale} sourceIds={methodSourceIds[selectedMethod.id]} className="method-guidance-sources" />
               <p className="quality-note"><strong>{t.method.quality}</strong> {selectedMethod.quality}</p>
           </DetailModal>
         )}

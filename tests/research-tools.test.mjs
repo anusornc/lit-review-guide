@@ -108,3 +108,16 @@ test("keeps every learning tool complete in English and Thai", () => {
     assert.equal(content.prisma.inputs.length, 8);
   }
 });
+
+test("uses consistent, natural Thai labels in the learning tools", () => {
+  const content = learningToolsContent.th;
+  const thaiText = JSON.stringify(content);
+
+  assert.equal(content.questionBuilder.frameworkLabel, "กรอบคำถามที่แนะนำ");
+  assert.equal(content.screening.title, "แบบฝึกหัดคัดกรองบทความ");
+  assert.equal(content.screening.options[0].label, "คัดเข้า");
+  assert.equal(content.screening.options[1].label, "คัดออก");
+  assert.equal(content.prisma.flowLabel, "ผลการคำนวณ");
+  assert.equal(content.prisma.stages.included, "งานวิจัยที่คัดเข้า");
+  assert.doesNotMatch(thaiText, /รับเข้า|กรอบตั้งต้น|เส้นทางที่คำนวณได้|รายงานที่พยายามขอ|ขอฉบับเต็มไม่ได้|ระบบอัตโนมัตินำออก/);
+});

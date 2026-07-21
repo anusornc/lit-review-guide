@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import type { MethodId } from "./guide-data";
 import type { Locale } from "./i18n";
+import { workflowSourceIds, workbenchSourceIds } from "./research-sources";
+import { SourceLinks } from "./source-links";
+import { StatTestChooser } from "./stat-test-chooser";
 import {
   buildQuestionDraft,
   calculateChecklistProgress,
@@ -172,6 +175,7 @@ export function WorkflowDrillDown({
                 <div className="workflow-example"><span>{content.exampleLabel}</span><p>{detail.example}</p></div>
                 <div><span>{content.pitfallsLabel}</span><ul>{detail.pitfalls.map((item) => <li key={item}>{item}</li>)}</ul></div>
                 <div><span>{content.toolsLabel}</span><ul>{detail.tools.map((item) => <li key={item}>{item}</li>)}</ul></div>
+                <SourceLinks locale={locale} sourceIds={workflowSourceIds[detail.id as keyof typeof workflowSourceIds]} className="workflow-guidance-sources" />
               </div>
             )}
           </li>
@@ -316,6 +320,7 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
             <button className="button button-primary" type="button" onClick={() => copyText("question", questionDraft)}>{copiedItem === "question" ? content.questionBuilder.copied : content.questionBuilder.copy}</button>
           </div>
         </div>
+        <SourceLinks locale={locale} sourceIds={workbenchSourceIds.questionBuilder} />
       </div>
 
       <div className="workbench-tool screening-lab" data-testid="screening-practice-lab">
@@ -337,6 +342,7 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
           })}
         </div>
         <button className="text-button" type="button" onClick={() => setScreeningDecisions({})}>{content.screening.reset}</button>
+        <SourceLinks locale={locale} sourceIds={workbenchSourceIds.screening} />
       </div>
 
       <div className="workbench-tool prisma-builder" data-testid="prisma-flow-builder">
@@ -377,7 +383,10 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
             <a href="https://www.prisma-statement.org/prisma-2020-flow-diagram" target="_blank" rel="noreferrer">{content.prisma.official}<span aria-hidden="true">↗</span></a>
           </div>
         </div>
+        <SourceLinks locale={locale} sourceIds={workbenchSourceIds.prisma} />
       </div>
+
+      <StatTestChooser locale={locale} />
     </section>
   );
 }
