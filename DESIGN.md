@@ -50,7 +50,7 @@
 ## Components
 
 - Existing components to reuse: decision pathway state, method ranking, bilingual datasets, workflow phases, toolkit, templates, and copy actions
-- New/changed components: sticky reference-style nav, theme toggle, PRISMA/checklist hero stack, top-progress wizard, method card grid, discipline card grid, accessible modal-like details, dark workflow cards, reference-style tool cards
+- New/changed components: sticky reference-style nav, theme toggle, PRISMA/checklist hero stack, top-progress wizard, method card grid, discipline card grid, accessible modal-like details, dark workflow cards, reference-style tool cards, and a bilingual Prompt Lab with explicit evidence guardrails
 - Variants and states: default/hover/active/selected/disabled for cards and pills; light/dark surfaces; empty search state; copied state; open/closed detail dialogs
 - Token/component ownership: `app/globals.css` owns tokens and visual variants; `app/page.tsx` resolves request-aware locale, theme, and metadata; `app/guide-client.tsx` owns interactive state and semantic page markup
 

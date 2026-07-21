@@ -80,6 +80,9 @@ test("server-renders the LitWise research guide", async () => {
   assert.match(html, /Umbrella review/);
   assert.match(html, /Execute your review in six traceable phases/);
   assert.match(html, /Research toolkit/);
+  assert.match(html, /AI prompt lab/);
+  assert.match(html, /Expand search vocabulary/);
+  assert.match(html, /Treat AI output as a draft to inspect/);
   assert.match(html, /Research tool directory/);
   assert.match(html, /Zotero/);
   assert.match(html, /ASReview/);
@@ -109,6 +112,7 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(guideClient, /disciplineDeepDives/);
   assert.match(guideClient, /workflow-section/);
   assert.match(guideClient, /toolkit-section/);
+  assert.match(guideClient, /ai-prompt-lab/);
   assert.match(guideClient, /start-stage-grid/);
   assert.match(guideClient, /discipline-search/);
   assert.match(guideClient, /method-filter-pills/);
@@ -145,6 +149,9 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(globalCss, /html\[data-theme="dark"\]/);
   assert.match(globalCss, /@media \(max-width: 600px\)/);
   assert.match(globalCss, /body \{ font-size: 16px; \}/);
+  assert.match(globalCss, /\.prompt-anatomy p \{[^}]*font-size: 16px/);
+  assert.match(globalCss, /html\[data-locale="th"\] \.prompt-anatomy p[^}]*\{ font-size: 16px/);
+  assert.match(globalCss, /\.prompt-(?:anatomy|task-list, \.prompt-preview|guardrails)[^}]*border-radius: 20px/);
   assert.match(globalCss, /@media print/);
   assert.match(globalCss, /prefers-reduced-motion/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
@@ -171,6 +178,8 @@ test("treats the language query as the server-rendered locale source", async () 
   assert.match(html, /<main lang="th">/i);
   assert.match(html, /<title>LitWise — คู่มือผู้เชี่ยวชาญด้านการทบทวนวรรณกรรม<\/title>/i);
   assert.match(html, /ค้นหาวิธีทบทวนที่เหมาะกับ/);
+  assert.match(html, /คลังพรอมป์สำหรับงานวิจัย/);
+  assert.match(html, /ขยายชุดคำค้น/);
 });
 
 test("seeds persisted locale and theme before hydration", async () => {

@@ -10,6 +10,7 @@ import {
   type EvidenceId,
   type GoalId,
   type MethodId,
+  type ResearchPromptId,
 } from "./guide-data";
 
 type Discipline = {
@@ -310,6 +311,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
   const [activeMethod, setActiveMethod] = useState<MethodId>("scoping");
   const [disciplineQuery, setDisciplineQuery] = useState("");
   const [methodFilter, setMethodFilter] = useState<MethodFilterId>("all");
+  const [activePromptId, setActivePromptId] = useState<ResearchPromptId>("search-vocabulary");
   const [copiedItem, setCopiedItem] = useState("");
   const [detailModal, setDetailModal] = useState<"method" | "discipline" | null>(null);
   const detailTrigger = useRef<HTMLButtonElement | null>(null);
@@ -342,6 +344,8 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
   const methodReference = selectedMethodDeepDive?.reference
     ? merged.toolkit.references.find((item) => item.id === selectedMethodDeepDive.reference)
     : undefined;
+  const activePrompt = merged.toolkit.aiLab.prompts.find((prompt) => prompt.id === activePromptId)
+    ?? merged.toolkit.aiLab.prompts[0];
   const normalizedDisciplineQuery = disciplineQuery.trim().toLocaleLowerCase(locale === "th" ? "th" : "en");
   const matchesDisciplineQuery = (item: Discipline, query: string) => [item.name, item.intro, item.questions, item.sources, ...item.methods]
     .join(" ")
@@ -843,6 +847,60 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
             </article>
           ))}
         </div>
+
+        <section className="ai-prompt-lab" aria-labelledby="ai-prompt-lab-title">
+          <div className="section-heading split-heading prompt-lab-heading">
+            <div><p className="section-index">{merged.toolkit.aiLab.index}</p><h2 id="ai-prompt-lab-title">{merged.toolkit.aiLab.title}</h2></div>
+            <p>{merged.toolkit.aiLab.intro}</p>
+          </div>
+
+          <div className="prompt-anatomy">
+            <h3>{merged.toolkit.aiLab.anatomyTitle}</h3>
+            <ol>
+              {merged.toolkit.aiLab.anatomy.map((part, index) => (
+                <li key={part.label}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <div><strong>{part.label}</strong><p>{part.description}</p></div>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="prompt-workbench">
+            <div className="prompt-task-list" role="group" aria-label={merged.toolkit.aiLab.taskLabel}>
+              <p>{merged.toolkit.aiLab.taskLabel}</p>
+              {merged.toolkit.aiLab.prompts.map((prompt, index) => (
+                <button
+                  key={prompt.id}
+                  type="button"
+                  aria-pressed={activePrompt.id === prompt.id}
+                  className={activePrompt.id === prompt.id ? "active" : ""}
+                  onClick={() => setActivePromptId(prompt.id)}
+                >
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <span><strong>{prompt.title}</strong><small>{prompt.bestFor}</small></span>
+                </button>
+              ))}
+            </div>
+
+            <article
+              className="prompt-preview"
+              id="ai-prompt-panel"
+              aria-live="polite"
+            >
+              <header><p className="detail-kicker">{merged.toolkit.aiLab.promptLabel}</p><h3>{activePrompt.title}</h3><p>{activePrompt.bestFor}</p></header>
+              <pre><code>{activePrompt.prompt}</code></pre>
+              <button className="button button-primary" onClick={() => copyText(`prompt-${activePrompt.id}`, activePrompt.prompt)}>
+                {copiedItem === `prompt-${activePrompt.id}` ? merged.toolkit.copied : merged.toolkit.copy}
+              </button>
+            </article>
+          </div>
+
+          <aside className="prompt-guardrails">
+            <div><p className="detail-kicker">{merged.toolkit.aiLab.guardrailLabel}</p><h3>{merged.toolkit.aiLab.guardrailTitle}</h3></div>
+            <ul>{merged.toolkit.aiLab.guardrails.map((guardrail) => <li key={guardrail}><span aria-hidden="true">✓</span>{guardrail}</li>)}</ul>
+          </aside>
+        </section>
 
         <div className="appraisal-panel">
           <div className="toolkit-subheading"><p className="detail-kicker">{merged.toolkit.appraisalTitle}</p><h3>{merged.toolkit.appraisalIntro}</h3></div>

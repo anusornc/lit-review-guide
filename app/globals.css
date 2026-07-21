@@ -291,6 +291,35 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .search-tip-grid article > span { width: 29px; height: 29px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-family: var(--serif); }
 .search-tip-grid h3 { margin-bottom: 5px; font-family: var(--serif); font-size: 17px; }
 .search-tip-grid p { margin: 0; color: var(--muted); font-size: 10px; }
+.ai-prompt-lab { margin-top: 92px; padding-top: 86px; border-top: 1px solid var(--line); }
+.prompt-lab-heading { margin-bottom: 32px; }
+.prompt-anatomy { padding: 28px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface-alt); }
+.prompt-anatomy > h3 { margin-bottom: 20px; font-family: var(--serif); font-size: 24px; font-weight: 600; }
+.prompt-anatomy ol { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.prompt-anatomy li { min-width: 0; display: grid; grid-template-columns: 27px 1fr; gap: 10px; padding: 15px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.prompt-anatomy li > span { color: var(--accent); font-family: var(--mono); font-size: 12px; }
+.prompt-anatomy strong { display: block; margin-bottom: 4px; font-family: var(--serif); font-size: 17px; }
+.prompt-anatomy p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.prompt-workbench { display: grid; grid-template-columns: minmax(260px, .7fr) minmax(0, 1.3fr); gap: 14px; margin-top: 14px; }
+.prompt-task-list, .prompt-preview { border: 1px solid var(--line); border-radius: 20px; background: var(--surface); }
+.prompt-task-list { display: flex; flex-direction: column; gap: 8px; padding: 18px; }
+.prompt-task-list > p { margin: 0 0 5px; color: var(--accent); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.prompt-task-list button { width: 100%; display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; border: 1px solid transparent; border-radius: 14px; background: transparent; color: var(--ink); padding: 13px; cursor: pointer; text-align: left; }
+.prompt-task-list button:hover { border-color: var(--line-strong); background: var(--surface-alt); }
+.prompt-task-list button.active { border-color: var(--accent); background: var(--accent-soft); }
+.prompt-task-list button > span:first-child { color: var(--accent); font-family: var(--mono); font-size: 11px; }
+.prompt-task-list strong { display: block; margin-bottom: 4px; font-family: var(--serif); font-size: 18px; line-height: 1.3; }
+.prompt-task-list small { display: block; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.prompt-preview { min-width: 0; display: flex; flex-direction: column; padding: 27px; }
+.prompt-preview header h3 { margin: 3px 0 8px; font-family: var(--serif); font-size: 27px; font-weight: 600; }
+.prompt-preview header > p:last-child { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.prompt-preview pre { max-height: 510px; overflow: auto; margin: 20px 0; border-radius: 14px; background: var(--navy); color: #e9edf4; padding: 24px; font-family: var(--mono); font-size: 16px; line-height: 1.7; white-space: pre-wrap; }
+.prompt-preview .button { align-self: flex-start; margin-top: auto; }
+.prompt-guardrails { display: grid; grid-template-columns: .75fr 1.25fr; gap: 34px; margin-top: 14px; padding: 28px; border-radius: 20px; background: var(--navy); color: #fff; }
+.prompt-guardrails h3 { margin: 4px 0 0; color: #fff; font-family: var(--serif); font-size: 25px; font-weight: 600; line-height: 1.2; }
+.prompt-guardrails ul { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; margin: 0; padding: 0; list-style: none; }
+.prompt-guardrails li { display: grid; grid-template-columns: 20px 1fr; gap: 9px; color: #cbd3df; font-size: 16px; line-height: 1.6; }
+.prompt-guardrails li span { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.08); color: var(--accent); font-weight: 700; }
 .appraisal-panel { margin-top: 70px; }
 .toolkit-subheading { margin-bottom: 24px; }
 .appraisal-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; }
@@ -360,6 +389,8 @@ html[data-locale="th"] .language-switch, html[data-locale="th"] .method-filter-p
 html[data-locale="th"] .step-rail button strong { font-size: 12px; line-height: 1.45; }
 html[data-locale="th"] .option-card strong { font-family: "Noto Sans Thai", Tahoma, sans-serif; font-size: 16px; }
 html[data-locale="th"] .option-card small, html[data-locale="th"] .evidence-list small, html[data-locale="th"] .commitment-list small, html[data-locale="th"] .fit-grid p, html[data-locale="th"] .method-output p, html[data-locale="th"] .method-deep-dive p, html[data-locale="th"] .discipline-detail dd, html[data-locale="th"] .field-insight p, html[data-locale="th"] .field-caution p { font-size: 14px; line-height: 1.75; }
+html[data-locale="th"] .prompt-anatomy p, html[data-locale="th"] .prompt-task-list small, html[data-locale="th"] .prompt-preview header > p:last-child, html[data-locale="th"] .prompt-guardrails li { font-size: 16px; line-height: 1.75; }
+html[data-locale="th"] .prompt-preview pre { font-family: "Noto Sans Thai", Tahoma, var(--sans); font-size: 16px; line-height: 1.8; }
 html[data-locale="th"] .flow-stack span, html[data-locale="th"] .checklist-card ul { font-size: 12px; }
 
 @media (max-width: 1080px) {
@@ -371,6 +402,7 @@ html[data-locale="th"] .flow-stack span, html[data-locale="th"] .checklist-card 
   .start-stage-grid { grid-template-columns: repeat(2, 1fr); }
   .methods-grid, .discipline-card-grid { grid-template-columns: repeat(2, 1fr); }
   .workflow-grid { grid-template-columns: repeat(2, 1fr); }
+  .prompt-anatomy ol { grid-template-columns: repeat(2, 1fr); }
   .tool-category { grid-template-columns: 1fr; }
 }
 
@@ -389,6 +421,7 @@ html[data-locale="th"] .flow-stack span, html[data-locale="th"] .checklist-card 
   .step-rail button strong { font-size: 8px; }
   .discipline-choice-grid { grid-template-columns: repeat(2, 1fr); }
   .search-canvas { grid-template-columns: 1fr; }
+  .prompt-workbench, .prompt-guardrails { grid-template-columns: 1fr; }
   .tool-card-list { grid-template-columns: 1fr; }
   .template-grid { grid-template-columns: 1fr; }
   .pitfall-panel { grid-template-columns: 1fr; }
@@ -439,6 +472,12 @@ html[data-locale="th"] .flow-stack span, html[data-locale="th"] .checklist-card 
   .workflow-grid > li { min-height: 300px; }
   .search-tip-grid { grid-template-columns: 1fr; }
   .search-canvas { padding: 22px; }
+  .ai-prompt-lab { margin-top: 70px; padding-top: 65px; }
+  .prompt-anatomy { padding: 20px; }
+  .prompt-anatomy ol, .prompt-guardrails ul { grid-template-columns: 1fr; }
+  .prompt-preview { padding: 20px; }
+  .prompt-preview pre { max-height: 430px; padding: 18px; }
+  .prompt-guardrails { padding: 22px; }
   .tool-category { grid-template-columns: 1fr; }
   .pitfall-panel { padding: 22px; }
   .pitfall-panel ol { grid-template-columns: 1fr; }
@@ -453,7 +492,7 @@ html[data-locale="th"] .flow-stack span, html[data-locale="th"] .checklist-card 
 
 @media print {
   :root, html[data-theme="dark"] { --bg: #fff; --surface: #fff; --surface-alt: #fff; --surface-soft: #fff; --ink: #000; --muted: #333; --line: #bbb; --navy: #111; }
-  .site-header, .hero-actions, .theme-toggle, .language-switch, .pathway-controls, .method-filter-pills, .detail-modal, .search-code button, .template-grid button, .closing-section, footer { display: none !important; }
+  .site-header, .hero-actions, .theme-toggle, .language-switch, .pathway-controls, .method-filter-pills, .detail-modal, .search-code button, .prompt-preview button, .template-grid button, .closing-section, footer { display: none !important; }
   body { background: #fff; color: #000; font-size: 11pt; }
   section, .hero, .pathway-section, .methods-section, .workflow-section { width: 100%; padding: 18mm 0; break-inside: avoid; background: #fff; color: #000; }
   .workflow-heading h2, .workflow-grid h3 { color: #000; }

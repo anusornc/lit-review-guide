@@ -5,6 +5,7 @@ export type GoalId = "map" | "evaluate" | "understand" | "explain";
 export type EvidenceId = "experimental" | "qualitative" | "mixed" | "theoretical" | "uncertain";
 export type DisciplineId = "health" | "social" | "education" | "business" | "technology" | "science" | "humanities" | "law-policy" | "interdisciplinary";
 export type MethodId = "systematic" | "scoping" | "meta-analysis" | "qualitative" | "realist" | "integrative" | "mixed" | "bibliometric" | "critical" | "umbrella" | "rapid" | "systematic-search" | "meta-ethnography" | "thematic";
+export type ResearchPromptId = "search-vocabulary" | "question-challenge" | "evidence-matrix" | "gap-audit" | "claim-check";
 
 type DecisionInput = {
   goal: GoalId | "";
@@ -205,6 +206,124 @@ export const mergedGuideContent = {
         { marker: "02", title: "Use truncation carefully", description: "A wildcard can capture useful word endings, but test every truncated term so it does not retrieve unrelated words." },
         { marker: "03", title: "Test proximity operators", description: "When a database supports NEAR, W/n, or an equivalent operator, use it to keep related concepts close without requiring an exact phrase." },
       ],
+      aiLab: {
+        index: "AI-assisted research",
+        title: "AI prompt lab",
+        intro: "Use AI to expand, compare, and challenge your thinking while keeping every scholarly decision and source check with the researcher.",
+        anatomyTitle: "A reliable research prompt names four things",
+        anatomy: [
+          { label: "Context", description: "Topic, discipline, purpose, and the material available." },
+          { label: "Task", description: "One concrete job for the AI to help with." },
+          { label: "Evidence rules", description: "What it may use, must verify, and must not invent." },
+          { label: "Output", description: "A structure that makes gaps and uncertainty visible." },
+        ],
+        taskLabel: "Choose a research task",
+        promptLabel: "Copy-ready prompt",
+        prompts: [
+          {
+            id: "search-vocabulary",
+            title: "Expand search vocabulary",
+            bestFor: "Turning a topic into concept blocks, synonyms, spelling variants, and terms to test in databases.",
+            prompt: `Context:
+I am reviewing [topic] in [discipline, population, or setting]. My current question is [question or decision].
+
+Task:
+Help me build vocabulary for a reproducible database search. Separate the question into concept blocks and propose synonyms, acronyms, spelling variants, broader terms, and narrower terms for each block.
+
+Evidence rules:
+- Do not present a term as an official subject heading unless it has been checked in the named database thesaurus.
+- Separate natural-language keywords from controlled-vocabulary candidates that I still need to verify.
+- Flag terms likely to retrieve irrelevant results and explain why.
+- Do not claim that the list is complete.
+
+Output:
+Create a table with: concept block | keywords and variants | controlled terms to verify | likely noise. Then draft Boolean blocks, clearly marking any syntax that must be adapted for [database].`,
+          },
+          {
+            id: "question-challenge",
+            title: "Challenge a review question",
+            bestFor: "Testing whether a proposed question is clear, answerable, and aligned with the evidence likely to exist.",
+            prompt: `Context:
+My proposed review question is [question]. It sits in [discipline or context], should inform [decision or contribution], and must be completed within [time and team constraints].
+
+Task:
+Critique the question before I commit to a review design. Identify ambiguous concepts, hidden assumptions, scope problems, and the kinds of evidence the question would require.
+
+Evidence rules:
+- Do not choose a review method from the topic label alone.
+- State every assumption you make about the field and available evidence.
+- Distinguish what can be checked with a preliminary search from what requires supervisor or stakeholder judgement.
+
+Output:
+Provide: 1) issues to resolve, 2) three revised question options with different scopes, 3) evidence each option would need, 4) a feasibility check, and 5) questions I should take to my supervisor or review team.`,
+          },
+          {
+            id: "evidence-matrix",
+            title: "Compare supplied studies",
+            bestFor: "Building a traceable comparison before synthesis without filling missing fields by inference.",
+            prompt: `Context:
+I will provide [number] papers or structured notes about [topic]. I need to compare them for [review purpose].
+
+Task:
+Extract only information present in the supplied material and build an evidence-comparison matrix.
+
+Evidence rules:
+- Use only the documents or notes I provide in this conversation.
+- For every entry, cite the source filename or study ID and page, table, or section when available.
+- Write "not reported" when information is missing; do not infer it.
+- Keep authors' findings separate from your interpretation and flag contradictions.
+
+Output:
+Use columns for: citation | aim | context | design | sample/data | measure or phenomenon | main finding | limitation | source location | reviewer note. End with patterns that are supported by the matrix and questions that remain unresolved.`,
+          },
+          {
+            id: "gap-audit",
+            title: "Audit a claimed research gap",
+            bestFor: "Checking whether a proposed gap is an absence of evidence, a limitation, a contradiction, or only a search artefact.",
+            prompt: `Context:
+My current corpus contains [describe papers, databases, dates, languages, and inclusion boundaries]. I think the gap is: [proposed gap].
+
+Task:
+Stress-test this gap claim against the supplied corpus and search boundaries.
+
+Evidence rules:
+- Do not treat "not found in this corpus" as proof that no research exists.
+- Trace every observation to studies or search records I provide.
+- Distinguish an evidence gap, population or context gap, methodological limitation, contradictory evidence, theory gap, and search-coverage gap.
+- Identify what additional searching or expert checking is needed before making the claim.
+
+Output:
+Return a gap-audit table with: possible gap type | supporting evidence | counter-evidence | boundary or uncertainty | next verification step. Finish with a cautious gap statement that does not overclaim.`,
+          },
+          {
+            id: "claim-check",
+            title: "Check a claim against its source",
+            bestFor: "Verifying whether a sentence accurately represents the cited study before it enters a thesis or paper.",
+            prompt: `Context:
+Draft claim: [paste claim]. Proposed source: [citation, DOI, or supplied document].
+
+Task:
+Check whether the source supports the wording and strength of the claim.
+
+Evidence rules:
+- If you cannot access or locate the source text, say so and stop short of verification.
+- Check the study design, population, setting, comparison, outcome, estimate, uncertainty, and authors' limitations.
+- Distinguish association from causation and statistical significance from practical importance.
+- Do not invent a quotation, page number, DOI, or result.
+
+Output:
+Report: verdict [supported | partly supported | unsupported | unable to verify], exact supporting location, mismatches, missing context, and a revised claim whose strength stays within the evidence.`,
+          },
+        ],
+        guardrailLabel: "AI quality check",
+        guardrailTitle: "Treat AI output as a draft to inspect",
+        guardrails: [
+          "Never cite AI-generated text as evidence; return to the original publication or dataset.",
+          "Open and read the source before accepting a quotation, number, method, DOI, or page reference.",
+          "Record where AI assisted the work and keep final inclusion, appraisal, and interpretation decisions human-owned.",
+          "Do not upload confidential, identifiable, embargoed, or unpublished material without checking consent and institutional policy.",
+        ],
+      },
       copy: "Copy", copied: "Copied ✓", templateLabel: "Copy-ready template",
       appraisalTitle: "Choose appraisal by evidence design", appraisalIntro: "The design of the included study—not the prestige of its journal—determines the appraisal lens.",
       appraisalRows: [
@@ -393,6 +512,125 @@ export const mergedGuideContent = {
         { marker: "02", title: "ใช้เครื่องหมายตัดคำอย่างระมัดระวัง", description: "เครื่องหมายแทนท้ายคำช่วยเก็บคำหลายรูปได้ แต่ควรทดลองทุกคำก่อน เพื่อไม่ให้ได้คำอื่นที่ไม่เกี่ยวข้องติดมาด้วย" },
         { marker: "03", title: "ทดลองใช้คำสั่งค้นคำที่อยู่ใกล้กัน", description: "หากฐานข้อมูลรองรับ NEAR, W/n หรือคำสั่งใกล้เคียง ให้ใช้เชื่อมแนวคิดที่ควรอยู่ใกล้กันโดยไม่บังคับเป็นวลีตายตัว" },
       ],
+      aiLab: {
+        index: "ใช้ AI ช่วยทำงานวิจัย",
+        title: "คลังพรอมป์สำหรับงานวิจัย",
+        intro: "ให้ AI ช่วยแตกประเด็น เปรียบเทียบ และทักท้วงความคิด โดยผู้วิจัยยังเป็นคนตัดสินใจและตรวจแหล่งข้อมูลทุกครั้ง",
+        anatomyTitle: "พรอมป์ที่ใช้กับงานวิจัยได้ดีควรบอกให้ครบ 4 เรื่อง",
+        anatomy: [
+          { label: "บริบท", description: "หัวข้อ สาขา เป้าหมาย และข้อมูลที่มีอยู่" },
+          { label: "งานที่ให้ช่วย", description: "ระบุงานหนึ่งอย่างให้ชัดว่าอยากให้ AI ช่วยอะไร" },
+          { label: "กติกาเรื่องหลักฐาน", description: "กำหนดว่าใช้อะไรได้ ต้องตรวจอะไร และห้ามแต่งอะไรขึ้นมา" },
+          { label: "รูปแบบคำตอบ", description: "กำหนดโครงให้เห็นข้อมูลที่ขาดและความไม่แน่นอน" },
+        ],
+        taskLabel: "เลือกงานที่ต้องการให้ AI ช่วย",
+        promptLabel: "พรอมป์พร้อมนำไปปรับใช้",
+        prompts: [
+          {
+            id: "search-vocabulary",
+            title: "ขยายชุดคำค้น",
+            bestFor: "แตกหัวข้อเป็นแนวคิดหลัก พร้อมคำพ้อง คำย่อ รูปสะกด และคำที่ต้องนำไปทดลองค้นในฐานข้อมูล",
+            prompt: `บริบท:
+ฉันกำลังทบทวนเรื่อง [หัวข้อ] ใน [สาขา/ประชากร/บริบท] โดยมีคำถามเบื้องต้นว่า [คำถามหรือการตัดสินใจที่ต้องการข้อมูลสนับสนุน]
+
+งานที่ให้ช่วย:
+ช่วยสร้างชุดคำสำหรับวางแผนค้นฐานข้อมูล แยกคำถามเป็นแนวคิดหลัก แล้วเสนอคำพ้อง คำย่อ รูปสะกด คำที่กว้างกว่า และคำที่เฉพาะกว่าของแต่ละแนวคิด
+
+กติกาเรื่องหลักฐาน:
+- อย่าเรียกคำใดว่าเป็นศัพท์ควบคุมอย่างเป็นทางการ หากยังไม่ได้ตรวจใน thesaurus ของฐานข้อมูลนั้น
+- แยกคำค้นทั่วไปออกจากคำที่ฉันต้องนำไปตรวจว่าเป็นศัพท์ควบคุมจริงหรือไม่
+- ชี้คำที่อาจดึงผลลัพธ์ไม่เกี่ยวข้อง พร้อมอธิบายสาเหตุ
+- อย่าอ้างว่ารายการคำนี้ครอบคลุมครบถ้วนแล้ว
+
+รูปแบบคำตอบ:
+ทำตาราง: แนวคิดหลัก | คำค้นและรูปแบบคำ | ศัพท์ควบคุมที่ต้องตรวจ | ความเสี่ยงที่จะได้ผลลัพธ์ที่ไม่เกี่ยวข้อง จากนั้นร่างชุดคำค้น Boolean และทำเครื่องหมายส่วนที่ต้องปรับให้ตรงกับ [ชื่อฐานข้อมูล]`,
+          },
+          {
+            id: "question-challenge",
+            title: "ตรวจความชัดของคำถามทบทวน",
+            bestFor: "ตรวจว่าคำถามชัด ตอบได้จริง และสอดคล้องกับหลักฐานที่คาดว่าจะพบหรือไม่ ก่อนเลือกวิธีทบทวน",
+            prompt: `บริบท:
+คำถามทบทวนที่กำลังพิจารณาคือ [คำถาม] อยู่ใน [สาขาหรือบริบท] ต้องการนำผลไปใช้เพื่อ [การตัดสินใจหรือคุณูปการ] และมีข้อจำกัดด้าน [เวลา/ทีม/การเข้าถึงข้อมูล]
+
+งานที่ให้ช่วย:
+ช่วยวิจารณ์คำถามนี้ก่อนที่ฉันจะกำหนดรูปแบบการทบทวน ชี้คำที่กำกวม สมมติฐานที่ซ่อนอยู่ ขอบเขตที่กว้างหรือแคบเกินไป และชนิดหลักฐานที่ต้องมีจึงจะตอบคำถามได้
+
+กติกาเรื่องหลักฐาน:
+- อย่าเลือกวิธีทบทวนจากชื่อหัวข้อเพียงอย่างเดียว
+- บอกสมมติฐานทุกข้อที่ใช้เกี่ยวกับสาขาและหลักฐานที่คาดว่าจะมี
+- แยกเรื่องที่ตรวจได้ด้วยการค้นนำร่อง ออกจากเรื่องที่ควรหารือกับอาจารย์ที่ปรึกษาหรือผู้มีส่วนได้ส่วนเสีย
+
+รูปแบบคำตอบ:
+ตอบเป็น 5 ส่วน: 1) จุดที่ต้องทำให้ชัด 2) คำถามฉบับปรับใหม่ 3 แบบที่มีขอบเขตต่างกัน 3) หลักฐานที่แต่ละแบบต้องใช้ 4) ความเป็นไปได้ในการทำจริง และ 5) คำถามที่ควรนำไปคุยกับอาจารย์ที่ปรึกษาหรือทีมทบทวน`,
+          },
+          {
+            id: "evidence-matrix",
+            title: "เปรียบเทียบบทความที่ให้ไว้",
+            bestFor: "ทำตารางเปรียบเทียบก่อนสังเคราะห์ โดยไม่เติมข้อมูลที่บทความไม่ได้รายงาน",
+            prompt: `บริบท:
+ฉันจะให้บทความหรือบันทึกจำนวน [จำนวน] รายการเกี่ยวกับ [หัวข้อ] และต้องการเปรียบเทียบเพื่อ [เป้าหมายของงานทบทวน]
+
+งานที่ให้ช่วย:
+ดึงเฉพาะข้อมูลที่ปรากฏในเอกสารที่ให้ แล้วจัดทำตารางเปรียบเทียบหลักฐาน
+
+กติกาเรื่องหลักฐาน:
+- ใช้เฉพาะเอกสารหรือบันทึกที่ฉันให้ในการสนทนานี้
+- ทุกช่องต้องระบุชื่อไฟล์หรือรหัสงาน และหน้า ตาราง หรือหัวข้อย่อย หากมีข้อมูลตำแหน่ง
+- หากเอกสารไม่ระบุ ให้เขียนว่า “ไม่รายงาน” ห้ามคาดเดาเติมเอง
+- แยกข้อค้นพบของผู้เขียนออกจากการตีความของคุณ และทำเครื่องหมายเมื่อแต่ละงานให้ผลขัดกัน
+
+รูปแบบคำตอบ:
+ใช้คอลัมน์: การอ้างอิง | เป้าหมาย | บริบท | แบบแผนวิจัย | กลุ่มตัวอย่าง/ข้อมูล | ตัววัดหรือปรากฏการณ์ | ข้อค้นพบหลัก | ข้อจำกัด | ตำแหน่งต้นทาง | หมายเหตุผู้ทบทวน แล้วสรุปเฉพาะรูปแบบที่ตารางรองรับ พร้อมระบุคำถามที่ยังตอบไม่ได้`,
+          },
+          {
+            id: "gap-audit",
+            title: "ตรวจข้ออ้างเรื่องช่องว่างวิจัย",
+            bestFor: "แยกให้ออกว่าสิ่งที่เรียกว่าช่องว่าง เป็นการขาดหลักฐาน ข้อจำกัดของวิธี ผลที่ขัดกัน หรือเกิดจากการค้นยังไม่ครอบคลุม",
+            prompt: `บริบท:
+ชุดเอกสารปัจจุบันของฉันมาจาก [ฐานข้อมูล/ช่วงปี/ภาษา/ขอบเขตการคัดเลือก] และกำลังจะเสนอว่าช่องว่างคือ [ข้อความที่ต้องการตรวจ]
+
+งานที่ให้ช่วย:
+ช่วยทดสอบว่าข้ออ้างเรื่องช่องว่างนี้หนักแน่นเพียงใด เมื่อเทียบกับชุดเอกสารและขอบเขตการค้นที่ฉันให้
+
+กติกาเรื่องหลักฐาน:
+- การไม่พบในเอกสารชุดนี้ ไม่ได้แปลว่าไม่มีงานวิจัยอยู่จริง
+- ทุกข้อสังเกตต้องย้อนกลับไปยังงานวิจัยหรือบันทึกการค้นที่ฉันให้
+- แยกช่องว่างด้านหลักฐาน ประชากรหรือบริบท ข้อจำกัดด้านระเบียบวิธี ผลที่ขัดกัน ช่องว่างทางทฤษฎี และช่องว่างจากการค้นไม่ครอบคลุม
+- ระบุสิ่งที่ต้องค้นเพิ่มหรือให้ผู้เชี่ยวชาญช่วยตรวจ ก่อนนำข้ออ้างนี้ไปใช้
+
+รูปแบบคำตอบ:
+ทำตาราง: ประเภทช่องว่างที่เป็นไปได้ | หลักฐานสนับสนุน | หลักฐานโต้แย้ง | ขอบเขตหรือความไม่แน่นอน | ขั้นตอนตรวจสอบถัดไป แล้วช่วยร่างข้อความอธิบายช่องว่างแบบระมัดระวังและไม่สรุปเกินข้อมูล`,
+          },
+          {
+            id: "claim-check",
+            title: "ตรวจข้อความกับแหล่งอ้างอิง",
+            bestFor: "ตรวจว่าประโยคในวิทยานิพนธ์หรือบทความกล่าวตรงและไม่แรงเกินกว่างานต้นฉบับรองรับ",
+            prompt: `บริบท:
+ข้อความร่าง: [วางข้อความ]
+แหล่งที่ตั้งใจใช้อ้างอิง: [รายการอ้างอิง/DOI/เอกสารที่ให้]
+
+งานที่ให้ช่วย:
+ตรวจว่าแหล่งข้อมูลรองรับเนื้อหาและระดับความหนักแน่นของข้อความนี้หรือไม่
+
+กติกาเรื่องหลักฐาน:
+- หากเข้าถึงหรือหาตำแหน่งข้อความต้นทางไม่ได้ ให้บอกตามตรงและอย่ายืนยันว่าได้ตรวจแล้ว
+- ตรวจแบบแผนวิจัย ประชากร บริบท ตัวเปรียบเทียบ ผลลัพธ์ ค่าประมาณ ความไม่แน่นอน และข้อจำกัดที่ผู้เขียนระบุ
+- แยกความสัมพันธ์ออกจากเหตุและผล และแยกนัยสำคัญทางสถิติออกจากความสำคัญในทางปฏิบัติ
+- ห้ามแต่งข้อความอ้างตรง เลขหน้า DOI หรือผลการศึกษา
+
+รูปแบบคำตอบ:
+รายงานผลเป็น [รองรับ | รองรับบางส่วน | ไม่รองรับ | ยังตรวจไม่ได้] พร้อมตำแหน่งหลักฐาน จุดที่ไม่ตรง บริบทที่ขาด และข้อความฉบับแก้ที่มีน้ำหนักไม่เกินกว่าหลักฐาน`,
+          },
+        ],
+        guardrailLabel: "จุดตรวจคุณภาพเมื่อใช้ AI",
+        guardrailTitle: "ให้ถือว่าคำตอบจาก AI เป็นร่างที่ต้องตรวจ",
+        guardrails: [
+          "อย่านำข้อความที่ AI สร้างขึ้นไปใช้อ้างอิงเป็นหลักฐาน ต้องย้อนกลับไปยังบทความหรือชุดข้อมูลต้นฉบับ",
+          "เปิดอ่านแหล่งต้นฉบับก่อนเชื่อข้อความอ้างตรง ตัวเลข วิธีวิจัย DOI หรือเลขหน้าที่ AI ให้มา",
+          "บันทึกว่าใช้ AI ช่วยตรงไหน และให้ผู้วิจัยเป็นผู้ตัดสินใจเรื่องการคัดเลือก การประเมิน และการตีความ",
+          "อย่าอัปโหลดข้อมูลลับ ข้อมูลระบุตัวบุคคล งานที่ติดเงื่อนไขเผยแพร่ หรือเอกสารที่ยังไม่ตีพิมพ์ โดยไม่ตรวจความยินยอมและนโยบายของสถาบันก่อน",
+        ],
+      },
       copy: "คัดลอก", copied: "คัดลอกแล้ว ✓", templateLabel: "แบบฟอร์มพร้อมใช้",
       appraisalTitle: "เลือกวิธีประเมินให้ตรงกับประเภทหลักฐาน", appraisalIntro: "ประเภทงานวิจัยที่นำมาทบทวน—ไม่ใช่ชื่อเสียงของวารสาร—เป็นตัวกำหนดว่าควรประเมินคุณภาพจากมุมใด",
       appraisalRows: [

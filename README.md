@@ -16,7 +16,7 @@ supports Node.js 22 or Docker.
 - 14 literature-review methods with search, appraisal, reporting, and tool guidance
 - 9 discipline families with databases, review venues, standards, tools, and cautions
 - six traceable phases: Scope → Search → Screen → Appraise → Extract → Write
-- Boolean search canvas, appraisal chooser, copy-ready templates, and common pitfalls
+- Boolean search canvas, bilingual research Prompt Lab, appraisal chooser, copy-ready templates, and common pitfalls
 - Thai and English content with URL, cookie, and browser-language resolution
 - responsive UI, light and dark themes, accessible dialogs, and keyboard navigation
 

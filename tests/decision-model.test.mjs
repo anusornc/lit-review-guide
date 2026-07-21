@@ -45,6 +45,8 @@ test("keeps research intent as a hard guardrail when other signals conflict", ()
 });
 
 test("keeps the merged guide complete in English and Thai", () => {
+  const promptIdsByLocale = [];
+
   for (const locale of ["en", "th"]) {
     const content = mergedGuideContent[locale];
 
@@ -53,6 +55,11 @@ test("keeps the merged guide complete in English and Thai", () => {
     assert.equal(Object.keys(content.disciplineDeepDives).length, 9);
     assert.equal(content.workflow.phases.length, 6);
     assert.equal(content.toolkit.searchTips.length, 3);
+    assert.equal(content.toolkit.aiLab.anatomy.length, 4);
+    assert.equal(content.toolkit.aiLab.prompts.length, 5);
+    assert.equal(content.toolkit.aiLab.guardrails.length, 4);
+    assert.ok(content.toolkit.aiLab.prompts.every((prompt) => prompt.prompt.includes("[")));
+    promptIdsByLocale.push(content.toolkit.aiLab.prompts.map((prompt) => prompt.id));
     assert.equal(content.toolkit.toolCategories.length, 4);
     assert.equal(content.toolkit.toolCategories.flatMap((category) => category.tools).length, 12);
     assert.ok(content.toolkit.toolCategories.every((category) => category.tools.every((tool) => tool.links.length >= 1)));
@@ -60,4 +67,6 @@ test("keeps the merged guide complete in English and Thai", () => {
     assert.equal(content.toolkit.templates.length, 4);
     assert.equal(content.toolkit.pitfalls.length, 6);
   }
+
+  assert.deepEqual(promptIdsByLocale[0], promptIdsByLocale[1]);
 });
