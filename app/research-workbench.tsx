@@ -5,7 +5,6 @@ import type { MethodId } from "./guide-data";
 import type { Locale } from "./i18n";
 import { workflowSourceIds, workbenchSourceIds } from "./research-sources";
 import { SourceLinks } from "./source-links";
-import { StatTestChooser } from "./stat-test-chooser";
 import {
   buildQuestionDraft,
   calculateChecklistProgress,
@@ -445,7 +444,6 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
         <SourceLinks locale={locale} sourceIds={workbenchSourceIds.prisma} />
       </div>
 
-      <StatTestChooser locale={locale} />
     </section>
   );
 }

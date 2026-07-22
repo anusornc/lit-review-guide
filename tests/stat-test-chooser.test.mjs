@@ -43,6 +43,7 @@ test("provides bilingual guidance, software help, and sources for every recommen
   for (const recommendation of Object.values(statRecommendations)) {
     assert.ok(recommendation.name.en && recommendation.name.th);
     assert.ok(recommendation.useCase.en && recommendation.useCase.th);
+    assert.ok(recommendation.exampleQuestion.en && recommendation.exampleQuestion.th);
     assert.ok(recommendation.assumptions.en && recommendation.assumptions.th);
     assert.deepEqual(Object.keys(recommendation.commands), statSoftware);
     assert.ok(recommendation.sourceIds.length >= 2);
@@ -65,4 +66,3 @@ test("keeps corrected software and interpretation guardrails", () => {
   assert.match(statRecommendations[11].assumptions.en, /monotonic/);
   assert.match(statRecommendations[2].alternative.reason.en, /median interpretation requires additional/);
 });
-

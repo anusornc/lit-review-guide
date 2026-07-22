@@ -135,6 +135,10 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(guideClient, /MethodComparison/);
   assert.match(guideClient, /WorkflowDrillDown/);
   assert.match(guideClient, /ResearchWorkbench/);
+  assert.ok(
+    guideClient.indexOf('id="field-notes"') < guideClient.indexOf('id="statistics"'),
+    "supplementary statistics should follow the literature-review content",
+  );
   assert.match(guideClient, /methodSourceIds/);
   assert.match(guideClient, /SourceLinks/);
   assert.match(guideClient, /toolkit-section/);
@@ -203,12 +207,14 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(researchWorkbench, /className="prisma-tabs" role="tablist"/);
   assert.match(researchWorkbench, /id="prisma-example-panel"/);
   assert.match(researchWorkbench, /className="prisma-example-reasons"/);
-  assert.match(researchWorkbench, /StatTestChooser/);
+  assert.doesNotMatch(researchWorkbench, /StatTestChooser/);
+  assert.match(guideClient, /StatTestChooser/);
   assert.match(researchWorkbench, /workflowSourceIds/);
   assert.match(statChooser, /data-testid="stat-test-chooser"/);
   assert.match(statChooser, /aria-live="polite"/);
   assert.doesNotMatch(statChooser, /iframe|dangerouslySetInnerHTML/);
   assert.match(statData, /ตัวช่วยเลือกสถิติ/);
+  assert.match(statData, /ตัวอย่างคำถามวิจัย/);
   assert.match(statData, /equal_var=False/);
   assert.equal((statData.match(/^  \d+: \{/gm) ?? []).length, 14);
   assert.match(researchSources, /JBI Manual for Evidence Synthesis/);

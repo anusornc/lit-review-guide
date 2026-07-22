@@ -7,6 +7,7 @@ import { learningToolsContent } from "./research-tools";
 import { methodSourceIds } from "./research-sources";
 import { MethodComparison, ResearchWorkbench, WorkflowDrillDown } from "./research-workbench";
 import { SourceLinks } from "./source-links";
+import { StatTestChooser } from "./stat-test-chooser";
 import {
   mergedGuideContent,
   rankMethods,
@@ -984,6 +985,10 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
           {t.notes.items.map((item, index) => <li key={item[0]}><span>{String(index + 1).padStart(2, "0")}</span><strong>{item[0]}</strong><p>{item[1]}</p></li>)}
         </ol>
         <blockquote>{t.notes.quote}<cite>{t.notes.cite}</cite></blockquote>
+      </section>
+
+      <section className="supplementary-statistics-section" id="statistics">
+        <StatTestChooser locale={locale} />
       </section>
 
       <section className="closing-section">

@@ -319,6 +319,8 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .workflow-example { border-left: 3px solid var(--accent) !important; }
 
 .research-workbench-section { width: min(var(--container), calc(100% - 48px)); margin: 0 auto; padding: 104px 0 95px; }
+.supplementary-statistics-section { width: min(var(--container), calc(100% - 48px)); margin: 0 auto; padding: 95px 0 105px; }
+.supplementary-statistics-section .workbench-tool { margin-top: 0; }
 .workbench-heading { margin-bottom: 35px; }
 .project-checklist-panel, .workbench-tool { border: 1px solid var(--line); border-radius: 22px; background: var(--surface); box-shadow: 0 2px 0 rgba(15,23,42,.02); }
 .project-checklist-panel { overflow: hidden; padding: 30px; }
@@ -473,7 +475,7 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .stat-result-heading p { margin: 6px 0 0; color: var(--muted); font-size: 16px; line-height: 1.65; }
 .stat-result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
 .stat-result-grid section { border: 1px solid var(--line); border-radius: 13px; background: var(--surface); padding: 16px; }
-.stat-result-grid section:first-child { grid-column: 1 / -1; border-left: 3px solid var(--warning); }
+.stat-result-grid .stat-example-question { grid-column: 1 / -1; border-left: 3px solid var(--warning); }
 .stat-result-grid section > strong, .stat-command-panel > strong { display: block; color: var(--accent); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
 .stat-result-grid section p { margin: 7px 0 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
 .stat-result-grid section p b { color: var(--ink); }
@@ -673,7 +675,7 @@ html[data-locale="th"] .stat-option-grid button small, html[data-locale="th"] .s
   .official-resources { grid-template-columns: 1fr; }
   .comparison-heading, .question-builder-grid, .question-example-content, .prisma-grid { grid-template-columns: 1fr; }
   .stat-result-grid { grid-template-columns: 1fr; }
-  .stat-result-grid section:first-child { grid-column: auto; }
+  .stat-result-grid .stat-example-question { grid-column: auto; }
   .workflow-learning-grid > li.expanded { grid-template-columns: 1fr; }
   .workflow-detail-panel { border-top: 1px solid rgba(255,255,255,.12); border-left: 0; }
   .note-grid { grid-template-columns: repeat(2, 1fr); }

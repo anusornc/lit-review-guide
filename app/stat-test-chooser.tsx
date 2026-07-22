@@ -68,7 +68,7 @@ export function StatTestChooser({ locale }: { locale: Locale }) {
         <p>{content.caution}</p>
       </aside>
 
-      <nav className="stat-trail" aria-label={locale === "th" ? "เส้นทางคำตอบ" : "Answer trail"}>
+      <nav className="stat-trail" aria-label={locale === "th" ? "ขั้นตอนการตัดสินใจ" : "Answer trail"}>
         <button type="button" onClick={reset}>{content.start}</button>
         {trail.map((item, index) => (
           <button key={`${item.nodeId}-${index}`} type="button" onClick={() => jumpToTrail(index)}>
@@ -86,6 +86,10 @@ export function StatTestChooser({ locale }: { locale: Locale }) {
             </div>
 
             <div className="stat-result-grid">
+              <section className="stat-example-question">
+                <strong>{content.example}</strong>
+                <p>{result.exampleQuestion[locale]}</p>
+              </section>
               <section>
                 <strong>{content.assumptions}</strong>
                 <p>{result.assumptions[locale]}</p>
@@ -154,4 +158,3 @@ export function StatTestChooser({ locale }: { locale: Locale }) {
     </div>
   );
 }
-

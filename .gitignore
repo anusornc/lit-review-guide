@@ -19,6 +19,7 @@
 
 # misc
 .DS_Store
+.~lock.*#
 *.pem
 
 # debug
