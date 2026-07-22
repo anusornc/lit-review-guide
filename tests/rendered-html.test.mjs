@@ -100,6 +100,10 @@ test("server-renders the LitWise research guide", async () => {
   assert.match(html, /Treat AI output as a draft to inspect/);
   assert.match(html, /Research tool directory/);
   assert.match(html, /Zotero/);
+  assert.match(html, /Google Scholar Labs Search/);
+  assert.match(html, /Semantic Scholar/);
+  assert.match(html, /OpenAlex/);
+  assert.match(html, /PubMed/);
   assert.match(html, /ASReview/);
   assert.match(html, /Elicit/);
   assert.match(html, /Nested Knowledge/);
@@ -226,7 +230,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(guideData, /คลังเครื่องมือสำหรับทำงานวิจัย/);
   assert.match(guideData, /05 · ลงมือทำงานทบทวน/);
   assert.match(guideData, /07 · เครื่องมือนักวิจัย/);
-  assert.match(guideData, /คัดเลือกเครื่องมือเพิ่มเติมจากรายการของ Effortless Academic/);
+  assert.match(guideData, /เครื่องมือสืบค้นตรวจสอบจากเอกสารของผู้ให้บริการโดยตรง/);
+  assert.match(guideData, /รายการของ Effortless Academic/);
   assert.match(guideData, /Livewrite \(เดิมชื่อ ReSub\)/);
   assert.doesNotMatch(guideData, /บทวิทยานิพนธ์ที่ปกป้องได้|ผืนงานสร้างคำค้น|เกณฑ์เคลื่อน|ตารางไร้ร่องรอย|การทบทวนแบบร่ม/);
   assert.match(researchTools, /เครื่องมือช่วยวางกรอบคำถาม/);

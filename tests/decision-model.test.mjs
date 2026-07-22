@@ -57,6 +57,8 @@ test("keeps research intent as a hard guardrail when other signals conflict", ()
 
 test("keeps the merged guide complete in English and Thai", () => {
   const promptIdsByLocale = [];
+  const toolCategoryIdsByLocale = [];
+  const searchToolNamesByLocale = [];
 
   for (const locale of ["en", "th"]) {
     const content = mergedGuideContent[locale];
@@ -71,14 +73,24 @@ test("keeps the merged guide complete in English and Thai", () => {
     assert.equal(content.toolkit.aiLab.guardrails.length, 4);
     assert.ok(content.toolkit.aiLab.prompts.every((prompt) => prompt.prompt.includes("[")));
     promptIdsByLocale.push(content.toolkit.aiLab.prompts.map((prompt) => prompt.id));
+    toolCategoryIdsByLocale.push(content.toolkit.toolCategories.map((category) => category.id));
     const toolNames = content.toolkit.toolCategories.flatMap((category) => category.tools.map((tool) => tool.name));
-    assert.equal(content.toolkit.toolCategories.length, 6);
-    assert.equal(toolNames.length, 30);
-    assert.equal(new Set(toolNames).size, 30);
+    const searchToolNames = content.toolkit.toolCategories
+      .filter((category) => ["search-indexes", "field-databases"].includes(category.id))
+      .flatMap((category) => category.tools.map((tool) => tool.name));
+    searchToolNamesByLocale.push(searchToolNames);
+    assert.equal(content.toolkit.toolCategories.length, 8);
+    assert.equal(toolNames.length, 47);
+    assert.equal(new Set(toolNames).size, 47);
+    assert.equal(searchToolNames.length, 17);
     assert.match(content.toolkit.toolDirectorySource, /Effortless Academic/);
     for (const addedTool of ["Bibliome", "Liner", "Keenious", "Iris.ai", "Elicit", "Consensus", "SciSpace", "Sourcely", "Litmaps", "Scite", "Anara", "Nested Knowledge", "Paperpal", "Jenni AI", "WriteWise", "Yomu AI", "SciDraw"]) {
       assert.ok(toolNames.includes(addedTool));
     }
+    for (const searchTool of ["Google Scholar Labs Search", "Google Scholar", "Semantic Scholar", "OpenAlex", "Crossref Metadata Search", "CORE", "OpenAIRE Explore", "Lens", "Dimensions", "Scopus", "Web of Science", "PubMed", "ERIC", "arXiv", "DOAJ", "IEEE Xplore / ACM Digital Library", "JSTOR / Project MUSE"]) {
+      assert.ok(searchToolNames.includes(searchTool));
+    }
+    assert.ok(content.toolkit.toolCategories.flatMap((category) => category.tools).flatMap((tool) => tool.links).some((link) => link.href === "https://scholar.google.com/scholar_labs/search"));
     assert.ok(toolNames.some((name) => name.startsWith("Livewrite")));
     assert.ok(content.toolkit.toolCategories.every((category) => category.tools.every((tool) => tool.links.length >= 1)));
     assert.ok(content.toolkit.toolCategories.every((category) => category.tools.every((tool) => tool.links.every((link) => link.href.startsWith("https://")))));
@@ -87,6 +99,8 @@ test("keeps the merged guide complete in English and Thai", () => {
   }
 
   assert.deepEqual(promptIdsByLocale[0], promptIdsByLocale[1]);
+  assert.deepEqual(toolCategoryIdsByLocale[0], toolCategoryIdsByLocale[1]);
+  assert.deepEqual(searchToolNamesByLocale[0], searchToolNamesByLocale[1]);
   assert.deepEqual(promptIdsByLocale[0].slice(-9), [
     "paper-summary",
     "literature-review",
