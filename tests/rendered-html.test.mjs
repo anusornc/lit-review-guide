@@ -216,7 +216,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(i18n, /ข้อควรพิจารณา/);
   assert.match(i18n, /งานทบทวนที่น่าเชื่อถือ/);
   assert.doesNotMatch(i18n, /สายโซ่ของการตัดสินใจ|อธิบายและปกป้องได้|ข้ออ้างเชิงความรู้|พื้นที่การสืบค้น|สร้างเส้นทางของฉัน|บันทึกภาคสนาม|ดำเนินการต่อ|ข้อแลกเปลี่ยน|อย่าดูแค่ชื่อวิธี ควรเปรียบเทียบจุดประสงค์และข้อจำกัด/);
-  assert.match(guideData, /การทบทวนงานทบทวนอย่างเป็นระบบ \(umbrella review\)/);
+  assert.match(guideData, /การทบทวนงานทบทวนอย่างเป็นระบบ/);
+  assert.match(guideData, /englishName: "Umbrella review"/);
   assert.match(guideData, /คลังเครื่องมือสำหรับทำงานวิจัย/);
   assert.match(guideData, /05 · ลงมือทำงานทบทวน/);
   assert.match(guideData, /07 · เครื่องมือนักวิจัย/);
@@ -243,6 +244,7 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(researchWorkbench, /className="screening-verdict" role="status"/);
   assert.match(researchWorkbench, /className="question-example"/);
   assert.match(researchWorkbench, /className="purpose-framework-name"/);
+  assert.match(researchWorkbench, /comparison-method-name/);
   assert.match(researchWorkbench, /framework\.expandedName/);
   assert.match(researchWorkbench, /placeholder={example}/);
   assert.match(researchWorkbench, /data-testid="method-comparison"/);
@@ -273,6 +275,7 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(globalCss, /body \{ font-size: 16px; \}/);
   assert.match(globalCss, /\.prompt-anatomy p \{[^}]*font-size: 16px/);
   assert.match(globalCss, /\.journey-overview/);
+  assert.match(globalCss, /\.method-english-name/);
   assert.match(globalCss, /html\[data-locale="th"\] \.prompt-anatomy p[^}]*\{ font-size: 16px/);
   assert.match(globalCss, /html\[data-locale="th"\] \.alternative-methods button small[^}]*\{ font-size: 16px/);
   assert.match(globalCss, /html\[data-locale="th"\] \.method-detail \.method-steps li[^}]*\{ font-size: 16px/);

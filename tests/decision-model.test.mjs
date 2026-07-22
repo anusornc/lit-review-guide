@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { mergedGuideContent, rankMethods } from "../app/guide-data.ts";
+import { thaiContent } from "../app/i18n.ts";
 import { resolveLocalePreference, resolveThemePreference } from "../app/preferences.ts";
 
 test("resolves static-host locale preferences in a predictable order", () => {
@@ -108,4 +109,27 @@ test("keeps the merged guide complete in English and Thai", () => {
   assert.match(mergedGuideContent.th.toolkit.aiLab.prompts.find((prompt) => prompt.id === "citation-network")?.prompt ?? "", /ยังระบุไม่ได้หากไม่มีข้อความรอบจุดอ้างอิง/);
   assert.doesNotMatch(mergedGuideContent.th.toolkit.aiLab.prompts.map((prompt) => prompt.prompt).join("\n"), /ตำแหน่งต้นทาง|ข้อวินิจฉัย|ระดับความมั่นใจ/);
   assert.equal(mergedGuideContent.th.toolkit.toolDirectoryTitle, "คลังเครื่องมือสำหรับทำงานวิจัย");
+});
+
+test("provides an English name for all 14 Thai review methods", () => {
+  const thaiMethods = [...thaiContent.methods, ...mergedGuideContent.th.extraMethods];
+
+  assert.equal(thaiMethods.length, 14);
+  assert.ok(thaiMethods.every((method) => method.englishName.length > 0));
+  assert.deepEqual(thaiMethods.map((method) => method.englishName), [
+    "Systematic review",
+    "Scoping review",
+    "Meta-analysis",
+    "Qualitative evidence synthesis",
+    "Realist review",
+    "Integrative review",
+    "Mixed-methods review",
+    "Bibliometric review",
+    "Critical or narrative review",
+    "Umbrella review",
+    "Rapid review",
+    "Systematic search and review",
+    "Meta-ethnography",
+    "Thematic synthesis",
+  ]);
 });

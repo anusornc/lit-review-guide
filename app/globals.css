@@ -241,6 +241,10 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .method-card-top i { color: var(--accent); font-family: var(--serif); font-size: 13px; }
 .method-card-family { margin-top: 25px; color: var(--accent); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .methods-grid button > strong, .discipline-card-grid button > strong { display: block; margin: 8px 0 10px; font-family: var(--serif); font-size: 25px; font-weight: 600; line-height: 1.15; }
+.method-english-name { display: block; margin-top: 5px; color: var(--accent); font-family: var(--sans); font-size: 14px; font-weight: 700; letter-spacing: .01em; line-height: 1.35; }
+.result-panel h3 .method-english-name { font-size: 15px; }
+.alternative-methods button .method-english-name { margin-top: 2px; font-size: 12px; }
+.method-detail h3 .method-english-name { margin-top: 7px; font-size: 16px; }
 .methods-grid button > small, .discipline-card-grid button > small { display: block; color: var(--muted); font-size: 11px; line-height: 1.65; }
 .method-card-tags, .discipline-card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 18px 0; }
 .method-card-tags i, .discipline-card-tags i { padding: 4px 8px; border-radius: 999px; background: var(--surface-alt); color: var(--muted); font-size: 8px; font-style: normal; font-weight: 600; }
@@ -255,8 +259,11 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .comparison-picker-label span { color: var(--accent); font-size: 10px; font-weight: 700; }
 .comparison-method-pills { display: flex; flex-wrap: wrap; gap: 7px; }
 .comparison-method-pills button { min-height: 40px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-soft); color: var(--muted); padding: 0 12px; cursor: pointer; font-size: 13px; font-weight: 600; }
-.comparison-method-pills button span { color: var(--accent); font-size: 12px; }
+.comparison-method-pills button > span[aria-hidden="true"] { color: var(--accent); font-size: 12px; }
+.comparison-method-name { display: grid; gap: 1px; color: inherit; font-size: 13px; line-height: 1.25; text-align: left; }
+.comparison-method-name small { color: var(--accent); font-family: var(--sans); font-size: 10px; font-weight: 700; line-height: 1.3; }
 .comparison-method-pills button.active { border-color: var(--navy); background: var(--navy); color: #fff; }
+.comparison-method-pills button.active .comparison-method-name small { color: #e6b48f; }
 .comparison-limit { margin: 12px 0 0; color: var(--danger); font-size: 10px; }
 .comparison-empty { margin: 0; padding: 20px 32px 27px; border-top: 1px dashed var(--line); color: var(--muted); font-size: 15px; text-align: center; }
 .comparison-table-wrap { overflow-x: auto; border-top: 1px solid var(--line); }
@@ -265,6 +272,7 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .comparison-table-wrap tr:last-child th, .comparison-table-wrap tr:last-child td { border-bottom: 0; }
 .comparison-table-wrap th:last-child, .comparison-table-wrap td:last-child { border-right: 0; }
 .comparison-table-wrap thead th { background: var(--navy); color: #fff; font-family: var(--serif); font-size: 14px; }
+.comparison-table-wrap thead .comparison-method-name small { color: #e6b48f; }
 .comparison-table-wrap thead th:first-child { min-width: 165px; color: var(--accent); font-family: var(--sans); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
 .comparison-table-wrap tbody th { min-width: 165px; background: var(--surface-alt); color: var(--accent); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
 .comparison-table-wrap td { color: var(--muted); font-size: 16px; line-height: 1.65; }

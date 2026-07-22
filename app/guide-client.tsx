@@ -33,6 +33,7 @@ type Discipline = {
 type ReviewMethod = {
   id: MethodId;
   name: string;
+  englishName?: string;
   family: string;
   summary: string;
   bestFor: string;
@@ -42,6 +43,15 @@ type ReviewMethod = {
   steps: string[];
   quality: string;
 };
+
+function BilingualMethodName({ method, locale }: { method: Pick<ReviewMethod, "name" | "englishName">; locale: Locale }) {
+  return (
+    <>
+      {method.name}
+      {locale === "th" && method.englishName && <span className="method-english-name" lang="en">{method.englishName}</span>}
+    </>
+  );
+}
 
 type MethodDeepDive = {
   search: string;
@@ -330,6 +340,9 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
     disciplines: [...baseContent.disciplines, merged.interdisciplinary],
     methods: [...baseContent.methods, ...merged.extraMethods],
   };
+  const methodLabel = (method: Pick<ReviewMethod, "name" | "englishName">) => locale === "th" && method.englishName
+    ? `${method.name} (${method.englishName})`
+    : method.name;
   const { goals, evidenceTypes, disciplines, methods } = content;
   const t = uiText[locale];
   const learning = learningToolsContent[locale];
@@ -368,7 +381,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
   ];
   const visibleMethods = methodFilter === "all" ? methods : methods.filter((method) => methodFilterTags[method.id].includes(methodFilter));
 
-  const pathwayText = `${t.pathway.copyLabels.title}\n${t.pathway.copyLabels.intent}: ${chosenGoal?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.discipline}: ${chosenDiscipline?.name ?? t.pathway.notSelected}\n${t.pathway.copyLabels.evidence}: ${evidenceTypes.find((item) => item.id === evidence)?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.commitment}: ${chosenCommitment?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.method}: ${recommended.name}\n${t.pathway.copyLabels.alternatives}: ${alternatives.map((item) => item.name).join(" · ")}\n${t.pathway.copyLabels.why}: ${recommended.bestFor}`;
+  const pathwayText = `${t.pathway.copyLabels.title}\n${t.pathway.copyLabels.intent}: ${chosenGoal?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.discipline}: ${chosenDiscipline?.name ?? t.pathway.notSelected}\n${t.pathway.copyLabels.evidence}: ${evidenceTypes.find((item) => item.id === evidence)?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.commitment}: ${chosenCommitment?.title ?? t.pathway.notSelected}\n${t.pathway.copyLabels.method}: ${methodLabel(recommended)}\n${t.pathway.copyLabels.alternatives}: ${alternatives.map(methodLabel).join(" · ")}\n${t.pathway.copyLabels.why}: ${recommended.bestFor}`;
 
   useEffect(() => {
     const queryLocale = new URL(window.location.href).searchParams.get("lang");
@@ -656,7 +669,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
             {step === 5 && (
               <div className="result-panel">
                 <div className="result-label"><span>{t.pathway.recommended}</span><span>{t.pathway.complete}</span></div>
-                <h3>{recommended.name}</h3>
+                <h3><BilingualMethodName method={recommended} locale={locale} /></h3>
                 <p className="result-summary">{recommended.summary}</p>
                 <div className="result-reason">
                   <span>{t.pathway.why}</span>
@@ -672,7 +685,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
                   <div>
                     {alternatives.map((method) => (
                       <button key={method.id} onClick={(event) => { setActiveMethod(method.id); detailTrigger.current = event.currentTarget; setDetailModal("method"); }}>
-                        <strong>{method.name}</strong>
+                        <strong><BilingualMethodName method={method} locale={locale} /></strong>
                         <small>{method.family} · {method.time}</small>
                         <em><b>{t.pathway.alternativeFit}</b> {method.bestFor}</em>
                         <em><b>{t.pathway.alternativeTradeoff}</b> {method.avoidWhen}</em>
@@ -728,11 +741,11 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
                   detailTrigger.current = event.currentTarget;
                   setDetailModal("method");
                 }}
-                aria-label={`${t.method.cardAction}: ${method.name}`}
+                aria-label={`${t.method.cardAction}: ${methodLabel(method)}`}
               >
                 <span className="method-card-top"><i>{String(index + 1).padStart(2, "0")}</i><em>{method.time}</em></span>
                 <span className="method-card-family">{method.family}</span>
-                <strong>{method.name}</strong>
+                <strong><BilingualMethodName method={method} locale={locale} /></strong>
                 <small>{method.summary}</small>
                 <span className="method-card-tags">{methodFilterTags[method.id].map((tag) => <i key={tag}>{t.method.filters[tag]}</i>)}</span>
                 <span className="card-link">{t.method.cardAction}<b aria-hidden="true">→</b></span>
@@ -746,7 +759,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
         {detailModal === "method" && (
           <DetailModal className="method-detail" closeLabel={t.chrome.close} labelledBy="method-dialog-title" onClose={() => setDetailModal(null)}>
               <p className="detail-kicker">{t.method.detail} · {selectedMethod.family}</p>
-              <h3 id="method-dialog-title">{selectedMethod.name}</h3>
+              <h3 id="method-dialog-title"><BilingualMethodName method={selectedMethod} locale={locale} /></h3>
               <p className="method-summary">{selectedMethod.summary}</p>
               <div className="fit-grid">
                 <div><span>{t.method.useWhen}</span><p>{selectedMethod.bestFor}</p></div>

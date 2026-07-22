@@ -22,6 +22,7 @@ import {
 type ComparableMethod = {
   id: MethodId;
   name: string;
+  englishName?: string;
   family: string;
   bestFor: string;
   output: string;
@@ -75,6 +76,12 @@ export function MethodComparison({
   };
 
   const metaFor = (methodId: MethodId) => content.methodMeta.find((item) => item.id === methodId);
+  const methodName = (method: ComparableMethod) => (
+    <span className="comparison-method-name">
+      {method.name}
+      {locale === "th" && method.englishName && <small lang="en">{method.englishName}</small>}
+    </span>
+  );
 
   return (
     <section className="method-comparison" aria-labelledby="method-comparison-title" data-testid="method-comparison">
@@ -96,7 +103,7 @@ export function MethodComparison({
               className={selectedIds.includes(method.id) ? "active" : ""}
               onClick={() => toggleMethod(method.id)}
             >
-              <span aria-hidden="true">{selectedIds.includes(method.id) ? "✓" : "+"}</span>{method.name}
+              <span aria-hidden="true">{selectedIds.includes(method.id) ? "✓" : "+"}</span>{methodName(method)}
             </button>
           ))}
         </div>
@@ -109,7 +116,7 @@ export function MethodComparison({
         <div className="comparison-table-wrap">
           <table>
             <thead>
-              <tr><th>{content.columns.attribute}</th>{selectedMethods.map((method) => <th key={method.id}>{method.name}</th>)}</tr>
+              <tr><th>{content.columns.attribute}</th>{selectedMethods.map((method) => <th key={method.id}>{methodName(method)}</th>)}</tr>
             </thead>
             <tbody>
               <tr><th>{content.columns.time}</th>{selectedMethods.map((method) => <td key={method.id}>{method.time}</td>)}</tr>
