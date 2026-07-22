@@ -24,6 +24,7 @@ type ComparableMethod = {
   name: string;
   englishName?: string;
   family: string;
+  fieldExamples: readonly string[];
   bestFor: string;
   output: string;
   time: string;
@@ -122,6 +123,7 @@ export function MethodComparison({
               <tr><th>{content.columns.time}</th>{selectedMethods.map((method) => <td key={method.id}>{method.time}</td>)}</tr>
               <tr><th>{content.columns.complexity}</th>{selectedMethods.map((method) => <td key={method.id}>{metaFor(method.id)?.complexity}</td>)}</tr>
               <tr><th>{content.columns.team}</th>{selectedMethods.map((method) => <td key={method.id}>{metaFor(method.id)?.team}</td>)}</tr>
+              <tr><th>{content.columns.fields}</th>{selectedMethods.map((method) => <td key={method.id}>{method.fieldExamples.join(" · ")}</td>)}</tr>
               <tr><th>{content.columns.bestFor}</th>{selectedMethods.map((method) => <td key={method.id}>{method.bestFor}</td>)}</tr>
               <tr><th>{content.columns.output}</th>{selectedMethods.map((method) => <td key={method.id}>{method.output}</td>)}</tr>
               <tr><th>{content.columns.reporting}</th>{selectedMethods.map((method) => <td key={method.id}>{methodDeepDives[method.id]?.reporting}</td>)}</tr>

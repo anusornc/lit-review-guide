@@ -232,9 +232,11 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .method-filter-pills { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
 .method-filter-pills button { min-height: 40px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); padding: 0 13px; cursor: pointer; font-size: 9px; font-weight: 600; }
 .method-filter-pills button.active { border-color: var(--navy); background: var(--navy); color: #fff; }
+.method-field-note { max-width: 760px; margin: -22px 0 28px auto; color: var(--muted); font-size: 13px; line-height: 1.7; text-align: right; }
 .methods-grid, .discipline-card-grid { max-width: var(--container); margin: 0 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .methods-grid article, .discipline-card-grid article { min-width: 0; }
 .methods-grid article > button, .discipline-card-grid article > button { width: 100%; height: 100%; min-height: 310px; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); padding: 24px; text-align: left; cursor: pointer; box-shadow: 0 2px 0 rgba(15,23,42,.02); transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease; }
+.methods-grid article > button { min-height: 365px; }
 .methods-grid article > button:hover, .discipline-card-grid article > button:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); box-shadow: var(--shadow-sm); }
 .method-card-top { display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 9px; }
 .method-card-top i, .method-card-top em { font-style: normal; }
@@ -246,6 +248,10 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .alternative-methods button .method-english-name { margin-top: 2px; font-size: 12px; }
 .method-detail h3 .method-english-name { margin-top: 7px; font-size: 16px; }
 .methods-grid button > small, .discipline-card-grid button > small { display: block; color: var(--muted); font-size: 11px; line-height: 1.65; }
+.method-card-fields { margin-top: 16px; }
+.method-card-fields > span, .method-field-panel > span { color: var(--accent); font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.method-card-fields ul, .method-field-panel ul { display: flex; flex-wrap: wrap; gap: 5px; margin: 7px 0 0; padding: 0; list-style: none; }
+.method-card-fields li, .method-field-panel li { padding: 5px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--ink); font-size: 11px; line-height: 1.35; }
 .method-card-tags, .discipline-card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 18px 0; }
 .method-card-tags i, .discipline-card-tags i { padding: 4px 8px; border-radius: 999px; background: var(--surface-alt); color: var(--muted); font-size: 8px; font-style: normal; font-weight: 600; }
 
@@ -292,6 +298,7 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .modal-close { position: sticky; top: 0; float: right; width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); cursor: pointer; font-size: 23px; line-height: 1; }
 .method-detail h3, .discipline-detail h3 { max-width: 650px; margin: 5px 0 14px; font-family: var(--serif); font-size: clamp(32px, 4vw, 49px); font-weight: 600; letter-spacing: -.035em; line-height: 1.08; }
 .method-summary { max-width: 650px; color: var(--muted); font-size: 14px; }
+.method-field-panel { margin: 16px 0 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); padding: 14px 16px; }
 .fit-grid, .method-deep-dive { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .fit-grid > div, .method-output, .method-steps, .method-deep-dive > div, .discipline-detail dl > div, .field-insight, .field-caution { border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); padding: 16px; }
 .fit-grid span, .method-output span, .method-steps > span, .method-deep-dive span, .discipline-detail dt, .field-insight span, .field-caution span { color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
@@ -650,6 +657,9 @@ html[data-locale="th"] .result-reason p, html[data-locale="th"] .result-grid p, 
 html[data-locale="th"] .result-reason span, html[data-locale="th"] .result-grid span, html[data-locale="th"] .alternative-methods > span, html[data-locale="th"] .method-detail .fit-grid span, html[data-locale="th"] .method-detail .method-output span, html[data-locale="th"] .method-detail .method-steps > span, html[data-locale="th"] .method-detail .method-deep-dive span { font-size: 12px; line-height: 1.55; }
 html[data-locale="th"] .alternative-methods button small, html[data-locale="th"] .alternative-methods button em, html[data-locale="th"] .alternative-methods > p, html[data-locale="th"] .method-detail .method-output small { font-size: 16px; line-height: 1.7; }
 html[data-locale="th"] .method-detail .method-steps li, html[data-locale="th"] .method-detail .quality-note { font-size: 16px; line-height: 1.75; }
+html[data-locale="th"] .method-field-note { font-size: 15px; line-height: 1.8; }
+html[data-locale="th"] .method-card-fields > span, html[data-locale="th"] .method-field-panel > span { font-size: 12px; line-height: 1.55; }
+html[data-locale="th"] .method-card-fields li, html[data-locale="th"] .method-field-panel li { font-size: 13px; line-height: 1.5; }
 html[data-locale="th"] .prompt-anatomy p, html[data-locale="th"] .prompt-task-list small, html[data-locale="th"] .prompt-preview header > p:last-child, html[data-locale="th"] .prompt-guardrails li { font-size: 16px; line-height: 1.75; }
 html[data-locale="th"] .prompt-preview pre { font-family: "Noto Sans Thai", Tahoma, var(--sans); font-size: 16px; line-height: 1.8; }
 html[data-locale="th"] .flow-stack span, html[data-locale="th"] .checklist-card ul { font-size: 12px; }

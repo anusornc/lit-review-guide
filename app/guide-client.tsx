@@ -35,6 +35,7 @@ type ReviewMethod = {
   name: string;
   englishName?: string;
   family: string;
+  fieldExamples: readonly string[];
   summary: string;
   bestFor: string;
   avoidWhen: string;
@@ -207,6 +208,7 @@ const methods: ReviewMethod[] = [
     id: "systematic",
     name: "Systematic review",
     family: "Focused question",
+    fieldExamples: ["Health & medicine", "Education", "Psychology"],
     summary: "A reproducible search, appraisal, and synthesis designed to answer a precise question.",
     bestFor: "A bounded question with enough comparable primary studies and a defensible protocol.",
     avoidWhen: "The field is too new, the concepts are unstable, or the question is still exploratory.",
@@ -219,6 +221,7 @@ const methods: ReviewMethod[] = [
     id: "scoping",
     name: "Scoping review",
     family: "Broad landscape",
+    fieldExamples: ["Health sciences", "Social sciences", "Emerging fields"],
     summary: "Maps concepts, evidence types, research activity, and gaps across a broad field.",
     bestFor: "Clarifying definitions, understanding breadth, or deciding whether a systematic review is feasible.",
     avoidWhen: "You need a definitive claim about effectiveness or a pooled effect estimate.",
@@ -231,6 +234,7 @@ const methods: ReviewMethod[] = [
     id: "meta-analysis",
     name: "Meta-analysis",
     family: "Quantitative synthesis",
+    fieldExamples: ["Health & medicine", "Psychology", "Education"],
     summary: "Statistically combines compatible effect estimates from multiple studies.",
     bestFor: "Studies with sufficiently similar populations, measures, comparisons, and outcomes.",
     avoidWhen: "Clinical or methodological heterogeneity makes one pooled number misleading.",
@@ -243,6 +247,7 @@ const methods: ReviewMethod[] = [
     id: "qualitative",
     name: "Qualitative evidence synthesis",
     family: "Meaning & experience",
+    fieldExamples: ["Health & nursing", "Social sciences", "Education"],
     summary: "Integrates qualitative findings to build themes, explanations, or new interpretations.",
     bestFor: "Understanding experience, acceptability, meaning, barriers, and how people interpret a phenomenon.",
     avoidWhen: "Your only objective is estimating prevalence, frequency, or a causal effect.",
@@ -255,6 +260,7 @@ const methods: ReviewMethod[] = [
     id: "realist",
     name: "Realist review",
     family: "Complex systems",
+    fieldExamples: ["Public health", "Public policy", "Education"],
     summary: "Explains how context activates mechanisms to produce different outcomes.",
     bestFor: "Complex programmes, policy, implementation, and questions about what works for whom and why.",
     avoidWhen: "You only need a simple average effect or cannot develop an initial programme theory.",
@@ -267,6 +273,7 @@ const methods: ReviewMethod[] = [
     id: "integrative",
     name: "Integrative review",
     family: "Theory building",
+    fieldExamples: ["Nursing & health", "Education", "Management"],
     summary: "Combines empirical and theoretical literature to reconceptualise a topic or build a framework.",
     bestFor: "Mature but fragmented fields where diverse evidence can support a new conceptual model.",
     avoidWhen: "The selection logic is vague or synthesis becomes an untraceable author opinion.",
@@ -279,6 +286,7 @@ const methods: ReviewMethod[] = [
     id: "mixed",
     name: "Mixed-methods review",
     family: "Integrated evidence",
+    fieldExamples: ["Public health", "Education", "Social sciences"],
     summary: "Combines quantitative and qualitative evidence within one coordinated synthesis.",
     bestFor: "Questions that need both effect evidence and explanations of experience or implementation.",
     avoidWhen: "There is no clear integration question and the two syntheses would merely sit side by side.",
@@ -291,6 +299,7 @@ const methods: ReviewMethod[] = [
     id: "bibliometric",
     name: "Bibliometric review",
     family: "Research structure",
+    fieldExamples: ["Business & management", "Information science", "Technology & engineering"],
     summary: "Uses publication metadata to analyse growth, influence, collaboration, and conceptual clusters.",
     bestFor: "Large literatures where the structure and evolution of the research community matter.",
     avoidWhen: "Citation counts are being used as a substitute for study quality or substantive interpretation.",
@@ -303,6 +312,7 @@ const methods: ReviewMethod[] = [
     id: "critical",
     name: "Critical or narrative review",
     family: "Interpretive argument",
+    fieldExamples: ["Humanities", "Social sciences", "Law"],
     summary: "Develops an expert, historically situated argument about a body of thought or debate.",
     bestFor: "Tracing intellectual traditions, exposing assumptions, or proposing a new interpretation.",
     avoidWhen: "Selective citation is used to imply exhaustive coverage or objective effect estimation.",
@@ -730,6 +740,7 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
             ))}
           </div>
         </div>
+        <p className="method-field-note">{t.method.fieldExamplesNote}</p>
 
         <div className="methods-grid" role="list" aria-label={t.method.listAria}>
           {visibleMethods.map((method, index) => (
@@ -747,6 +758,10 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
                 <span className="method-card-family">{method.family}</span>
                 <strong><BilingualMethodName method={method} locale={locale} /></strong>
                 <small>{method.summary}</small>
+                <div className="method-card-fields">
+                  <span>{t.method.fieldExamples}</span>
+                  <ul>{method.fieldExamples.map((field) => <li key={field}>{field}</li>)}</ul>
+                </div>
                 <span className="method-card-tags">{methodFilterTags[method.id].map((tag) => <i key={tag}>{t.method.filters[tag]}</i>)}</span>
                 <span className="card-link">{t.method.cardAction}<b aria-hidden="true">→</b></span>
               </button>
@@ -761,6 +776,10 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
               <p className="detail-kicker">{t.method.detail} · {selectedMethod.family}</p>
               <h3 id="method-dialog-title"><BilingualMethodName method={selectedMethod} locale={locale} /></h3>
               <p className="method-summary">{selectedMethod.summary}</p>
+              <div className="method-field-panel">
+                <span>{t.method.fieldExamples}</span>
+                <ul>{selectedMethod.fieldExamples.map((field) => <li key={field}>{field}</li>)}</ul>
+              </div>
               <div className="fit-grid">
                 <div><span>{t.method.useWhen}</span><p>{selectedMethod.bestFor}</p></div>
                 <div><span>{t.method.avoidWhen}</span><p>{selectedMethod.avoidWhen}</p></div>

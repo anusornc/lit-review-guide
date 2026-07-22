@@ -175,7 +175,7 @@ export const learningToolsContent = {
       selectionCount: "selected",
       maxMessage: "Remove one method before adding another.",
       empty: "Choose at least two methods to reveal the comparison table.",
-      columns: { attribute: "Decision factor", time: "Typical time", complexity: "Complexity", team: "Suggested team", bestFor: "Best fit", output: "Expected output", reporting: "Reporting guidance" },
+      columns: { attribute: "Decision factor", time: "Typical time", complexity: "Complexity", team: "Suggested team", fields: "Common fields", bestFor: "Best fit", output: "Expected output", reporting: "Reporting guidance" },
       methodMeta: methodMetaEn,
     },
     workflow: {
@@ -309,7 +309,7 @@ export const learningToolsContent = {
       selectionCount: "วิธีที่เลือก",
       maxMessage: "นำวิธีหนึ่งออกก่อนเพิ่มวิธีใหม่",
       empty: "เลือกอย่างน้อยสองวิธีเพื่อเปิดตารางเปรียบเทียบ",
-      columns: { attribute: "ปัจจัยตัดสินใจ", time: "ระยะเวลาโดยทั่วไป", complexity: "ความซับซ้อน", team: "ขนาดทีมที่แนะนำ", bestFor: "เหมาะกับ", output: "ผลลัพธ์ที่คาดหวัง", reporting: "แนวทางการรายงาน" },
+      columns: { attribute: "ปัจจัยตัดสินใจ", time: "ระยะเวลาโดยทั่วไป", complexity: "ความซับซ้อน", team: "ขนาดทีมที่แนะนำ", fields: "สาขาที่พบบ่อย", bestFor: "เหมาะกับ", output: "ผลลัพธ์ที่คาดหวัง", reporting: "แนวทางการรายงาน" },
       methodMeta: methodMetaTh,
     },
     workflow: {

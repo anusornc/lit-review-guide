@@ -133,3 +133,12 @@ test("provides an English name for all 14 Thai review methods", () => {
     "Thematic synthesis",
   ]);
 });
+
+test("provides concise field examples for all 14 review methods", () => {
+  const thaiMethods = [...thaiContent.methods, ...mergedGuideContent.th.extraMethods];
+
+  assert.equal(thaiMethods.length, 14);
+  assert.ok(thaiMethods.every((method) => method.fieldExamples.length === 3));
+  assert.ok(thaiMethods.every((method) => new Set(method.fieldExamples).size === method.fieldExamples.length));
+  assert.ok(thaiMethods.every((method) => method.fieldExamples.every((field) => field.trim().length > 0)));
+});

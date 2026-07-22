@@ -178,6 +178,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(guideClient, /journey-overview/);
   assert.match(guideClient, /discipline-search/);
   assert.match(guideClient, /method-filter-pills/);
+  assert.match(guideClient, /method-field-note/);
+  assert.match(guideClient, /method-card-fields/);
   assert.match(guideClient, /tool-directory/);
   assert.match(guideClient, /https:\/\/effortlessacademic\.com\/tools\//);
   assert.match(guideClient, /theme-toggle/);
@@ -207,6 +209,7 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(i18n, /เริ่มต้นที่ตอบคำถาม 5 ข้อนี้/);
   assert.match(i18n, /เมื่อพิจารณาเวลาและทรัพยากรที่มี คุณต้องการอะไรตอนนี้\?/);
   assert.match(i18n, /วิธีการทบทวนวรรณกรรม และ การเปรียบเทียบ/);
+  assert.match(i18n, /พบบ่อยในสาขา/);
   assert.match(i18n, /หมายเลข 01–07 เป็นลำดับหลักของการทบทวนวรรณกรรม/);
   assert.match(i18n, /\{ index: "A", title: "ยังไม่ได้เริ่ม"/);
   assert.match(i18n, /\{ index: "D", title: "กำลังหาเครื่องมือช่วยทำงาน"/);
@@ -218,6 +221,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.doesNotMatch(i18n, /สายโซ่ของการตัดสินใจ|อธิบายและปกป้องได้|ข้ออ้างเชิงความรู้|พื้นที่การสืบค้น|สร้างเส้นทางของฉัน|บันทึกภาคสนาม|ดำเนินการต่อ|ข้อแลกเปลี่ยน|อย่าดูแค่ชื่อวิธี ควรเปรียบเทียบจุดประสงค์และข้อจำกัด/);
   assert.match(guideData, /การทบทวนงานทบทวนอย่างเป็นระบบ/);
   assert.match(guideData, /englishName: "Umbrella review"/);
+  assert.match(researchWorkbench, /content\.columns\.fields/);
+  assert.match(globalCss, /\.method-card-fields/);
   assert.match(guideData, /คลังเครื่องมือสำหรับทำงานวิจัย/);
   assert.match(guideData, /05 · ลงมือทำงานทบทวน/);
   assert.match(guideData, /07 · เครื่องมือนักวิจัย/);
