@@ -1,11 +1,12 @@
 import type { Locale } from "./i18n";
+import { researchAnalysisPrompts } from "./research-prompts.js";
 
 export type CommitmentId = "rapid" | "thesis" | "publication";
 export type GoalId = "map" | "evaluate" | "understand" | "explain";
 export type EvidenceId = "experimental" | "qualitative" | "mixed" | "theoretical" | "uncertain";
 export type DisciplineId = "health" | "social" | "education" | "business" | "technology" | "science" | "humanities" | "law-policy" | "interdisciplinary";
 export type MethodId = "systematic" | "scoping" | "meta-analysis" | "qualitative" | "realist" | "integrative" | "mixed" | "bibliometric" | "critical" | "umbrella" | "rapid" | "systematic-search" | "meta-ethnography" | "thematic";
-export type ResearchPromptId = "search-vocabulary" | "question-challenge" | "evidence-matrix" | "gap-audit" | "claim-check";
+export type ResearchPromptId = "search-vocabulary" | "question-challenge" | "evidence-matrix" | "gap-audit" | "claim-check" | (typeof researchAnalysisPrompts.en)[number]["id"];
 
 type DecisionInput = {
   goal: GoalId | "";
@@ -314,6 +315,7 @@ Evidence rules:
 Output:
 Report: verdict [supported | partly supported | unsupported | unable to verify], exact supporting location, mismatches, missing context, and a revised claim whose strength stays within the evidence.`,
           },
+          ...researchAnalysisPrompts.en,
         ],
         guardrailLabel: "AI quality check",
         guardrailTitle: "Treat AI output as a draft to inspect",
@@ -610,7 +612,7 @@ Report: verdict [supported | partly supported | unsupported | unable to verify],
 - แยกข้อค้นพบของผู้เขียนออกจากการตีความของคุณ และทำเครื่องหมายเมื่อแต่ละงานให้ผลขัดกัน
 
 รูปแบบคำตอบ:
-ใช้คอลัมน์: การอ้างอิง | เป้าหมาย | บริบท | แบบแผนวิจัย | กลุ่มตัวอย่าง/ข้อมูล | ตัววัดหรือปรากฏการณ์ | ข้อค้นพบหลัก | ข้อจำกัด | ตำแหน่งต้นทาง | หมายเหตุผู้ทบทวน แล้วสรุปเฉพาะรูปแบบที่ตารางรองรับ พร้อมระบุคำถามที่ยังตอบไม่ได้`,
+ใช้คอลัมน์: การอ้างอิง | เป้าหมาย | บริบท | แบบแผนวิจัย | กลุ่มตัวอย่าง/ข้อมูล | ตัววัดหรือปรากฏการณ์ | ข้อค้นพบหลัก | ข้อจำกัด | หน้า ตาราง หรือส่วนที่เกี่ยวข้อง | หมายเหตุผู้ทบทวน แล้วสรุปเฉพาะรูปแบบที่ตารางรองรับ พร้อมระบุคำถามที่ยังตอบไม่ได้`,
           },
           {
             id: "gap-audit",
@@ -651,6 +653,7 @@ Report: verdict [supported | partly supported | unsupported | unable to verify],
 รูปแบบคำตอบ:
 รายงานผลเป็น [รองรับ | รองรับบางส่วน | ไม่รองรับ | ยังตรวจไม่ได้] พร้อมตำแหน่งหลักฐาน จุดที่ไม่ตรง บริบทที่ขาด และข้อความฉบับแก้ที่มีน้ำหนักไม่เกินกว่าหลักฐาน`,
           },
+          ...researchAnalysisPrompts.th,
         ],
         guardrailLabel: "จุดตรวจคุณภาพเมื่อใช้ AI",
         guardrailTitle: "ให้ถือว่าคำตอบจาก AI เป็นร่างที่ต้องตรวจ",

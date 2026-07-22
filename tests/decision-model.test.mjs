@@ -66,7 +66,7 @@ test("keeps the merged guide complete in English and Thai", () => {
     assert.equal(content.workflow.phases.length, 6);
     assert.equal(content.toolkit.searchTips.length, 3);
     assert.equal(content.toolkit.aiLab.anatomy.length, 4);
-    assert.equal(content.toolkit.aiLab.prompts.length, 5);
+    assert.equal(content.toolkit.aiLab.prompts.length, 14);
     assert.equal(content.toolkit.aiLab.guardrails.length, 4);
     assert.ok(content.toolkit.aiLab.prompts.every((prompt) => prompt.prompt.includes("[")));
     promptIdsByLocale.push(content.toolkit.aiLab.prompts.map((prompt) => prompt.id));
@@ -86,5 +86,26 @@ test("keeps the merged guide complete in English and Thai", () => {
   }
 
   assert.deepEqual(promptIdsByLocale[0], promptIdsByLocale[1]);
+  assert.deepEqual(promptIdsByLocale[0].slice(-9), [
+    "paper-summary",
+    "literature-review",
+    "evidence-synthesis",
+    "research-comparison",
+    "methodology-evaluation",
+    "research-gap-analysis",
+    "theoretical-framework",
+    "critical-appraisal",
+    "citation-network",
+  ]);
+  assert.equal(new Set(promptIdsByLocale[0]).size, 14);
+  assert.match(mergedGuideContent.th.toolkit.aiLab.prompts.find((prompt) => prompt.id === "paper-summary")?.prompt ?? "", /ห้ามเติมข้อมูลที่บทความไม่ได้รายงาน/);
+  assert.match(mergedGuideContent.th.toolkit.aiLab.prompts.find((prompt) => prompt.id === "citation-network")?.prompt ?? "", /เครือข่ายการอ้างอิง/);
+  assert.match(mergedGuideContent.en.toolkit.aiLab.prompts.find((prompt) => prompt.id === "paper-summary")?.prompt ?? "", /Label your recommendations as interpretation/);
+  assert.match(mergedGuideContent.th.toolkit.aiLab.prompts.find((prompt) => prompt.id === "paper-summary")?.prompt ?? "", /ระบุให้ชัดว่าส่วนหลังเป็นการตีความ/);
+  assert.match(mergedGuideContent.en.toolkit.aiLab.prompts.find((prompt) => prompt.id === "citation-network")?.prompt ?? "", /influence on the current papers/);
+  assert.match(mergedGuideContent.th.toolkit.aiLab.prompts.find((prompt) => prompt.id === "citation-network")?.prompt ?? "", /อิทธิพลต่อบทความปัจจุบัน/);
+  assert.match(mergedGuideContent.en.toolkit.aiLab.prompts.find((prompt) => prompt.id === "citation-network")?.prompt ?? "", /cannot determine without citation context/);
+  assert.match(mergedGuideContent.th.toolkit.aiLab.prompts.find((prompt) => prompt.id === "citation-network")?.prompt ?? "", /ยังระบุไม่ได้หากไม่มีข้อความรอบจุดอ้างอิง/);
+  assert.doesNotMatch(mergedGuideContent.th.toolkit.aiLab.prompts.map((prompt) => prompt.prompt).join("\n"), /ตำแหน่งต้นทาง|ข้อวินิจฉัย|ระดับความมั่นใจ/);
   assert.equal(mergedGuideContent.th.toolkit.toolDirectoryTitle, "คลังเครื่องมือสำหรับทำงานวิจัย");
 });

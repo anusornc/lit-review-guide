@@ -527,9 +527,9 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .prompt-anatomy li > span { color: var(--accent); font-family: var(--mono); font-size: 12px; }
 .prompt-anatomy strong { display: block; margin-bottom: 4px; font-family: var(--serif); font-size: 17px; }
 .prompt-anatomy p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
-.prompt-workbench { display: grid; grid-template-columns: minmax(260px, .7fr) minmax(0, 1.3fr); gap: 14px; margin-top: 14px; }
+.prompt-workbench { display: grid; grid-template-columns: minmax(260px, .7fr) minmax(0, 1.3fr); align-items: start; gap: 14px; margin-top: 14px; }
 .prompt-task-list, .prompt-preview { border: 1px solid var(--line); border-radius: 20px; background: var(--surface); }
-.prompt-task-list { display: flex; flex-direction: column; gap: 8px; padding: 18px; }
+.prompt-task-list { max-height: min(760px, calc(100vh - 120px)); display: flex; flex-direction: column; gap: 8px; overflow-y: auto; padding: 18px; scrollbar-gutter: stable; }
 .prompt-task-list > p { margin: 0 0 5px; color: var(--accent); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .prompt-task-list button { width: 100%; display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; border: 1px solid transparent; border-radius: 14px; background: transparent; color: var(--ink); padding: 13px; cursor: pointer; text-align: left; }
 .prompt-task-list button:hover { border-color: var(--line-strong); background: var(--surface-alt); }
@@ -669,6 +669,7 @@ html[data-locale="th"] .stat-option-grid button small, html[data-locale="th"] .s
   .discipline-choice-grid { grid-template-columns: repeat(2, 1fr); }
   .search-canvas { grid-template-columns: 1fr; }
   .prompt-workbench, .prompt-guardrails { grid-template-columns: 1fr; }
+  .prompt-task-list { max-height: none; overflow-y: visible; scrollbar-gutter: auto; }
   .tool-card-list { grid-template-columns: 1fr; }
   .template-grid { grid-template-columns: 1fr; }
   .pitfall-panel { grid-template-columns: 1fr; }

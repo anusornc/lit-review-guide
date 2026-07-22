@@ -95,6 +95,8 @@ test("server-renders the LitWise research guide", async () => {
   assert.match(html, /Research toolkit/);
   assert.match(html, /AI prompt lab/);
   assert.match(html, /Expand search vocabulary/);
+  assert.match(html, /Summarize one research paper/);
+  assert.match(html, /Map a citation network/);
   assert.match(html, /Treat AI output as a draft to inspect/);
   assert.match(html, /Research tool directory/);
   assert.match(html, /Zotero/);
@@ -230,6 +232,7 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(globalCss, /\.prompt-anatomy p \{[^}]*font-size: 16px/);
   assert.match(globalCss, /html\[data-locale="th"\] \.prompt-anatomy p[^}]*\{ font-size: 16px/);
   assert.match(globalCss, /\.prompt-(?:anatomy|task-list, \.prompt-preview|guardrails)[^}]*border-radius: 20px/);
+  assert.match(globalCss, /@media \(max-width: 840px\)[\s\S]*\.prompt-task-list \{ max-height: none; overflow-y: visible;/);
   assert.match(globalCss, /@media print/);
   assert.match(globalCss, /prefers-reduced-motion/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
