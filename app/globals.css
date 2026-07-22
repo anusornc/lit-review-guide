@@ -155,6 +155,20 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .start-card-index { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-size: 10px; font-weight: 700; }
 .start-stage-grid h3 { margin: 36px 0 11px; font-family: var(--serif); font-size: 24px; font-weight: 600; line-height: 1.17; }
 .start-stage-grid p { color: var(--muted); font-size: 12px; line-height: 1.65; }
+.journey-overview { margin-top: 24px; overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--surface-soft); }
+.journey-overview-heading { display: flex; align-items: end; justify-content: space-between; gap: 32px; padding: 25px 28px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.journey-overview-heading h3 { max-width: 520px; margin: 0; font-family: var(--serif); font-size: 26px; font-weight: 600; letter-spacing: -.025em; line-height: 1.2; }
+.journey-overview-heading p { max-width: 530px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+.journey-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.journey-groups > section { min-width: 0; padding: 23px 20px 25px; border-right: 1px solid var(--line); }
+.journey-groups > section:last-child { border-right: 0; }
+.journey-groups > section > p { margin: 0 0 13px; color: var(--accent); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.journey-groups ol { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.journey-groups a { min-height: 58px; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); padding: 9px 12px; transition: border-color 180ms ease, transform 180ms ease; }
+.journey-groups a:hover { transform: translateX(3px); border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
+.journey-groups a span { color: var(--accent); font-family: var(--mono); font-size: 10px; font-weight: 700; }
+.journey-groups a strong { font-size: 14px; font-weight: 650; line-height: 1.45; }
+.journey-groups a b { color: var(--accent); font-size: 14px; }
 .start-card-action, .card-link { display: flex; justify-content: space-between; gap: 16px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink); font-size: 10px; font-weight: 700; }
 .start-card-action b, .card-link b { color: var(--accent); font-size: 15px; }
 
@@ -616,6 +630,7 @@ html[data-locale="th"] h1, html[data-locale="th"] h2, html[data-locale="th"] h3,
 html[data-locale="th"] .hero h1 { font-size: clamp(50px, 5.1vw, 74px); line-height: 1.12; }
 html[data-locale="th"] .hero-lede, html[data-locale="th"] .section-heading > p, html[data-locale="th"] .step-intro, html[data-locale="th"] .method-summary { font-size: var(--th-body); line-height: 1.8; }
 html[data-locale="th"] .start-stage-grid p, html[data-locale="th"] .methods-grid button > small, html[data-locale="th"] .discipline-card-grid button > small, html[data-locale="th"] .workflow-grid > li > p, html[data-locale="th"] .tool-card > p, html[data-locale="th"] .tool-category header p, html[data-locale="th"] .note-grid p, html[data-locale="th"] footer { font-size: var(--th-small); line-height: 1.75; }
+html[data-locale="th"] .journey-overview-heading p, html[data-locale="th"] .journey-groups a strong { font-size: var(--th-small); line-height: 1.7; }
 html[data-locale="th"] .tool-card > small { font-size: 14px; line-height: 1.75; }
 html[data-locale="th"] .tool-access, html[data-locale="th"] .tool-links a { font-size: 12px; line-height: 1.55; }
 html[data-locale="th"] .site-header nav, html[data-locale="th"] .header-action, html[data-locale="th"] .button, html[data-locale="th"] .text-link, html[data-locale="th"] .back-button { font-size: 14px; }
@@ -649,6 +664,11 @@ html[data-locale="th"] .stat-option-grid button small, html[data-locale="th"] .s
   .hero { grid-template-columns: 1fr .9fr; gap: 34px; }
   .hero h1 { font-size: clamp(52px, 6.7vw, 73px); }
   .start-stage-grid { grid-template-columns: repeat(2, 1fr); }
+  .journey-overview-heading { align-items: flex-start; flex-direction: column; }
+  .journey-overview-heading p { max-width: 720px; }
+  .journey-groups { grid-template-columns: 1fr; }
+  .journey-groups > section { border-right: 0; border-bottom: 1px solid var(--line); }
+  .journey-groups > section:last-child { border-bottom: 0; }
   .methods-grid, .discipline-card-grid { grid-template-columns: repeat(2, 1fr); }
   .workflow-grid { grid-template-columns: repeat(2, 1fr); }
   .project-checklist-grid { grid-template-columns: repeat(2, 1fr); }
@@ -714,6 +734,9 @@ html[data-locale="th"] .stat-option-grid button small, html[data-locale="th"] .s
   .section-heading { margin-bottom: 34px; }
   .section-heading h2, .field-note-title h2, .closing-section h2 { font-size: 37px; }
   .start-stage-grid, .methods-grid, .discipline-card-grid, .workflow-grid { grid-template-columns: 1fr; }
+  .journey-overview-heading { padding: 21px 20px; }
+  .journey-overview-heading h3 { font-size: 23px; }
+  .journey-groups > section { padding: 20px; }
   .method-comparison { margin-top: 35px; }
   .comparison-heading, .comparison-picker { padding: 22px; }
   .comparison-picker-label { align-items: flex-start; flex-direction: column; gap: 5px; }

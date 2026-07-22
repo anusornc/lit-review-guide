@@ -106,6 +106,22 @@ test("server-renders the LitWise research guide", async () => {
   assert.match(html, /SciDraw/);
   assert.match(html, /View the source list/);
   assert.match(html, /Search log template/);
+  const orderedJourneyHeadings = [
+    "01 · Guided pathway",
+    "02 · Method library",
+    "03 · Discipline atlas",
+    "04 · Before the search",
+    "05 · Execute the review",
+    "06 · Guided practice",
+    "07 · Research toolkit",
+    "Supplement",
+  ];
+  for (let index = 1; index < orderedJourneyHeadings.length; index += 1) {
+    assert.ok(
+      html.indexOf(orderedJourneyHeadings[index - 1]) < html.indexOf(orderedJourneyHeadings[index]),
+      `${orderedJourneyHeadings[index]} should follow ${orderedJourneyHeadings[index - 1]}`,
+    );
+  }
   assert.match(html, /http:\/\/localhost:3000\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
@@ -137,15 +153,29 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(guideClient, /MethodComparison/);
   assert.match(guideClient, /WorkflowDrillDown/);
   assert.match(guideClient, /ResearchWorkbench/);
-  assert.ok(
-    guideClient.indexOf('id="field-notes"') < guideClient.indexOf('id="statistics"'),
-    "supplementary statistics should follow the literature-review content",
-  );
+  const orderedSectionMarkers = [
+    'id="start"',
+    'id="pathway"',
+    'id="methods"',
+    'id="disciplines"',
+    'id="field-notes"',
+    'id="workflow"',
+    '<ResearchWorkbench',
+    'id="toolkit"',
+    'id="statistics"',
+  ];
+  for (let index = 1; index < orderedSectionMarkers.length; index += 1) {
+    assert.ok(
+      guideClient.indexOf(orderedSectionMarkers[index - 1]) < guideClient.indexOf(orderedSectionMarkers[index]),
+      `${orderedSectionMarkers[index]} should follow ${orderedSectionMarkers[index - 1]}`,
+    );
+  }
   assert.match(guideClient, /methodSourceIds/);
   assert.match(guideClient, /SourceLinks/);
   assert.match(guideClient, /toolkit-section/);
   assert.match(guideClient, /ai-prompt-lab/);
   assert.match(guideClient, /start-stage-grid/);
+  assert.match(guideClient, /journey-overview/);
   assert.match(guideClient, /discipline-search/);
   assert.match(guideClient, /method-filter-pills/);
   assert.match(guideClient, /tool-directory/);
@@ -177,16 +207,24 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(i18n, /เริ่มต้นที่ตอบคำถาม 5 ข้อนี้/);
   assert.match(i18n, /เมื่อพิจารณาเวลาและทรัพยากรที่มี คุณต้องการอะไรตอนนี้\?/);
   assert.match(i18n, /วิธีการทบทวนวรรณกรรม และ การเปรียบเทียบ/);
+  assert.match(i18n, /หมายเลข 01–07 เป็นลำดับหลักของการทบทวนวรรณกรรม/);
+  assert.match(i18n, /\{ index: "A", title: "ยังไม่ได้เริ่ม"/);
+  assert.match(i18n, /\{ index: "D", title: "กำลังหาเครื่องมือช่วยทำงาน"/);
+  assert.match(i18n, /02 · คลังวิธีทบทวน/);
+  assert.match(i18n, /04 · ก่อนเริ่มค้น/);
   assert.match(i18n, /Best fit/);
   assert.match(i18n, /ข้อควรพิจารณา/);
   assert.match(i18n, /งานทบทวนที่น่าเชื่อถือ/);
   assert.doesNotMatch(i18n, /สายโซ่ของการตัดสินใจ|อธิบายและปกป้องได้|ข้ออ้างเชิงความรู้|พื้นที่การสืบค้น|สร้างเส้นทางของฉัน|บันทึกภาคสนาม|ดำเนินการต่อ|ข้อแลกเปลี่ยน|อย่าดูแค่ชื่อวิธี ควรเปรียบเทียบจุดประสงค์และข้อจำกัด/);
   assert.match(guideData, /การทบทวนงานทบทวนอย่างเป็นระบบ \(umbrella review\)/);
   assert.match(guideData, /คลังเครื่องมือสำหรับทำงานวิจัย/);
+  assert.match(guideData, /05 · ลงมือทำงานทบทวน/);
+  assert.match(guideData, /07 · เครื่องมือนักวิจัย/);
   assert.match(guideData, /คัดเลือกเครื่องมือเพิ่มเติมจากรายการของ Effortless Academic/);
   assert.match(guideData, /Livewrite \(เดิมชื่อ ReSub\)/);
   assert.doesNotMatch(guideData, /บทวิทยานิพนธ์ที่ปกป้องได้|ผืนงานสร้างคำค้น|เกณฑ์เคลื่อน|ตารางไร้ร่องรอย|การทบทวนแบบร่ม/);
   assert.match(researchTools, /เครื่องมือช่วยวางกรอบคำถาม/);
+  assert.match(researchTools, /06 · ฝึกลงมือทำ/);
   assert.match(researchTools, /อยากให้งานทบทวนนี้ช่วยตอบคำถามอะไร/);
   assert.match(researchTools, /ดูตัวอย่างที่กรอกครบ/);
   assert.match(researchTools, /เปรียบเทียบว่าอะไรได้ผลกว่ากัน/);
@@ -234,6 +272,7 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(globalCss, /@media \(max-width: 600px\)/);
   assert.match(globalCss, /body \{ font-size: 16px; \}/);
   assert.match(globalCss, /\.prompt-anatomy p \{[^}]*font-size: 16px/);
+  assert.match(globalCss, /\.journey-overview/);
   assert.match(globalCss, /html\[data-locale="th"\] \.prompt-anatomy p[^}]*\{ font-size: 16px/);
   assert.match(globalCss, /html\[data-locale="th"\] \.alternative-methods button small[^}]*\{ font-size: 16px/);
   assert.match(globalCss, /html\[data-locale="th"\] \.method-detail \.method-steps li[^}]*\{ font-size: 16px/);

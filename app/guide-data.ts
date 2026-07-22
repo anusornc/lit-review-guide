@@ -185,7 +185,7 @@ export const mergedGuideContent = {
       interdisciplinary: { journals: ["Nature Sustainability", "PNAS", "One Earth", "field-specific frontier venues"], standards: ["PRISMA family where applicable", "JBI Manual", "explicit boundary and vocabulary decisions"], tools: ["OpenAlex", "VOSviewer", "Connected Papers", "Zotero"], tip: "Search across vocabularies and database families; a single discipline’s index will systematically miss part of the field." },
     },
     workflow: {
-      index: "02 · Execute the review", title: "Execute your review in six traceable phases.",
+      index: "05 · Execute the review", title: "Execute your review in six traceable phases.",
       intro: "Each phase should leave an artefact that another researcher—or your future self—can inspect.",
       outputLabel: "Leave behind", checkpointLabel: "Decision gate",
       phases: [
@@ -198,7 +198,7 @@ export const mergedGuideContent = {
       ],
     },
     toolkit: {
-      index: "05 · Research toolkit", title: "Move from advice to working research artefacts.",
+      index: "07 · Research toolkit", title: "Move from advice to working research artefacts.",
       intro: "Copy a starter, adapt it to your discipline, and preserve the decisions that make your review auditable.",
       searchTitle: "Boolean search canvas", searchIntro: "Build one block per concept. Add synonyms with OR; connect concepts with AND; add controlled vocabulary inside each database.",
       searchCode: "(\"artificial intelligence\" OR \"machine learning\" OR AI)\nAND\n(education OR teaching OR learning)\nAND\n(ethics OR bias OR fairness)",
@@ -522,7 +522,7 @@ Report: verdict [supported | partly supported | unsupported | unable to verify],
       interdisciplinary: { journals: ["Nature Sustainability", "PNAS", "One Earth", "เวทีแนวหน้าของแต่ละสาขา"], standards: ["ตระกูล PRISMA เมื่อเหมาะสม", "JBI Manual", "การตัดสินใจเรื่องขอบเขตและคำศัพท์ที่ชัด"], tools: ["OpenAlex", "VOSviewer", "Connected Papers", "Zotero"], tip: "ค้นข้ามชุดคำศัพท์และตระกูลฐานข้อมูล เพราะดัชนีของศาสตร์เดียวจะทำให้หลักฐานบางส่วนหายไปอย่างเป็นระบบ" },
     },
     workflow: {
-      index: "02 · ลงมือทำงานทบทวน", title: "ทบทวนวรรณกรรมใน 6 ขั้นตอน",
+      index: "05 · ลงมือทำงานทบทวน", title: "ทบทวนวรรณกรรมใน 6 ขั้นตอน",
       intro: "ทุกขั้นตอนควรมีข้อมูลสนับสนุนการตัดสินใจ เพื่อให้นักวิจัยคนอื่น—รวมถึงตัวคุณในอนาคต—ย้อนกลับมาตรวจสอบได้",
       outputLabel: "หลักฐานการทำงานที่ควรมี", checkpointLabel: "คำถามก่อนผ่านไปขั้นถัดไป",
       phases: [
@@ -535,7 +535,7 @@ Report: verdict [supported | partly supported | unsupported | unable to verify],
       ],
     },
     toolkit: {
-      index: "05 · เครื่องมือนักวิจัย", title: "นำคำแนะนำไปใช้ทำงานวิจัยต่อได้ทันที",
+      index: "07 · เครื่องมือนักวิจัย", title: "นำคำแนะนำไปใช้ทำงานวิจัยต่อได้ทันที",
       intro: "คัดลอกแบบฟอร์ม ปรับให้เข้ากับสาขา และบันทึกเหตุผลของการตัดสินใจแต่ละขั้นเพื่อให้งานตรวจสอบได้",
       searchTitle: "แบบร่างคำค้น Boolean", searchIntro: "แยกคำถามออกเป็นแนวคิดหลัก ใช้ OR เชื่อมคำพ้อง ใช้ AND เชื่อมแต่ละแนวคิด แล้วเติมศัพท์ควบคุมให้ตรงกับฐานข้อมูลที่ใช้",
       searchCode: "(\"artificial intelligence\" OR \"machine learning\" OR AI)\nAND\n(education OR teaching OR learning)\nAND\n(ethics OR bias OR fairness)",

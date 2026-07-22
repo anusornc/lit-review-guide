@@ -14,7 +14,7 @@ export const uiText = {
       protocolChecklist: "Protocol checklist",
       checklistItems: ["Question framed", "Sources planned", "Criteria recorded"],
     },
-    nav: { start: "Start", workflow: "Workflow", disciplines: "Disciplines", methods: "Methods", toolkit: "Tools", pitfalls: "Pitfalls", action: "Build my pathway" },
+    nav: { start: "Start", prepare: "Before search", workflow: "Workflow", disciplines: "Disciplines", methods: "Methods", toolkit: "Tools", pitfalls: "Pitfalls", action: "Build my pathway" },
     hero: {
       eyebrow: "Literature review expert guide",
       audience: "Master’s · PhD · Research",
@@ -41,10 +41,28 @@ export const uiText = {
       title: "Start from where you are now.",
       intro: "You do not need to read this guide from top to bottom. Choose the situation that is closest to yours and move to the next useful decision.",
       cards: [
-        { index: "01", title: "I have not started yet", description: "I have a topic or a rough idea, but I do not know which review method fits it.", action: "Choose a review method", href: "#pathway" },
-        { index: "02", title: "I already have papers", description: "My PDFs and notes are growing, and I need a traceable way to organise the work.", action: "Follow the workflow", href: "#workflow" },
-        { index: "03", title: "I need field-specific guidance", description: "I need to know which sources, standards, journals, and methods matter in my discipline.", action: "Explore my discipline", href: "#disciplines" },
-        { index: "04", title: "I need practical tools", description: "I am ready to search, screen, appraise, extract, analyse, or start writing.", action: "Open the toolkit", href: "#toolkit" },
+        { index: "A", title: "I have not started yet", description: "I have a topic or a rough idea, but I do not know which review method fits it.", action: "Choose a review method", href: "#pathway" },
+        { index: "B", title: "I already have papers", description: "My PDFs and notes are growing, and I need a traceable way to organise the work.", action: "Follow the workflow", href: "#workflow" },
+        { index: "C", title: "I need field-specific guidance", description: "I need to know which sources, standards, journals, and methods matter in my discipline.", action: "Explore my discipline", href: "#disciplines" },
+        { index: "D", title: "I need practical tools", description: "I am ready to search, screen, appraise, extract, analyse, or start writing.", action: "Open the toolkit", href: "#toolkit" },
+      ],
+      journeyTitle: "Prefer a guided reading order? Follow this route.",
+      journeyIntro: "Numbers 01–07 mark the main literature-review journey. You can still jump directly to the section that matches your current work.",
+      journeyGroups: [
+        { label: "Stage 1 · Choose an approach", items: [
+          { index: "01", title: "Choose a review method", href: "#pathway" },
+          { index: "02", title: "Compare review methods", href: "#methods" },
+          { index: "03", title: "Check discipline guidance", href: "#disciplines" },
+        ] },
+        { label: "Stage 2 · Prepare and conduct", items: [
+          { index: "04", title: "Frame the work before searching", href: "#field-notes" },
+          { index: "05", title: "Work through six review phases", href: "#workflow" },
+          { index: "06", title: "Use the practice workbench", href: "#workbench" },
+        ] },
+        { label: "Stage 3 · Add support", items: [
+          { index: "07", title: "Choose research tools", href: "#toolkit" },
+          { index: "SUP", title: "Choose statistics when relevant", href: "#statistics" },
+        ] },
       ],
     },
     pathway: {
@@ -104,7 +122,7 @@ export const uiText = {
       cardAction: "Open field guide",
     },
     method: {
-      index: "04 · Method library",
+      index: "02 · Method library",
       title: "Compare the logic—not only the labels.",
       purpose: "Purpose",
       all: "All methods",
@@ -125,7 +143,7 @@ export const uiText = {
       filters: { all: "All", structured: "Structured", flexible: "Flexible", quantitative: "Quantitative", qualitative: "Qualitative" },
     },
     notes: {
-      index: "06 · Before the search",
+      index: "04 · Before the search",
       title: "Write these four sentences before opening a database.",
       items: [
         ["My review must help someone decide…", "Name the decision, audience, or knowledge gap—not just the topic."],
@@ -155,7 +173,7 @@ export const uiText = {
       protocolChecklist: "รายการตรวจสอบโครงร่าง",
       checklistItems: ["กำหนดคำถามแล้ว", "วางแผนแหล่งค้นแล้ว", "บันทึกเกณฑ์คัดเลือกแล้ว"],
     },
-    nav: { start: "เริ่มต้น", workflow: "ขั้นตอนการทำงาน", disciplines: "สาขาวิชา", methods: "วิธีทบทวน", toolkit: "เครื่องมือ", pitfalls: "ข้อควรระวัง", action: "ช่วยเลือกวิธีทบทวน" },
+    nav: { start: "เริ่มต้น", prepare: "ก่อนเริ่มค้น", workflow: "ขั้นตอนการทำงาน", disciplines: "สาขาวิชา", methods: "วิธีทบทวน", toolkit: "เครื่องมือ", pitfalls: "ข้อควรระวัง", action: "ช่วยเลือกวิธีทบทวน" },
     hero: {
       eyebrow: "คู่มือการทบทวนวรรณกรรมสำหรับนักวิจัย",
       audience: "ปริญญาโท · ปริญญาเอก · นักวิจัย",
@@ -182,10 +200,28 @@ export const uiText = {
       title: "ตอนนี้คุณอยู่จุดไหน?",
       intro: "คุณไม่จำเป็นต้องอ่านคู่มือนี้ตั้งแต่ต้นจนจบ เลือกสถานการณ์ที่ใกล้กับคุณที่สุด แล้วไปยังส่วนที่ช่วยให้งานเดินหน้าต่อได้ทันที",
       cards: [
-        { index: "01", title: "ยังไม่ได้เริ่ม", description: "มีหัวข้อหรือแนวคิดคร่าว ๆ แล้ว แต่ยังไม่แน่ใจว่าควรใช้วิธีทบทวนแบบใด", action: "ช่วยเลือกวิธีทบทวน", href: "#pathway" },
-        { index: "02", title: "มีบทความอยู่แล้ว", description: "มีบทความและบันทึกการค้นคว้าสะสมมากขึ้น จึงต้องการวิธีจัดระเบียบที่ย้อนกลับมาตรวจสอบได้", action: "ดูขั้นตอนการทำงาน", href: "#workflow" },
-        { index: "03", title: "อยากดูคำแนะนำตามสาขา", description: "ต้องการรู้ว่าควรค้นจากที่ใด ใช้มาตรฐานอะไร และวิธีใดเป็นที่ยอมรับในสาขา", action: "เลือกสาขาวิชา", href: "#disciplines" },
-        { index: "04", title: "กำลังหาเครื่องมือช่วยทำงาน", description: "พร้อมเริ่มค้น คัดกรอง ประเมิน สกัดข้อมูล วิเคราะห์ หรือเขียนงานแล้ว", action: "เปิดชุดเครื่องมือ", href: "#toolkit" },
+        { index: "A", title: "ยังไม่ได้เริ่ม", description: "มีหัวข้อหรือแนวคิดคร่าว ๆ แล้ว แต่ยังไม่แน่ใจว่าควรใช้วิธีทบทวนแบบใด", action: "ช่วยเลือกวิธีทบทวน", href: "#pathway" },
+        { index: "B", title: "มีบทความอยู่แล้ว", description: "มีบทความและบันทึกการค้นคว้าสะสมมากขึ้น จึงต้องการวิธีจัดระเบียบที่ย้อนกลับมาตรวจสอบได้", action: "ดูขั้นตอนการทำงาน", href: "#workflow" },
+        { index: "C", title: "อยากดูคำแนะนำตามสาขา", description: "ต้องการรู้ว่าควรค้นจากที่ใด ใช้มาตรฐานอะไร และวิธีใดเป็นที่ยอมรับในสาขา", action: "เลือกสาขาวิชา", href: "#disciplines" },
+        { index: "D", title: "กำลังหาเครื่องมือช่วยทำงาน", description: "พร้อมเริ่มค้น คัดกรอง ประเมิน สกัดข้อมูล วิเคราะห์ หรือเขียนงานแล้ว", action: "เปิดชุดเครื่องมือ", href: "#toolkit" },
+      ],
+      journeyTitle: "ถ้าต้องการอ่านตามลำดับ ให้เดินตามเส้นทางนี้",
+      journeyIntro: "หมายเลข 01–07 เป็นลำดับหลักของการทบทวนวรรณกรรม แต่คุณสามารถข้ามไปยังหัวข้อที่ตรงกับงานของคุณได้ทันที",
+      journeyGroups: [
+        { label: "ช่วงที่ 1 · เลือกแนวทาง", items: [
+          { index: "01", title: "เลือกวิธีทบทวน", href: "#pathway" },
+          { index: "02", title: "เปรียบเทียบวิธีทบทวน", href: "#methods" },
+          { index: "03", title: "ดูคำแนะนำตามสาขา", href: "#disciplines" },
+        ] },
+        { label: "ช่วงที่ 2 · เตรียมและลงมือทำ", items: [
+          { index: "04", title: "เตรียมข้อมูลก่อนเริ่มค้น", href: "#field-notes" },
+          { index: "05", title: "ทำงานทบทวนใน 6 ขั้นตอน", href: "#workflow" },
+          { index: "06", title: "ใช้แบบฝึกและเครื่องมือปฏิบัติ", href: "#workbench" },
+        ] },
+        { label: "ช่วงที่ 3 · เลือกตัวช่วย", items: [
+          { index: "07", title: "เลือกเครื่องมือสำหรับทำงานวิจัย", href: "#toolkit" },
+          { index: "เสริม", title: "เลือกสถิติเมื่อเกี่ยวข้องกับงานวิจัย", href: "#statistics" },
+        ] },
       ],
     },
     pathway: {
@@ -245,7 +281,7 @@ export const uiText = {
       cardAction: "เปิดคู่มือสาขา",
     },
     method: {
-      index: "04 · คลังวิธีทบทวน",
+      index: "02 · คลังวิธีทบทวน",
       title: "วิธีการทบทวนวรรณกรรม และ การเปรียบเทียบ",
       purpose: "วัตถุประสงค์",
       all: "ทุกวิธี",
@@ -266,7 +302,7 @@ export const uiText = {
       filters: { all: "ทุกวิธี", structured: "เป็นระบบสูง", flexible: "ยืดหยุ่น", quantitative: "เชิงปริมาณ", qualitative: "เชิงคุณภาพ" },
     },
     notes: {
-      index: "06 · ก่อนเริ่มค้น",
+      index: "04 · ก่อนเริ่มค้น",
       title: "เขียน 4 ประโยคนี้ให้ได้ ก่อนเปิดฐานข้อมูล",
       items: [
         ["งานทบทวนของฉันต้องช่วยให้ใครตัดสินใจเรื่อง…", "ระบุการตัดสินใจ ผู้ใช้ผลลัพธ์ หรือช่องว่างความรู้ ไม่ใช่บอกเพียงหัวข้อ"],

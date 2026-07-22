@@ -3,9 +3,9 @@
 ## Source of truth
 
 - Status: Active
-- Last refreshed: 2026-07-20
+- Last refreshed: 2026-07-22
 - Primary product surfaces: the single LitWise research-guide page in English and Thai
-- Evidence reviewed: `../lit-review-guide/index.html`, `../lit-review-guide/styles.css`, `../lit-review-guide/app.js`, `../lit-review-guide/data.js`, `app/page.tsx`, `app/globals.css`, `app/i18n.ts`, `app/guide-data.ts`, and `tests/`
+- Evidence reviewed: `../lit-review-guide/index.html`, `../lit-review-guide/styles.css`, `../lit-review-guide/app.js`, `../lit-review-guide/data.js`, `app/page.tsx`, `app/guide-client.tsx`, `app/research-workbench.tsx`, `app/globals.css`, `app/i18n.ts`, `app/guide-data.ts`, `app/research-tools.ts`, and `tests/`
 
 ## Brand
 
@@ -27,9 +27,35 @@
 
 ## Information architecture
 
-- Primary navigation: Start, Methods, Disciplines, Workflow, Practice, Tools, Pitfalls
+- Primary navigation: Start, Methods, Disciplines, Prepare, Workflow, Practice, Tools
 - Core routes/screens: one long-form page with anchored sections and modal-like method/discipline deep dives
-- Content hierarchy: hero -> situation-based entry points -> decision wizard -> method library and comparison -> discipline library -> expandable six-phase workflow -> project workbench -> search/appraisal/tools/templates -> pitfalls -> closing action
+- Content hierarchy: hero -> situation-based entry points and journey overview -> `01` decision wizard -> `02` method library and comparison -> `03` discipline library -> `04` pre-search framing -> `05` expandable six-phase workflow -> `06` project workbench -> `07` search/appraisal/tools/templates and pitfalls -> unnumbered statistics supplement -> closing action
+
+### User journey and numbering
+
+The situation cards are shortcuts, not numbered chapters. Users may jump to the section that matches their current state, while the chapter numbers remain a stable reading order.
+
+```mermaid
+flowchart TD
+    A["ตอนนี้คุณอยู่จุดไหน?"]
+    A -->|"ยังไม่ได้เริ่ม"| B["01 เลือกวิธีทบทวน"]
+    A -->|"ต้องการเปรียบเทียบ"| C["02 เปรียบเทียบวิธีทบทวน"]
+    A -->|"ต้องการคำแนะนำตามสาขา"| D["03 ดูคำแนะนำตามสาขา"]
+    A -->|"มีบทความหรือกำลังลงมือทำ"| E["04 เตรียมข้อมูลก่อนค้น"]
+    A -->|"กำลังหาเครื่องมือ"| H["07 เลือกเครื่องมือช่วยทำงาน"]
+    B --> C --> D --> E
+    E --> F["05 ทำงานทบทวนใน 6 ขั้นตอน"]
+    F --> G["06 ใช้แบบฝึกและเครื่องมือปฏิบัติ"]
+    G --> H
+    H --> I["ภาคเสริม เลือกสถิติเมื่อทำงานวิจัยเชิงประจักษ์"]
+```
+
+Numbering rules:
+
+- Use `01`-`07` only for the main literature-review journey.
+- Use `A`-`D` on entry-point cards so situational shortcuts cannot be mistaken for the `01`-`07` chapter sequence.
+- Label statistics as `Supplement` / `ภาคเสริม`; it supports research methodology but is not a literature-review stage.
+- Do not reuse a chapter number for a tool, subsection, or alternate route.
 
 ## Design principles
 

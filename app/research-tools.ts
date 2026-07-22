@@ -195,7 +195,7 @@ export const learningToolsContent = {
         { id: "write", prepare: ["Traceable findings and uncertainty", "The reporting guideline for the chosen method"], actions: ["Report methods so another team could repeat them", "Show study characteristics and selection flow", "Connect claims to appraisal and certainty", "Discuss limitations, implications, and update needs"], example: "Attach full database strategies and a transparent exclusion table as supplementary material rather than summarizing the search in one sentence.", pitfalls: ["Writing conclusions stronger than the included evidence", "Hiding protocol changes or automation"], tools: ["PRISMA, PRISMA-ScR, ENTREQ, RAMESES, or method-specific guidance", "Reference manager", "Reporting checklist"] },
       ],
     },
-    workbench: { index: "03 · Guided practice", title: "Build the artefacts, not just the vocabulary.", intro: "Use these client-side tools to rehearse decisions and create copy-ready working notes. Your checklist stays in this browser; no research data is uploaded." },
+    workbench: { index: "06 · Guided practice", title: "Build the artefacts, not just the vocabulary.", intro: "Use these client-side tools to rehearse decisions and create copy-ready working notes. Your checklist stays in this browser; no research data is uploaded." },
     checklist: {
       title: "My review project",
       intro: "A progress checklist for the minimum traceable workflow. Completion is a reminder—not a quality score.",
@@ -329,7 +329,7 @@ export const learningToolsContent = {
         { id: "write", prepare: ["ข้อค้นพบที่ระบุแหล่งหลักฐานและระดับความไม่แน่นอนได้ชัดเจน", "แนวทางรายงานที่ตรงกับวิธีทบทวน"], actions: ["รายงานวิธีให้ทีมอื่นทำตามได้", "แสดงลักษณะงานและขั้นตอนการคัดเลือก", "เชื่อมข้อสรุปกับผลประเมินและความเชื่อมั่น", "อภิปรายข้อจำกัด การนำไปใช้ และความจำเป็นในการปรับปรุงข้อมูล"], example: "แนบคำค้นเต็มของทุกฐานข้อมูลและตารางเหตุผลคัดออกไว้ในเอกสารเสริม แทนการเขียนเพียงว่าค้นอย่างเป็นระบบ", pitfalls: ["สรุปผลเกินกว่าที่หลักฐานที่คัดเข้ามารองรับ", "ซ่อนการเปลี่ยนโครงร่างหรือการใช้ระบบอัตโนมัติ"], tools: ["PRISMA, PRISMA-ScR, ENTREQ, RAMESES หรือแนวทางเฉพาะวิธี", "โปรแกรมจัดการอ้างอิง", "รายการตรวจสอบการรายงาน"] },
       ],
     },
-    workbench: { index: "03 · ฝึกลงมือทำ", title: "ลงมือวางแผนงานวิจัย", intro: "ใช้เครื่องมือในหน้านี้เพื่อฝึกตัดสินใจและสร้างบันทึกที่นำไปปรับใช้ได้ รายการตรวจสอบจะเก็บไว้ในเบราว์เซอร์นี้เท่านั้น โดยไม่มีการส่งข้อมูลงานวิจัยออกไป" },
+    workbench: { index: "06 · ฝึกลงมือทำ", title: "ลงมือวางแผนงานวิจัย", intro: "ใช้เครื่องมือในหน้านี้เพื่อฝึกตัดสินใจและสร้างบันทึกที่นำไปปรับใช้ได้ รายการตรวจสอบจะเก็บไว้ในเบราว์เซอร์นี้เท่านั้น โดยไม่มีการส่งข้อมูลงานวิจัยออกไป" },
     checklist: {
       title: "รายการตรวจสอบขั้นตอนการทบทวนวรรณกรรม",
       intro: "รายการตรวจสอบขั้นตอนสำคัญที่ควรย้อนกลับมาตรวจได้ การทำครบทุกข้อเป็นเพียงตัวช่วยเตือน ไม่ได้หมายความว่างานมีคุณภาพแล้ว",

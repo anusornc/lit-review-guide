@@ -460,10 +460,10 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
           <a href="#start">{t.nav.start}</a>
           <a href="#methods">{t.nav.methods}</a>
           <a href="#disciplines">{t.nav.disciplines}</a>
+          <a href="#field-notes">{t.nav.prepare}</a>
           <a href="#workflow">{t.nav.workflow}</a>
           <a href="#workbench">{learning.navLabel}</a>
           <a href="#toolkit">{t.nav.toolkit}</a>
-            <a href="#pitfalls">{t.nav.pitfalls}</a>
         </nav>
         <div className="header-tools">
           <div className="language-switch" role="group" aria-label={t.languageLabel}>
@@ -540,6 +540,26 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
             </a>
           ))}
         </div>
+        <nav className="journey-overview" aria-labelledby="journey-overview-title">
+          <div className="journey-overview-heading">
+            <h3 id="journey-overview-title">{t.startHere.journeyTitle}</h3>
+            <p>{t.startHere.journeyIntro}</p>
+          </div>
+          <div className="journey-groups">
+            {t.startHere.journeyGroups.map((group) => (
+              <section key={group.label}>
+                <p>{group.label}</p>
+                <ol>
+                  {group.items.map((item) => (
+                    <li key={`${item.index}-${item.href}`}>
+                      <a href={item.href}><span>{item.index}</span><strong>{item.title}</strong><b aria-hidden="true">→</b></a>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ))}
+          </div>
+        </nav>
       </section>
 
       <section className="pathway-section" id="pathway">
@@ -821,6 +841,17 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
         )}
       </section>
 
+      <section className="field-notes" id="field-notes">
+        <div className="field-note-title">
+          <p className="section-index">{t.notes.index}</p>
+          <h2>{t.notes.title}</h2>
+        </div>
+        <ol className="note-grid">
+          {t.notes.items.map((item, index) => <li key={item[0]}><span>{String(index + 1).padStart(2, "0")}</span><strong>{item[0]}</strong><p>{item[1]}</p></li>)}
+        </ol>
+        <blockquote>{t.notes.quote}<cite>{t.notes.cite}</cite></blockquote>
+      </section>
+
       <section className="workflow-section" id="workflow">
         <div className="section-heading split-heading workflow-heading">
           <div><p className="section-index">{merged.workflow.index}</p><h2>{merged.workflow.title}</h2></div>
@@ -974,17 +1005,6 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
           <div><p className="detail-kicker">{merged.toolkit.referencesTitle}</p><p>{merged.toolkit.referencesNote}</p></div>
           <div>{merged.toolkit.references.map((reference) => <a key={reference.id} href={reference.href} target="_blank" rel="noreferrer">{reference.label}<span aria-hidden="true">↗</span></a>)}</div>
         </div>
-      </section>
-
-      <section className="field-notes" id="field-notes">
-        <div className="field-note-title">
-          <p className="section-index">{t.notes.index}</p>
-          <h2>{t.notes.title}</h2>
-        </div>
-        <ol className="note-grid">
-          {t.notes.items.map((item, index) => <li key={item[0]}><span>{String(index + 1).padStart(2, "0")}</span><strong>{item[0]}</strong><p>{item[1]}</p></li>)}
-        </ol>
-        <blockquote>{t.notes.quote}<cite>{t.notes.cite}</cite></blockquote>
       </section>
 
       <section className="supplementary-statistics-section" id="statistics">
