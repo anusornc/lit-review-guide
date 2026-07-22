@@ -148,7 +148,7 @@ export const uiText = {
       index: "04 · Before the search",
       title: "Write these four sentences before opening a database.",
       items: [
-        ["My review must help someone decide…", "Name the decision, audience, or knowledge gap—not just the topic."],
+        ["What is this review intended to accomplish?", "State whether you need to summarize knowledge, compare findings, explain a phenomenon, identify a gap, or plan the next study."],
         ["The review includes evidence about…", "Define people, phenomena, concepts, settings, dates, and boundaries."],
         ["I will judge evidence by…", "Choose quality criteria that match each study design and knowledge claim."],
         ["The final contribution will be…", "State whether you need an estimate, map, explanation, theory, or agenda."],
@@ -265,7 +265,7 @@ export const uiText = {
     },
     discipline: {
       index: "03 · แผนที่สาขาวิชา",
-      title: "เริ่มจากสาขาของคุณ แล้วใช้คำถามวิจัยช่วยเลือกวิธี",
+      title: "จุดเน้นของแต่ละสาขาวิชาในการทบทวนวรรณกรรม",
       intro: "แต่ละสาขาให้คุณค่าแก่หลักฐานและใช้เกณฑ์พิจารณาความน่าเชื่อถือต่างกัน เลือกสาขาเพื่อดูคำถามที่พบบ่อย แหล่งค้น วิธีทบทวน และข้อควรระวัง",
       listAria: "กลุ่มสาขาวิชา",
       guide: "คู่มือสาขา",
@@ -307,9 +307,9 @@ export const uiText = {
     },
     notes: {
       index: "04 · ก่อนเริ่มค้น",
-      title: "เขียน 4 ประโยคนี้ให้ได้ ก่อนเปิดฐานข้อมูล",
+      title: "ตอบคำถามดังต่อไปนี้ก่อนเริ่มทบทวนวรรณกรรม",
       items: [
-        ["งานทบทวนของฉันต้องช่วยให้ใครตัดสินใจเรื่อง…", "ระบุการตัดสินใจ ผู้ใช้ผลลัพธ์ หรือช่องว่างความรู้ ไม่ใช่บอกเพียงหัวข้อ"],
+        ["งานทบทวนนี้ทำขึ้นเพื่ออะไร", "ระบุว่าต้องการสรุปองค์ความรู้ เปรียบเทียบผล อธิบายปรากฏการณ์ ค้นหาช่องว่าง หรือใช้วางแผนงานวิจัยขั้นต่อไป"],
         ["งานทบทวนนี้ครอบคลุมหลักฐานเกี่ยวกับ…", "กำหนดคน ปรากฏการณ์ แนวคิด บริบท ช่วงเวลา และขอบเขตให้ชัด"],
         ["ฉันจะตัดสินคุณภาพหลักฐานจาก…", "เลือกเกณฑ์คุณภาพให้เหมาะกับประเภทงานวิจัยและข้อสรุปที่ต้องการนำเสนอ"],
         ["งานนี้จะช่วยตอบช่องว่างความรู้เรื่อง…", "ระบุว่าต้องการค่าประมาณ แผนที่ คำอธิบาย ทฤษฎี หรือประเด็นวิจัยต่อไป"],
