@@ -267,6 +267,8 @@ export const learningToolsContent = {
     prisma: {
       title: "PRISMA flow planner",
       intro: "Enter counts to check arithmetic and produce a copy-ready selection summary. This planning aid does not replace the official PRISMA 2020 diagram or its instructions.",
+      plannerTab: "Enter your counts",
+      exampleTab: "View an example",
       inputLabel: "Selection counts",
       flowLabel: "Derived flow",
       reasonsLabel: "Full-text exclusion reasons and counts",
@@ -288,6 +290,13 @@ export const learningToolsContent = {
         ["reportsNotRetrieved", "Reports not retrieved"], ["fullTextExcluded", "Full-text reports excluded"],
       ],
       stages: { identified: "Records identified", removed: "Removed before screening", screened: "Records screened", sought: "Reports sought", assessed: "Reports assessed", included: "Studies included" },
+      example: {
+        title: "Example: AI-supported tutoring in universities",
+        intro: "This hypothetical example shows how counts move from search results to included studies. Notice that the full-text exclusion reasons add up to the full-text reports excluded.",
+        note: "Example numbers only. Use counts from your own search and screening records in the planner tab.",
+        inputs: { databases: 1200, otherSources: 50, duplicatesRemoved: 200, automationRemoved: 0, otherRemoved: 10, recordsExcluded: 900, reportsNotRetrieved: 10, fullTextExcluded: 80 },
+        reasons: [["Wrong population", 30], ["Wrong intervention or concept", 25], ["Ineligible study design", 15], ["No eligible outcome", 10]],
+      },
     },
   },
   th: {
@@ -392,6 +401,8 @@ export const learningToolsContent = {
     prisma: {
       title: "เครื่องมือวางแผนผัง PRISMA",
       intro: "กรอกจำนวนเพื่อตรวจความสอดคล้องและสร้างข้อความสรุปพร้อมคัดลอก เครื่องมือนี้ช่วยวางแผน แต่ไม่แทนผังและคำแนะนำ PRISMA 2020 ฉบับทางการ",
+      plannerTab: "กรอกข้อมูลของคุณ",
+      exampleTab: "ดูตัวอย่าง",
       inputLabel: "จำนวนในกระบวนการคัดเลือก",
       flowLabel: "ผลการคำนวณ",
       reasonsLabel: "เหตุผลและจำนวนที่ตัดออกในขั้นฉบับเต็ม",
@@ -413,6 +424,13 @@ export const learningToolsContent = {
         ["reportsNotRetrieved", "รายงานที่ไม่สามารถเข้าถึงฉบับเต็ม"], ["fullTextExcluded", "รายงานฉบับเต็มที่คัดออก"],
       ],
       stages: { identified: "รายการที่ค้นพบ", removed: "รายการที่คัดออกก่อนคัดกรอง", screened: "รายการที่คัดกรอง", sought: "รายงานที่ขอฉบับเต็ม", assessed: "รายงานฉบับเต็มที่ประเมิน", included: "งานวิจัยที่คัดเข้า" },
+      example: {
+        title: "ตัวอย่าง: การทบทวนเรื่อง AI ช่วยสอนในมหาวิทยาลัย",
+        intro: "ตัวอย่างสมมตินี้แสดงว่าตัวเลขเปลี่ยนจากผลการค้นไปเป็นงานวิจัยที่คัดเข้าอย่างไร สังเกตว่าผลรวมของเหตุผลที่คัดออกในขั้นฉบับเต็มต้องเท่ากับจำนวนรายงานฉบับเต็มที่คัดออก",
+        note: "ตัวเลขนี้ใช้เพื่ออธิบายวิธีกรอกเท่านั้น เมื่อลงมือทำจริงควรใช้จำนวนจากบันทึกการค้นและการคัดกรองของคุณ",
+        inputs: { databases: 1200, otherSources: 50, duplicatesRemoved: 200, automationRemoved: 0, otherRemoved: 10, recordsExcluded: 900, reportsNotRetrieved: 10, fullTextExcluded: 80 },
+        reasons: [["ประชากรไม่ตรงเกณฑ์", 30], ["แนวคิดหรือสิ่งที่ศึกษาไม่ตรง", 25], ["รูปแบบการวิจัยไม่ตรงเกณฑ์", 15], ["ไม่รายงานผลลัพธ์ที่กำหนด", 10]],
+      },
     },
   },
 } as const;

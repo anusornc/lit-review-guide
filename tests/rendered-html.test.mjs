@@ -99,6 +99,10 @@ test("server-renders the LitWise research guide", async () => {
   assert.match(html, /Research tool directory/);
   assert.match(html, /Zotero/);
   assert.match(html, /ASReview/);
+  assert.match(html, /Elicit/);
+  assert.match(html, /Nested Knowledge/);
+  assert.match(html, /SciDraw/);
+  assert.match(html, /View the source list/);
   assert.match(html, /Search log template/);
   assert.match(html, /http:\/\/localhost:3000\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
@@ -139,6 +143,7 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(guideClient, /discipline-search/);
   assert.match(guideClient, /method-filter-pills/);
   assert.match(guideClient, /tool-directory/);
+  assert.match(guideClient, /https:\/\/effortlessacademic\.com\/tools\//);
   assert.match(guideClient, /theme-toggle/);
   assert.match(guideClient, /hero-research-art/);
   assert.match(guideClient, /wizard-progress/);
@@ -167,6 +172,9 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(i18n, /งานทบทวนที่น่าเชื่อถือ/);
   assert.doesNotMatch(i18n, /สายโซ่ของการตัดสินใจ|อธิบายและปกป้องได้|ข้ออ้างเชิงความรู้|พื้นที่การสืบค้น|สร้างเส้นทางของฉัน|บันทึกภาคสนาม|ดำเนินการต่อ|ข้อแลกเปลี่ยน/);
   assert.match(guideData, /การทบทวนงานทบทวนอย่างเป็นระบบ \(umbrella review\)/);
+  assert.match(guideData, /คลังเครื่องมือสำหรับทำงานวิจัย/);
+  assert.match(guideData, /คัดเลือกเครื่องมือเพิ่มเติมจากรายการของ Effortless Academic/);
+  assert.match(guideData, /Livewrite \(เดิมชื่อ ReSub\)/);
   assert.doesNotMatch(guideData, /บทวิทยานิพนธ์ที่ปกป้องได้|ผืนงานสร้างคำค้น|เกณฑ์เคลื่อน|ตารางไร้ร่องรอย|การทบทวนแบบร่ม/);
   assert.match(researchTools, /เครื่องมือช่วยวางกรอบคำถาม/);
   assert.match(researchTools, /อยากให้งานทบทวนนี้ช่วยตอบคำถามอะไร/);
@@ -176,6 +184,9 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(researchTools, /Sample · Phenomenon of Interest · Design · Evaluation · Research type/);
   assert.match(researchTools, /แบบฝึกหัดคัดกรองบทความ/);
   assert.match(researchTools, /เครื่องมือวางแผนผัง PRISMA/);
+  assert.match(researchTools, /กรอกข้อมูลของคุณ/);
+  assert.match(researchTools, /ดูตัวอย่าง/);
+  assert.match(researchTools, /ตัวอย่าง: การทบทวนเรื่อง AI ช่วยสอนในมหาวิทยาลัย/);
   assert.match(researchTools, /ตอบได้ตรงกับเกณฑ์/);
   assert.match(researchTools, /ผลรวมของแต่ละเหตุผลต้องเท่ากับจำนวนรายงานฉบับเต็มที่ตัดออก/);
   assert.doesNotMatch(researchTools, /รับเข้า|กรอบตั้งต้น|เส้นทางที่คำนวณได้|รายงานที่พยายามขอ|ขอฉบับเต็มไม่ได้|ระบบอัตโนมัตินำออก|เริ่มจากการตัดสินใจที่งานทบทวนต้องช่วยสนับสนุน|ดุลยพินิจของแต่ละสาขา|ปรากฏการณ์ที่สนใจ/);
@@ -189,6 +200,9 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(researchWorkbench, /data-testid="method-comparison"/);
   assert.match(researchWorkbench, /data-testid="screening-practice-lab"/);
   assert.match(researchWorkbench, /data-testid="prisma-flow-builder"/);
+  assert.match(researchWorkbench, /className="prisma-tabs" role="tablist"/);
+  assert.match(researchWorkbench, /id="prisma-example-panel"/);
+  assert.match(researchWorkbench, /className="prisma-example-reasons"/);
   assert.match(researchWorkbench, /StatTestChooser/);
   assert.match(researchWorkbench, /workflowSourceIds/);
   assert.match(statChooser, /data-testid="stat-test-chooser"/);

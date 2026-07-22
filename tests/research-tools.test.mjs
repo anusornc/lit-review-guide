@@ -111,6 +111,18 @@ test("keeps every learning tool complete in English and Thai", () => {
     }
     assert.equal(content.screening.scenarios.length, 6);
     assert.equal(content.prisma.inputs.length, 8);
+    assert.ok(content.prisma.plannerTab.length > 0);
+    assert.ok(content.prisma.exampleTab.length > 0);
+    assert.equal(content.prisma.example.reasons.reduce((total, [, count]) => total + count, 0), content.prisma.example.inputs.fullTextExcluded);
+    assert.deepEqual(calculatePrismaFlow({ ...content.prisma.example.inputs }), {
+      identified: 1250,
+      removedBeforeScreening: 210,
+      screened: 1040,
+      reportsSought: 140,
+      reportsAssessed: 130,
+      studiesIncluded: 50,
+      valid: true,
+    });
   }
 });
 
@@ -139,5 +151,8 @@ test("uses consistent, natural Thai labels in the learning tools", () => {
   assert.equal(content.screening.options[1].label, "คัดออก");
   assert.equal(content.prisma.flowLabel, "ผลการคำนวณ");
   assert.equal(content.prisma.stages.included, "งานวิจัยที่คัดเข้า");
+  assert.equal(content.prisma.plannerTab, "กรอกข้อมูลของคุณ");
+  assert.equal(content.prisma.exampleTab, "ดูตัวอย่าง");
+  assert.equal(content.prisma.example.title, "ตัวอย่าง: การทบทวนเรื่อง AI ช่วยสอนในมหาวิทยาลัย");
   assert.doesNotMatch(thaiText, /รับเข้า|กรอบตั้งต้น|เส้นทางที่คำนวณได้|รายงานที่พยายามขอ|ขอฉบับเต็มไม่ได้|ระบบอัตโนมัตินำออก|เริ่มจากการตัดสินใจที่งานทบทวนต้องช่วยสนับสนุน|ดุลยพินิจของแต่ละสาขา|ปรากฏการณ์ที่สนใจ/);
 });

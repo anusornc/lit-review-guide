@@ -925,7 +925,11 @@ export default function GuideClient({ initialLocale, initialTheme }: { initialLo
         <div className="tool-directory">
           <div className="section-heading split-heading tool-directory-heading">
             <div><h2>{merged.toolkit.toolDirectoryTitle}</h2></div>
-            <p>{merged.toolkit.toolDirectoryIntro}</p>
+            <div className="tool-directory-note">
+              <p>{merged.toolkit.toolDirectoryIntro}</p>
+              <a href="https://effortlessacademic.com/tools/" target="_blank" rel="noreferrer">{merged.toolkit.toolDirectorySourceLabel}<span aria-hidden="true">↗</span></a>
+              <small>{merged.toolkit.toolDirectorySource}</small>
+            </div>
           </div>
           <div className="tool-category-grid">
             {merged.toolkit.toolCategories.map((category) => (

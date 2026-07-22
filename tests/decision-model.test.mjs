@@ -70,8 +70,15 @@ test("keeps the merged guide complete in English and Thai", () => {
     assert.equal(content.toolkit.aiLab.guardrails.length, 4);
     assert.ok(content.toolkit.aiLab.prompts.every((prompt) => prompt.prompt.includes("[")));
     promptIdsByLocale.push(content.toolkit.aiLab.prompts.map((prompt) => prompt.id));
-    assert.equal(content.toolkit.toolCategories.length, 4);
-    assert.equal(content.toolkit.toolCategories.flatMap((category) => category.tools).length, 12);
+    const toolNames = content.toolkit.toolCategories.flatMap((category) => category.tools.map((tool) => tool.name));
+    assert.equal(content.toolkit.toolCategories.length, 6);
+    assert.equal(toolNames.length, 30);
+    assert.equal(new Set(toolNames).size, 30);
+    assert.match(content.toolkit.toolDirectorySource, /Effortless Academic/);
+    for (const addedTool of ["Bibliome", "Liner", "Keenious", "Iris.ai", "Elicit", "Consensus", "SciSpace", "Sourcely", "Litmaps", "Scite", "Anara", "Nested Knowledge", "Paperpal", "Jenni AI", "WriteWise", "Yomu AI", "SciDraw"]) {
+      assert.ok(toolNames.includes(addedTool));
+    }
+    assert.ok(toolNames.some((name) => name.startsWith("Livewrite")));
     assert.ok(content.toolkit.toolCategories.every((category) => category.tools.every((tool) => tool.links.length >= 1)));
     assert.ok(content.toolkit.toolCategories.every((category) => category.tools.every((tool) => tool.links.every((link) => link.href.startsWith("https://")))));
     assert.equal(content.toolkit.templates.length, 4);
@@ -79,4 +86,5 @@ test("keeps the merged guide complete in English and Thai", () => {
   }
 
   assert.deepEqual(promptIdsByLocale[0], promptIdsByLocale[1]);
+  assert.equal(mergedGuideContent.th.toolkit.toolDirectoryTitle, "คลังเครื่องมือสำหรับทำงานวิจัย");
 });

@@ -205,6 +205,7 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
   const [fullTextReasons, setFullTextReasons] = useState<PrismaReasonRow[]>([
     { id: 1, reason: "", count: 0 },
   ]);
+  const [prismaTab, setPrismaTab] = useState<"planner" | "example">("planner");
   const [copiedItem, setCopiedItem] = useState("");
 
   useEffect(() => {
@@ -246,6 +247,7 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
   ) as Record<string, ScreeningDecision>, [content.screening.scenarios]);
   const screeningScore = scoreScreeningDecisions(screeningDecisions, screeningExpected);
   const prismaFlow = calculatePrismaFlow(prismaInputs);
+  const prismaExampleFlow = calculatePrismaFlow({ ...content.prisma.example.inputs });
   const prismaReasonCounts = validatePrismaReasonCounts(prismaInputs.fullTextExcluded, fullTextReasons);
   const prismaIsValid = prismaFlow.valid && prismaReasonCounts.valid;
   const prismaReasonSummary = fullTextReasons
@@ -260,6 +262,22 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
     `${content.prisma.stages.included}: ${prismaFlow.studiesIncluded}`,
     ...prismaReasonSummary.map((item) => `${content.prisma.reasonsLabel}: ${item}`),
   ].filter(Boolean).join("\n");
+  const prismaStageEntries = [
+    [content.prisma.stages.identified, prismaFlow.identified],
+    [content.prisma.stages.removed, prismaFlow.removedBeforeScreening],
+    [content.prisma.stages.screened, prismaFlow.screened],
+    [content.prisma.stages.sought, prismaFlow.reportsSought],
+    [content.prisma.stages.assessed, prismaFlow.reportsAssessed],
+    [content.prisma.stages.included, prismaFlow.studiesIncluded],
+  ] as const;
+  const prismaExampleStageEntries = [
+    [content.prisma.stages.identified, prismaExampleFlow.identified],
+    [content.prisma.stages.removed, prismaExampleFlow.removedBeforeScreening],
+    [content.prisma.stages.screened, prismaExampleFlow.screened],
+    [content.prisma.stages.sought, prismaExampleFlow.reportsSought],
+    [content.prisma.stages.assessed, prismaExampleFlow.reportsAssessed],
+    [content.prisma.stages.included, prismaExampleFlow.studiesIncluded],
+  ] as const;
 
   return (
     <section className="research-workbench-section" id="workbench" aria-labelledby="workbench-title">
@@ -364,42 +382,66 @@ export function ResearchWorkbench({ locale }: { locale: Locale }) {
 
       <div className="workbench-tool prisma-builder" data-testid="prisma-flow-builder">
         <header><p className="detail-kicker">03</p><h3>{content.prisma.title}</h3><p>{content.prisma.intro}</p></header>
-        <div className="prisma-grid">
-          <div className="prisma-inputs">
-            <strong>{content.prisma.inputLabel}</strong>
-            {content.prisma.inputs.map(([inputId, label]) => {
-              const key = inputId as keyof PrismaInputs;
-              return <label key={key}>{label}<input type="number" min="0" inputMode="numeric" value={prismaInputs[key]} onChange={(event) => setPrismaInputs((current) => ({ ...current, [key]: Number(event.target.value) || 0 }))} /></label>;
-            })}
-            <fieldset className="prisma-reasons">
-              <legend>{content.prisma.reasonsLabel}</legend>
-              {fullTextReasons.map((item) => (
-                <div key={item.id} className="prisma-reason-row">
-                  <label>{content.prisma.reasonName}<input value={item.reason} placeholder={content.prisma.reasonPlaceholder} onChange={(event) => setFullTextReasons((current) => current.map((row) => row.id === item.id ? { ...row, reason: event.target.value } : row))} /></label>
-                  <label>{content.prisma.reasonCount}<input type="number" min="0" inputMode="numeric" value={item.count} onChange={(event) => setFullTextReasons((current) => current.map((row) => row.id === item.id ? { ...row, count: Number(event.target.value) || 0 } : row))} /></label>
-                  {fullTextReasons.length > 1 && <button type="button" className="text-button" onClick={() => setFullTextReasons((current) => current.filter((row) => row.id !== item.id))}>{content.prisma.removeReason}</button>}
-                </div>
-              ))}
-              <button type="button" className="text-button" onClick={() => setFullTextReasons((current) => [...current, { id: Math.max(...current.map((item) => item.id), 0) + 1, reason: "", count: 0 }])}>{content.prisma.addReason}</button>
-              <p className="prisma-reason-total">{content.prisma.reasonTotal}: <strong>{prismaReasonCounts.total}/{prismaInputs.fullTextExcluded}</strong></p>
-              {!prismaReasonCounts.valid && <p className="prisma-error" role="alert">{content.prisma.reasonMismatch}</p>}
-            </fieldset>
-          </div>
-          <div className="prisma-flow" aria-live="polite">
-            <strong>{content.prisma.flowLabel}</strong>
-            {([
-              [content.prisma.stages.identified, prismaFlow.identified],
-              [content.prisma.stages.removed, prismaFlow.removedBeforeScreening],
-              [content.prisma.stages.screened, prismaFlow.screened],
-              [content.prisma.stages.sought, prismaFlow.reportsSought],
-              [content.prisma.stages.assessed, prismaFlow.reportsAssessed],
-              [content.prisma.stages.included, prismaFlow.studiesIncluded],
-            ] as const).map(([label, value], index) => <div key={label}><span>{label}</span><b>{value}</b>{index < 5 && <i aria-hidden="true">↓</i>}</div>)}
-            {!prismaFlow.valid && <p className="prisma-error" role="alert">{content.prisma.invalid}</p>}
-            <button className="button button-primary" type="button" disabled={!prismaIsValid} onClick={() => copyText("prisma", prismaSummary)}>{copiedItem === "prisma" ? content.prisma.copied : content.prisma.copy}</button>
-            <a href="https://www.prisma-statement.org/prisma-2020-flow-diagram" target="_blank" rel="noreferrer">{content.prisma.official}<span aria-hidden="true">↗</span></a>
-          </div>
+        <div className="prisma-tabs" role="tablist" aria-label={content.prisma.title}>
+          <button id="prisma-planner-tab" type="button" role="tab" aria-selected={prismaTab === "planner"} aria-controls="prisma-planner-panel" onClick={() => setPrismaTab("planner")}>{content.prisma.plannerTab}</button>
+          <button id="prisma-example-tab" type="button" role="tab" aria-selected={prismaTab === "example"} aria-controls="prisma-example-panel" onClick={() => setPrismaTab("example")}>{content.prisma.exampleTab}</button>
         </div>
+
+        {prismaTab === "planner" ? (
+          <div id="prisma-planner-panel" className="prisma-grid" role="tabpanel" aria-labelledby="prisma-planner-tab">
+            <div className="prisma-inputs">
+              <strong>{content.prisma.inputLabel}</strong>
+              {content.prisma.inputs.map(([inputId, label]) => {
+                const key = inputId as keyof PrismaInputs;
+                return <label key={key}>{label}<input type="number" min="0" inputMode="numeric" value={prismaInputs[key]} onChange={(event) => setPrismaInputs((current) => ({ ...current, [key]: Number(event.target.value) || 0 }))} /></label>;
+              })}
+              <fieldset className="prisma-reasons">
+                <legend>{content.prisma.reasonsLabel}</legend>
+                {fullTextReasons.map((item) => (
+                  <div key={item.id} className="prisma-reason-row">
+                    <label>{content.prisma.reasonName}<input value={item.reason} placeholder={content.prisma.reasonPlaceholder} onChange={(event) => setFullTextReasons((current) => current.map((row) => row.id === item.id ? { ...row, reason: event.target.value } : row))} /></label>
+                    <label>{content.prisma.reasonCount}<input type="number" min="0" inputMode="numeric" value={item.count} onChange={(event) => setFullTextReasons((current) => current.map((row) => row.id === item.id ? { ...row, count: Number(event.target.value) || 0 } : row))} /></label>
+                    {fullTextReasons.length > 1 && <button type="button" className="text-button" onClick={() => setFullTextReasons((current) => current.filter((row) => row.id !== item.id))}>{content.prisma.removeReason}</button>}
+                  </div>
+                ))}
+                <button type="button" className="text-button" onClick={() => setFullTextReasons((current) => [...current, { id: Math.max(...current.map((item) => item.id), 0) + 1, reason: "", count: 0 }])}>{content.prisma.addReason}</button>
+                <p className="prisma-reason-total">{content.prisma.reasonTotal}: <strong>{prismaReasonCounts.total}/{prismaInputs.fullTextExcluded}</strong></p>
+                {!prismaReasonCounts.valid && <p className="prisma-error" role="alert">{content.prisma.reasonMismatch}</p>}
+              </fieldset>
+            </div>
+            <div className="prisma-flow" aria-live="polite">
+              <strong>{content.prisma.flowLabel}</strong>
+              {prismaStageEntries.map(([label, value], index) => <div key={label}><span>{label}</span><b>{value}</b>{index < 5 && <i aria-hidden="true">↓</i>}</div>)}
+              {!prismaFlow.valid && <p className="prisma-error" role="alert">{content.prisma.invalid}</p>}
+              <button className="button button-primary" type="button" disabled={!prismaIsValid} onClick={() => copyText("prisma", prismaSummary)}>{copiedItem === "prisma" ? content.prisma.copied : content.prisma.copy}</button>
+              <a href="https://www.prisma-statement.org/prisma-2020-flow-diagram" target="_blank" rel="noreferrer">{content.prisma.official}<span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        ) : (
+          <div id="prisma-example-panel" className="prisma-example" role="tabpanel" aria-labelledby="prisma-example-tab">
+            <header><p className="detail-kicker">{content.prisma.exampleTab}</p><h4>{content.prisma.example.title}</h4><p>{content.prisma.example.intro}</p></header>
+            <div className="prisma-grid">
+              <div className="prisma-example-data">
+                <strong>{content.prisma.inputLabel}</strong>
+                <dl>{content.prisma.inputs.map(([inputId, label]) => {
+                  const key = inputId as keyof PrismaInputs;
+                  return <div key={key}><dt>{label}</dt><dd>{content.prisma.example.inputs[key]}</dd></div>;
+                })}</dl>
+                <section className="prisma-example-reasons">
+                  <h5>{content.prisma.reasonsLabel}</h5>
+                  <ul>{content.prisma.example.reasons.map(([reason, count]) => <li key={reason}><span>{reason}</span><b>{count}</b></li>)}</ul>
+                  <p>{content.prisma.reasonTotal}: <strong>{content.prisma.example.reasons.reduce((total, [, count]) => total + count, 0)}/{content.prisma.example.inputs.fullTextExcluded}</strong></p>
+                </section>
+                <small>{content.prisma.example.note}</small>
+              </div>
+              <div className="prisma-flow prisma-example-flow">
+                <strong>{content.prisma.flowLabel}</strong>
+                {prismaExampleStageEntries.map(([label, value], index) => <div key={label}><span>{label}</span><b>{value}</b>{index < 5 && <i aria-hidden="true">↓</i>}</div>)}
+                <a href="https://www.prisma-statement.org/prisma-2020-flow-diagram" target="_blank" rel="noreferrer">{content.prisma.official}<span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+          </div>
+        )}
         <SourceLinks locale={locale} sourceIds={workbenchSourceIds.prisma} />
       </div>
 
