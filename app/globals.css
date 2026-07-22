@@ -200,15 +200,15 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .result-summary { max-width: 690px; color: var(--muted); }
 .result-reason, .result-grid > div, .alternative-methods { border: 1px solid var(--line); border-radius: 13px; background: var(--surface-soft); }
 .result-reason { margin: 22px 0 11px; padding: 17px; }
-.result-reason span, .result-grid span, .alternative-methods > span { color: var(--accent); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.result-reason p, .result-grid p { margin: 6px 0 0; color: var(--muted); font-size: 11px; }
+.result-reason span, .result-grid span, .alternative-methods > span { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.result-reason p, .result-grid p { margin: 6px 0 0; color: var(--muted); font-size: 15px; line-height: 1.65; }
 .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
 .result-grid > div { padding: 15px; }
 .alternative-methods { margin-top: 11px; padding: 16px; }
 .alternative-methods > div { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 9px; }
 .alternative-methods button { display: grid; gap: 3px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 11px; text-align: left; cursor: pointer; }
-.alternative-methods button strong { font-family: var(--serif); font-size: 14px; }
-.alternative-methods button small, .alternative-methods button em, .alternative-methods > p { color: var(--muted); font-size: 8px; font-style: normal; }
+.alternative-methods button strong { font-family: var(--serif); font-size: 16px; }
+.alternative-methods button small, .alternative-methods button em, .alternative-methods > p { color: var(--muted); font-size: 12px; line-height: 1.55; font-style: normal; }
 .alternative-methods > p { margin: 10px 0 0; }
 .result-actions { display: flex; gap: 10px; margin-top: 14px; }
 .result-actions .button-light { background: var(--navy); color: #fff; }
@@ -272,16 +272,16 @@ button:disabled { cursor: not-allowed; opacity: 0.42; }
 .method-summary { max-width: 650px; color: var(--muted); font-size: 14px; }
 .fit-grid, .method-deep-dive { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .fit-grid > div, .method-output, .method-steps, .method-deep-dive > div, .discipline-detail dl > div, .field-insight, .field-caution { border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); padding: 16px; }
-.fit-grid span, .method-output span, .method-steps > span, .method-deep-dive span, .discipline-detail dt, .field-insight span, .field-caution span { color: var(--accent); font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.fit-grid p, .method-output p, .method-deep-dive p, .field-insight p, .field-caution p { margin: 6px 0 0; color: var(--muted); font-size: 11px; }
+.fit-grid span, .method-output span, .method-steps > span, .method-deep-dive span, .discipline-detail dt, .field-insight span, .field-caution span { color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.fit-grid p, .method-output p, .method-deep-dive p, .field-insight p, .field-caution p { margin: 6px 0 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
 .method-output, .method-steps { margin-top: 10px; }
-.method-output small { display: inline-block; margin-top: 5px; color: var(--accent); font-size: 9px; font-weight: 700; }
+.method-output small { display: inline-block; margin-top: 5px; color: var(--accent); font-size: 12px; font-weight: 700; }
 .method-steps ol { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin: 10px 0 0; padding: 0; list-style: none; counter-reset: method-step; }
-.method-steps li { counter-increment: method-step; padding: 9px; border-radius: 8px; background: var(--surface); color: var(--muted); font-size: 9px; }
-.method-steps li::before { content: counter(method-step, decimal-leading-zero); display: block; color: var(--accent); font-family: var(--serif); font-size: 12px; }
+.method-steps li { counter-increment: method-step; padding: 11px; border-radius: 8px; background: var(--surface); color: var(--muted); font-size: 12px; line-height: 1.55; }
+.method-steps li::before { content: counter(method-step, decimal-leading-zero); display: block; color: var(--accent); font-family: var(--serif); font-size: 14px; }
 .method-deep-dive { margin-top: 10px; }
 .method-deep-dive a { display: inline-block; margin-top: 6px; color: var(--accent); font-size: 9px; font-weight: 700; }
-.quality-note { margin: 12px 0 0; padding: 14px 16px; border-left: 3px solid var(--accent); background: var(--accent-soft); color: var(--muted); font-size: 10px; }
+.quality-note { margin: 12px 0 0; padding: 14px 16px; border-left: 3px solid var(--accent); background: var(--accent-soft); color: var(--muted); font-size: 13px; line-height: 1.65; }
 .discipline-monogram { width: 52px; height: 52px; display: grid; place-items: center; margin-bottom: 18px; border-radius: 14px; background: var(--accent-soft); color: var(--accent); font-family: var(--serif); font-size: 25px; }
 .discipline-detail dl { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
 .discipline-detail dd { margin: 6px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
@@ -623,6 +623,10 @@ html[data-locale="th"] .language-switch, html[data-locale="th"] .method-filter-p
 html[data-locale="th"] .step-rail button strong { font-size: 12px; line-height: 1.45; }
 html[data-locale="th"] .option-card strong { font-family: "Noto Sans Thai", Tahoma, sans-serif; font-size: 16px; }
 html[data-locale="th"] .option-card small, html[data-locale="th"] .evidence-list small, html[data-locale="th"] .commitment-list small, html[data-locale="th"] .fit-grid p, html[data-locale="th"] .method-output p, html[data-locale="th"] .method-deep-dive p, html[data-locale="th"] .discipline-detail dd, html[data-locale="th"] .field-insight p, html[data-locale="th"] .field-caution p { font-size: 14px; line-height: 1.75; }
+html[data-locale="th"] .result-reason p, html[data-locale="th"] .result-grid p, html[data-locale="th"] .method-detail .fit-grid p, html[data-locale="th"] .method-detail .method-output p, html[data-locale="th"] .method-detail .method-deep-dive p { font-size: 16px; line-height: 1.75; }
+html[data-locale="th"] .result-reason span, html[data-locale="th"] .result-grid span, html[data-locale="th"] .alternative-methods > span, html[data-locale="th"] .method-detail .fit-grid span, html[data-locale="th"] .method-detail .method-output span, html[data-locale="th"] .method-detail .method-steps > span, html[data-locale="th"] .method-detail .method-deep-dive span { font-size: 12px; line-height: 1.55; }
+html[data-locale="th"] .alternative-methods button small, html[data-locale="th"] .alternative-methods button em, html[data-locale="th"] .alternative-methods > p, html[data-locale="th"] .method-detail .method-output small { font-size: 16px; line-height: 1.7; }
+html[data-locale="th"] .method-detail .method-steps li, html[data-locale="th"] .method-detail .quality-note { font-size: 16px; line-height: 1.75; }
 html[data-locale="th"] .prompt-anatomy p, html[data-locale="th"] .prompt-task-list small, html[data-locale="th"] .prompt-preview header > p:last-child, html[data-locale="th"] .prompt-guardrails li { font-size: 16px; line-height: 1.75; }
 html[data-locale="th"] .prompt-preview pre { font-family: "Noto Sans Thai", Tahoma, var(--sans); font-size: 16px; line-height: 1.8; }
 html[data-locale="th"] .flow-stack span, html[data-locale="th"] .checklist-card ul { font-size: 12px; }

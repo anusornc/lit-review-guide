@@ -173,10 +173,14 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(i18n, /คู่มือการทบทวนวรรณกรรมสำหรับนักวิจัย/);
   assert.match(i18n, /การทบทวนวรรณกรรมอย่างเป็นระบบ/);
   assert.match(i18n, /สุขภาพและการแพทย์/);
+  assert.match(i18n, /ตอนนี้คุณอยู่จุดไหน\?/);
+  assert.match(i18n, /เริ่มต้นที่ตอบคำถาม 5 ข้อนี้/);
+  assert.match(i18n, /เมื่อพิจารณาเวลาและทรัพยากรที่มี คุณต้องการอะไรตอนนี้\?/);
+  assert.match(i18n, /วิธีการทบทวนวรรณกรรม และ การเปรียบเทียบ/);
   assert.match(i18n, /Best fit/);
   assert.match(i18n, /ข้อควรพิจารณา/);
   assert.match(i18n, /งานทบทวนที่น่าเชื่อถือ/);
-  assert.doesNotMatch(i18n, /สายโซ่ของการตัดสินใจ|อธิบายและปกป้องได้|ข้ออ้างเชิงความรู้|พื้นที่การสืบค้น|สร้างเส้นทางของฉัน|บันทึกภาคสนาม|ดำเนินการต่อ|ข้อแลกเปลี่ยน/);
+  assert.doesNotMatch(i18n, /สายโซ่ของการตัดสินใจ|อธิบายและปกป้องได้|ข้ออ้างเชิงความรู้|พื้นที่การสืบค้น|สร้างเส้นทางของฉัน|บันทึกภาคสนาม|ดำเนินการต่อ|ข้อแลกเปลี่ยน|อย่าดูแค่ชื่อวิธี ควรเปรียบเทียบจุดประสงค์และข้อจำกัด/);
   assert.match(guideData, /การทบทวนงานทบทวนอย่างเป็นระบบ \(umbrella review\)/);
   assert.match(guideData, /คลังเครื่องมือสำหรับทำงานวิจัย/);
   assert.match(guideData, /คัดเลือกเครื่องมือเพิ่มเติมจากรายการของ Effortless Academic/);
@@ -231,6 +235,8 @@ test("removes starter assets and ships product metadata", async () => {
   assert.match(globalCss, /body \{ font-size: 16px; \}/);
   assert.match(globalCss, /\.prompt-anatomy p \{[^}]*font-size: 16px/);
   assert.match(globalCss, /html\[data-locale="th"\] \.prompt-anatomy p[^}]*\{ font-size: 16px/);
+  assert.match(globalCss, /html\[data-locale="th"\] \.alternative-methods button small[^}]*\{ font-size: 16px/);
+  assert.match(globalCss, /html\[data-locale="th"\] \.method-detail \.method-steps li[^}]*\{ font-size: 16px/);
   assert.match(globalCss, /\.prompt-(?:anatomy|task-list, \.prompt-preview|guardrails)[^}]*border-radius: 20px/);
   assert.match(globalCss, /@media \(max-width: 840px\)[\s\S]*\.prompt-task-list \{ max-height: none; overflow-y: visible;/);
   assert.match(globalCss, /@media print/);
