@@ -93,7 +93,7 @@ test("reports checklist and screening progress through stable public values", ()
   assert.deepEqual(calculateChecklistProgress(3, 12), { completed: 3, total: 12, percent: 25 });
   assert.deepEqual(scoreScreeningDecisions(
     { empirical: "include", editorial: "exclude", unclear: "full-text" },
-    { empirical: "include", editorial: "exclude", unclear: "full-text", conflict: "discuss" },
+    { empirical: "include", editorial: "exclude", unclear: "full-text", conflict: "verify" },
   ), { answered: 3, correct: 3, total: 4 });
 });
 
@@ -147,12 +147,14 @@ test("uses consistent, natural Thai labels in the learning tools", () => {
     ],
   );
   assert.equal(content.screening.title, "แบบฝึกหัดคัดกรองบทความ");
-  assert.equal(content.screening.options[0].label, "คัดเข้า");
-  assert.equal(content.screening.options[1].label, "คัดออก");
+  assert.equal(content.screening.options[0].label, "เลือกใช้");
+  assert.equal(content.screening.options[1].label, "ตัดออก");
+  assert.equal(content.screening.options[3].label, "ตรวจข้อมูลเพิ่ม");
+  assert.match(content.screening.scenarios.find((scenario) => scenario.id === "borderline")?.rationale ?? "", /corresponding author/);
   assert.equal(content.prisma.flowLabel, "ผลการคำนวณ");
-  assert.equal(content.prisma.stages.included, "งานวิจัยที่คัดเข้า");
+  assert.equal(content.prisma.stages.included, "งานวิจัยที่เลือกใช้");
   assert.equal(content.prisma.plannerTab, "กรอกข้อมูลของคุณ");
   assert.equal(content.prisma.exampleTab, "ดูตัวอย่าง");
   assert.equal(content.prisma.example.title, "ตัวอย่าง: การทบทวนเรื่อง AI ช่วยสอนในมหาวิทยาลัย");
-  assert.doesNotMatch(thaiText, /รับเข้า|กรอบตั้งต้น|เส้นทางที่คำนวณได้|รายงานที่พยายามขอ|ขอฉบับเต็มไม่ได้|ระบบอัตโนมัตินำออก|เริ่มจากการตัดสินใจที่งานทบทวนต้องช่วยสนับสนุน|ดุลยพินิจของแต่ละสาขา|ปรากฏการณ์ที่สนใจ/);
+  assert.doesNotMatch(thaiText, /คัดเข้า|คัดออก|ผู้ทบทวนอีกคน|รับเข้า|กรอบตั้งต้น|เส้นทางที่คำนวณได้|รายงานที่พยายามขอ|ขอฉบับเต็มไม่ได้|ระบบอัตโนมัตินำออก|เริ่มจากการตัดสินใจที่งานทบทวนต้องช่วยสนับสนุน|ดุลยพินิจของแต่ละสาขา|ปรากฏการณ์ที่สนใจ/);
 });
